@@ -19,8 +19,9 @@ ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh && \
     yum-config-manager --enable centos-sclo-rh-testing && \
-    yum install -y --setopt=tsflags=nodocs nss_wrapper && \
-    yum install -y --setopt=tsflags=nodocs bind-utils rh-nginx18 rh-nginx18-nginx && \
+    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx18 rh-nginx18-nginx" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH

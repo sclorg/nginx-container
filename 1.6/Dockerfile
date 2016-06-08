@@ -16,7 +16,9 @@ RUN mkdir -p /var/lib/nginx16
 COPY contrib /var/lib/nginx16/
 
 RUN yum install -y centos-release-scl-rh && \
-    yum install -y --setopt=tsflags=nodocs bind-utils nginx16 nginx16-nginx && \
+    INSTALL_PKGS="bind-utils nginx16 nginx16-nginx" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum clean all
 
 # When bash is started non-interactively, to run a shell script, for example it
