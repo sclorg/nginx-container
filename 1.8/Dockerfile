@@ -17,7 +17,7 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 
 RUN yum install -y yum-utils gettext hostname && \
-    yum install -y centos-release-scl-rh && \
+    yum install -y centos-release-scl-rh epel-release && \
     yum-config-manager --enable centos-sclo-rh-testing && \
     INSTALL_PKGS="nss_wrapper bind-utils rh-nginx18 rh-nginx18-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
