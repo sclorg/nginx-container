@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM openshift/base-centos7
 
 # RHSCL rh-nginx18 image.
 #
