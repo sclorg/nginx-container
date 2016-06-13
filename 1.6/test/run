@@ -2,7 +2,8 @@
 
 IMAGE_NAME="${IMAGE_NAME:-rhscl/nginx-16-rhel7}"
 
-. ./utils.sh
+THISDIR=$(dirname ${BASH_SOURCE[0]})
+. ${THISDIR}/utils.sh
 
 function create_container() {
     local name=$1 ; shift
