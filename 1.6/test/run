@@ -37,7 +37,7 @@ pushd $tmpdir > /dev/null || exit 1
 CIDFILE_DIR=cid_files
 mkdir "$CIDFILE_DIR"
 
-run_command_headsup "docker pull $IMAGE_NAME"
+run_command_headsup "docker inspect $IMAGE_NAME >/dev/null || docker pull $IMAGE_NAME"
 
 # Check default page
 DOCKER_ARGS='-p 80:80'
