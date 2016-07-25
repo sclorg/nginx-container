@@ -8,6 +8,15 @@ FROM rhel7:7.2-61
 # Environment:
 #  * $NGINX_LOG_TO_VOLUME (optional) - When set, nginx will log into /var/log/nginx16
 
+EXPOSE 80
+EXPOSE 443
+
+LABEL io.k8s.description="Platform for running nginx or building nginx-based application" \
+      io.k8s.display-name="Nginx 1.6" \
+      io.openshift.expose-services="80:http" \
+      io.openshift.expose-services="443:https" \
+      io.openshift.tags="builder,nginx,nginx16"
+
 # Labels consumed by Red Hat build service
 LABEL Component="nginx16-docker" \
       Name="rhscl/nginx-16-rhel7" \
@@ -15,10 +24,6 @@ LABEL Component="nginx16-docker" \
       Release="9.3" \
       BZComponent="nginx16-docker" \
       Architecture="x86_64"
-
-
-EXPOSE 80
-EXPOSE 443
 
 COPY run-*.sh /usr/local/bin/
 RUN mkdir -p /var/lib/nginx16

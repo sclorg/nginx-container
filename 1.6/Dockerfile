@@ -11,6 +11,12 @@ FROM centos:centos7
 EXPOSE 80
 EXPOSE 443
 
+LABEL io.k8s.description="Platform for running nginx or building nginx-based application" \
+      io.k8s.display-name="Nginx 1.6" \
+      io.openshift.expose-services="80:http" \
+      io.openshift.expose-services="443:https" \
+      io.openshift.tags="builder,nginx,nginx16"
+
 COPY run-*.sh /usr/local/bin/
 RUN mkdir -p /var/lib/nginx16
 COPY contrib /var/lib/nginx16/
