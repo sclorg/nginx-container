@@ -1,4 +1,4 @@
-FROM rhel7:7.2-61
+FROM rhel7
 
 # RHSCL nginx16 image.
 #
