@@ -12,12 +12,14 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
       io.k8s.display-name="Nginx 1.8" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx18" \
-      BZComponent="rh-nginx18-docker" \
-      Name="rhscl/nginx-18-rhel7" \
-      Version="1.8" \
-      Release="13.1" \
-      Architecture="x86_64"
+      io.openshift.tags="builder,nginx,rh-nginx18"
+
+# Labels consumed by Red Hat build service
+LABEL com.redhat.component="rh-nginx18-docker" \
+      name="rhscl/nginx-18-rhel7" \
+      version="1.8" \
+      release="13.1" \
+      architecture="x86_64"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 
