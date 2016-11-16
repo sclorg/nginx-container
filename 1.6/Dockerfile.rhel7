@@ -18,12 +18,11 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
       io.openshift.tags="builder,nginx,nginx16"
 
 # Labels consumed by Red Hat build service
-LABEL Component="nginx16-docker" \
-      Name="rhscl/nginx-16-rhel7" \
-      Version="1.6" \
-      Release="9.3" \
-      BZComponent="nginx16-docker" \
-      Architecture="x86_64"
+LABEL name="rhscl/nginx-16-rhel7" \
+      version="1.6" \
+      release="9.3" \
+      com.redhat.component="nginx16-docker" \
+      architecture="x86_64"
 
 COPY run-*.sh /usr/local/bin/
 RUN mkdir -p /var/lib/nginx16
