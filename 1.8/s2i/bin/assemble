@@ -13,5 +13,12 @@ if [ -d ./nginx-cfg ]; then
   fi
 fi
 
+if [ -f ./bin/init_script ]; then
+  echo "---> Copying nginx init script..."
+  cp -vf ./bin/init_script $PRE_RUN_SCRIPT
+  chmod +x $PRE_RUN_SCRIPT
+  rm -rf ./bin
+fi
+
 # Fix source directory permissions
 fix-permissions ./

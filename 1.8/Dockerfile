@@ -48,6 +48,7 @@ VOLUME ["/var/opt/rh/rh-nginx18/log/nginx/"]
 
 ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     ENV=/opt/app-root/etc/scl_enable \
+    PRE_RUN_SCRIPT=/opt/app-root/etc/init_script \
     PROMPT_COMMAND=". /opt/app-root/etc/scl_enable"
 
 CMD $STI_SCRIPTS_PATH/usage
