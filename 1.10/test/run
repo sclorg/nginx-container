@@ -128,52 +128,25 @@ test_scl_usage() {
   fi
 }
 
-test_connection() {
-  cat $cid_file
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
-  local max_attempts=10
+test_for_output()
+{
+  local url="$1"
+  local expect="$2"
+  local host="${3-localhost}"
+  local max_attempts=5
   local sleep_time=1
   local attempt=1
   local result=1
 
-  while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host: localhost" http://$(container_ip):${test_port}/)
-    echo "${response}"
-    status=$?
-    if [ $status -eq 0 ]; then
-      if echo "${response}" | grep -q "NGINX is working"; then
-        result=0
-        break
-      else
-        echo "Response: ${response}"
-      fi
-    fi
-    attempt=$(( $attempt + 1 ))
-    sleep $sleep_time
-  done
+  info "Testing URL $url with HTTP hostname ${host} produces output $expect"
 
   while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host: localhost2" http://$(container_ip):${test_port}/)
+    response=$(curl -s -H "Host: ${host}" ${url})
     echo "${response}"
     status=$?
     if [ $status -eq 0 ]; then
-      if echo "${response}" | grep -q "NGINX2 is working"; then
-        result=0
-        break
-      else
-        echo "Response: ${response}"
-      fi
-    fi
-    attempt=$(( $attempt + 1 ))
-    sleep $sleep_time
-  done
-
-  while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host: localhost" http://$(container_ip):${test_port}/nginx-cfg/default.conf)
-    echo "${response}"
-    status=$?
-    if [ $status -eq 0 ]; then
-      if echo "${response}" | grep -q "404"; then
+      if echo "${response}" | grep -q "${expect}"; then
+        info "Success!"
         result=0
         break
       else
@@ -185,6 +158,20 @@ test_connection() {
   done
 
   return $result
+}
+
+test_connection() {
+  cat $cid_file
+  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+
+  if test_for_output "http://$(container_ip):${test_port}/" "NGINX is working" &&
+     test_for_output "http://$(container_ip):${test_port}/" "NGINX2 is working" localhost2 &&
+     test_for_output "http://$(container_ip):${test_port}/aliased/index2.html" "NGINX2 is working"  &&
+     test_for_output "http://$(container_ip):${test_port}/nginx-cfg/default.conf" "404"; then
+     return 0
+  fi
+
+  return 1
 }
 
 test_application() {
