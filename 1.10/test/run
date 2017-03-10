@@ -137,7 +137,7 @@ test_connection() {
   local result=1
 
   while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host:localhost" http://$(container_ip):${test_port}/)
+    response=$(curl -s -H "Host: localhost" http://$(container_ip):${test_port}/)
     echo "${response}"
     status=$?
     if [ $status -eq 0 ]; then
@@ -153,7 +153,7 @@ test_connection() {
   done
 
   while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host:localhost2" http://$(container_ip):${test_port}/)
+    response=$(curl -s -H "Host: localhost2" http://$(container_ip):${test_port}/)
     echo "${response}"
     status=$?
     if [ $status -eq 0 ]; then
@@ -169,7 +169,7 @@ test_connection() {
   done
 
   while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host:localhost" http://$(container_ip):${test_port}/nginx-cfg/default.conf)
+    response=$(curl -s -H "Host: localhost" http://$(container_ip):${test_port}/nginx-cfg/default.conf)
     echo "${response}"
     status=$?
     if [ $status -eq 0 ]; then
