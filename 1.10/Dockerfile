@@ -15,6 +15,7 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
       io.openshift.tags="builder,nginx,rh-nginx110"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
+ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
 
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh epel-release && \
@@ -36,6 +37,7 @@ COPY ./contrib/ /opt/app-root
 # random UID.
 RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx110/nginx/nginx.conf && \
     mkdir -p /opt/app-root/etc/nginx.d/ && \
+    mkdir -p /opt/app-root/etc/nginx.default.d/ && \
     chmod -R a+rwx /opt/app-root/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx110 && \
     chown -R 1001:0 /opt/app-root && \

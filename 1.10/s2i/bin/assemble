@@ -13,5 +13,13 @@ if [ -d ./nginx-cfg ]; then
   fi
 fi
 
+if [ -d ./nginx-default-cfg ]; then
+  echo "---> Copying nginx default server configuration files..."
+  if [ "$(ls -A ./nginx-default-cfg/*.conf)" ]; then
+    cp -v ./nginx-default-cfg/*.conf "${NGINX_DEFAULT_CONF_PATH}"
+    rm -rf ./nginx-default-cfg
+  fi
+fi
+
 # Fix source directory permissions
 fix-permissions ./

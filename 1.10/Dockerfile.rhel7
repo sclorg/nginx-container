@@ -18,10 +18,11 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
 LABEL com.redhat.component="rh-nginx110-docker" \
       name="rhscl/nginx-110-rhel7" \
       version="1.10" \
-      release="1.1" \
+      release="1.2" \
       architecture="x86_64"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
+ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
 
 RUN yum install -y yum-utils && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
@@ -44,6 +45,7 @@ COPY ./contrib/ /opt/app-root
 # random UID.
 RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx110/nginx/nginx.conf && \
     mkdir -p /opt/app-root/etc/nginx.d/ && \
+    mkdir -p /opt/app-root/etc/nginx.default.d/ && \
     chmod -R a+rwx /opt/app-root/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx110 && \
     chown -R 1001:0 /opt/app-root && \
