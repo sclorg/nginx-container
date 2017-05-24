@@ -8,8 +8,14 @@ FROM centos/s2i-base-centos7
 EXPOSE 8080
 EXPOSE 8443
 
-ENV SUMMARY="A high performance web server and reverse proxy server" \
-    DESCRIPTION="Platform for running nginx or building nginx-based application"
+ENV NGINX_VERSION=1.10
+
+ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
+    DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
+protocols, with a strong focus on high concurrency, performance and low memory usage. The container \
+image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
+as a base image for other applications based on nginx $NGINX_VERSION web server. \
+Nginx server image can be extended using source-to-image tool."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
