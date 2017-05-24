@@ -8,11 +8,20 @@ FROM centos/s2i-base-centos7
 EXPOSE 8080
 EXPOSE 8443
 
-LABEL io.k8s.description="Platform for running nginx or building nginx-based application" \
+ENV SUMMARY="A high performance web server and reverse proxy server" \
+    DESCRIPTION="Platform for running nginx or building nginx-based application"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="DESCRIPTION" \
       io.k8s.display-name="Nginx 1.10" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx110"
+      io.openshift.tags="builder,nginx,rh-nginx110" \
+      com.redhat.component="rh-nginx110-docker" \
+      name="centos/nginx-110-centos7" \
+      version="1.10" \
+      release="1"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d

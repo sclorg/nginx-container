@@ -8,18 +8,20 @@ FROM rhscl/s2i-base-rhel7:1
 EXPOSE 8080
 EXPOSE 8443
 
-LABEL io.k8s.description="Platform for running nginx or building nginx-based application" \
+ENV SUMMARY="A high performance web server and reverse proxy server" \
+    DESCRIPTION="Platform for running nginx or building nginx-based application"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="DESCRIPTION" \
       io.k8s.display-name="Nginx 1.10" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx110"
-
-# Labels consumed by Red Hat build service
-LABEL com.redhat.component="rh-nginx110-docker" \
+      io.openshift.tags="builder,nginx,rh-nginx110" \
+      com.redhat.component="rh-nginx110-docker" \
       name="rhscl/nginx-110-rhel7" \
       version="1.10" \
-      release="1.2" \
-      architecture="x86_64"
+      release="1.2"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d

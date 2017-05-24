@@ -11,11 +11,20 @@ FROM centos:centos7
 EXPOSE 80
 EXPOSE 443
 
-LABEL io.k8s.description="Platform for running nginx or building nginx-based application" \
+ENV SUMMARY="A high performance web server and reverse proxy server" \
+    DESCRIPTION="Platform for running nginx or building nginx-based application"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="DESCRIPTION" \
       io.k8s.display-name="Nginx 1.6" \
       io.openshift.expose-services="80:http" \
       io.openshift.expose-services="443:https" \
-      io.openshift.tags="builder,nginx,nginx16"
+      io.openshift.tags="builder,nginx,nginx16" \
+      com.redhat.component="rh-nginx16-docker" \
+      name="centos/nginx-16-centos7" \
+      version="1.6" \
+      release="1"
 
 COPY run-*.sh /usr/local/bin/
 RUN mkdir -p /var/lib/nginx16
