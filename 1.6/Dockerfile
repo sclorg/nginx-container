@@ -18,8 +18,9 @@ LABEL io.k8s.description="Platform for running nginx or building nginx-based app
       io.openshift.tags="builder,nginx,nginx16"
 
 COPY run-*.sh /usr/local/bin/
-RUN mkdir -p /var/lib/nginx16
-COPY contrib /var/lib/nginx16/
+
+# Copy extra files to the image.
+COPY ./root/ /
 
 RUN yum install -y centos-release-scl-rh && \
     INSTALL_PKGS="bind-utils nginx16 nginx16-nginx" && \

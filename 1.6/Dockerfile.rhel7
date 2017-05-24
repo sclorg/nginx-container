@@ -25,8 +25,9 @@ LABEL name="rhscl/nginx-16-rhel7" \
       architecture="x86_64"
 
 COPY run-*.sh /usr/local/bin/
-RUN mkdir -p /var/lib/nginx16
-COPY contrib /var/lib/nginx16/
+
+# Copy extra files to the image.
+COPY ./root/ /
 
 RUN yum install -y yum-utils gettext hostname && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
