@@ -19,7 +19,7 @@ Nginx server image can be extended using source-to-image tool."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
-      io.k8s.description="DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Nginx 1.8" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
