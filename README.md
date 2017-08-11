@@ -8,8 +8,8 @@ Users can choose between RHEL and CentOS based images.
 Versions
 ---------------
 Nginx versions currently provided are:
-* nginx-1.6
 * nginx-1.8
+* nginx-1.10
 
 RHEL versions currently supported are:
 * RHEL7
