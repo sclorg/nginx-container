@@ -29,6 +29,12 @@ resulting image with [Docker](http://docker.io) execute:
     $ s2i build https://github.com/sclorg/nginx-container.git --context-dir=1.10/test/test-app/ rhscl/nginx-110-rhel7 nginx-sample-app
     $ docker run -p 8080:8080 nginx-sample-app
     ```
+    
+*  **For CentOS based image**
+    ```
+    $ s2i build https://github.com/sclorg/nginx-container.git --context-dir=1.10/test/test-app/ centos/nginx-110-centos7 nginx-sample-app
+    $ docker run -p 8080:8080 nginx-sample-app
+    ```
 
 **Accessing the application:**
 ```
