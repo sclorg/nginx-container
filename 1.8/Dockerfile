@@ -1,4 +1,4 @@
-FROM centos/s2i-base-centos7
+FROM centos/s2i-core-centos7
 
 # RHSCL rh-nginx18 image.
 #
