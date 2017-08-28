@@ -37,7 +37,6 @@ RUN yum repolist > /dev/null && \
     yum install -y yum-utils && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --enable rhel-7-server-ose-3.2-rpms && \
     INSTALL_PKGS="nss_wrapper bind-utils gettext hostname rh-nginx18 rh-nginx18-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
