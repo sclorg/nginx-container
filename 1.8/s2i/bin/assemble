@@ -9,8 +9,16 @@ if [ -d ./nginx-cfg ]; then
   echo "---> Copying nginx configuration files..."
   if [ "$(ls -A ./nginx-cfg/*.conf)" ]; then
     cp -v ./nginx-cfg/*.conf "${NGINX_CONFIGURATION_PATH}"
+    chmod -Rf 777 ${NGINX_CONFIGURATION_PATH}
     rm -rf ./nginx-cfg
   fi
+fi
+
+if [ -f ./bin/init_script ]; then
+  echo "---> Copying nginx init script..."
+  cp -vf ./bin/init_script $PRE_RUN_SCRIPT
+  chmod +x $PRE_RUN_SCRIPT
+  rm -rf ./bin
 fi
 
 # Fix source directory permissions

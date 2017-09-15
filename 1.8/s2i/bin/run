@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /opt/app-root/etc/generate_container_user
+source $PRE_RUN_SCRIPT
 
 set -e
 
