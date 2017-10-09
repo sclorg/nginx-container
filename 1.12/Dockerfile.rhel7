@@ -26,7 +26,7 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,nginx,rh-nginx112" \
       com.redhat.component="rh-nginx112-docker" \
       name="rhscl/nginx-112-rhel7" \
-      release="1"
+      version="1"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
