@@ -15,6 +15,7 @@ Versions
 Nginx versions currently provided are:
 * [nginx-1.8](1.8)
 * [nginx-1.10](1.10)
+* [nginx-1.12](1.12)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -32,7 +33,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available in Red Hat Container Registry. To download it run:
 
     ```
-    $ docker pull registry.access.redhat.com/rhscl/nginx-110-rhel7
+    $ docker pull registry.access.redhat.com/rhscl/nginx-112-rhel7
     ```
 
     To build a RHEL7 based Nginx image, you need to run Docker build on a properly
@@ -42,7 +43,7 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel7 VERSIONS=1.10
+    $ make build TARGET=rhel7 VERSIONS=1.12
     ```
 
 *  **CentOS7 based image**
@@ -50,7 +51,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ docker pull centos/nginx-110-centos7
+    $ docker pull centos/nginx-112-centos7
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -59,10 +60,10 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=centos7 VERSIONS=1.10
+    $ make build TARGET=centos7 VERSIONS=1.12
     ```
 
-For using other versions of Nginx, just replace the `1.10` value by particular version
+For using other versions of Nginx, just replace the `1.12` value by particular version
 in the commands above.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -79,6 +80,8 @@ see [usage documentation](1.8).
 For information about usage of Dockerfile for nginx 1.10,
 see [usage documentation](1.10).
 
+For information about usage of Dockerfile for nginx 1.12,
+see [usage documentation](1.12).
 
 Test
 ---------------------------------
