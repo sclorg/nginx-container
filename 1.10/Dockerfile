@@ -1,14 +1,14 @@
 FROM centos/s2i-core-centos7
 
-# RHSCL rh-nginx112 image.
+# RHSCL rh-nginx110 image.
 #
 # Volumes:
-#  * /var/opt/rh/rh-nginx112/log/nginx/ - Storage for logs
+#  * /var/opt/rh/rh-nginx110/log/nginx/ - Storage for logs
 
 EXPOSE 8080
 EXPOSE 8443
 
-ENV NGINX_VERSION=1.12
+ENV NGINX_VERSION=1.10
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
@@ -20,12 +20,13 @@ Nginx server image can be extended using source-to-image tool."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Nginx 1.12" \
+      io.k8s.display-name="Nginx 1.10" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx112" \
-      com.redhat.component="rh-nginx112-docker" \
-      name="centos/nginx-112-centos7" \
+      io.openshift.tags="builder,nginx,rh-nginx110" \
+      com.redhat.component="rh-nginx110-docker" \
+      name="centos/nginx-110-centos7" \
+      version="1.10" \
       release="1"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
@@ -34,7 +35,7 @@ ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh epel-release && \
     yum-config-manager --enable centos-sclo-rh-testing && \
-    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx112 rh-nginx112-nginx" && \
+    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx110 rh-nginx110-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all
@@ -48,18 +49,18 @@ COPY ./root/ /
 # In order to drop the root user, we have to make some directories world
 # writeable as OpenShift default security model is to run the container under
 # random UID.
-RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx112/nginx/nginx.conf && \
+RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx110/nginx/nginx.conf && \
     mkdir -p /opt/app-root/etc/nginx.d/ && \
     mkdir -p /opt/app-root/etc/nginx.default.d/ && \
     chmod -R a+rwx /opt/app-root/etc && \
-    chmod -R a+rwx /var/opt/rh/rh-nginx112 && \
+    chmod -R a+rwx /var/opt/rh/rh-nginx110 && \
     chown -R 1001:0 /opt/app-root && \
-    chown -R 1001:0 /var/opt/rh/rh-nginx112
+    chown -R 1001:0 /var/opt/rh/rh-nginx110
 
 USER 1001
 
-VOLUME ["/opt/rh/rh-nginx112/root/usr/share/nginx/html"]
-VOLUME ["/var/opt/rh/rh-nginx112/log/nginx/"]
+VOLUME ["/opt/rh/rh-nginx110/root/usr/share/nginx/html"]
+VOLUME ["/var/opt/rh/rh-nginx110/log/nginx/"]
 
 ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     ENV=/opt/app-root/etc/scl_enable \
