@@ -4,4 +4,10 @@ source /opt/app-root/etc/generate_container_user
 
 set -e
 
+source ${NGINX_CONTAINER_SCRIPTS_PATH}/common.sh
+
+if [ "$(ls -A ${NGINX_APP_ROOT}/etc/nginx-pre-init)" ]; then
+	process_extending_files ${NGINX_APP_ROOT}/etc/nginx-pre-init ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init
+fi
+
 exec nginx -g "daemon off;"
