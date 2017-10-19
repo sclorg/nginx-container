@@ -60,6 +60,7 @@ RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx18/nginx/nginx.con
     mkdir -p /opt/app-root/etc/nginx.d/ && \
     mkdir -p /opt/app-root/etc/nginx.default.d/ && \
     mkdir -p /opt/app-root/etc/nginx-pre-init/ && \
+    mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init/ && \
     chmod -R a+rwx /opt/app-root/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx18 && \
     chown -R 1001:0 /opt/app-root && \
