@@ -31,7 +31,5 @@ if [ -d ./nginx-pre-init ]; then
   fi
 fi
 
-mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init/
-
 # Fix source directory permissions
 fix-permissions ./
