@@ -29,7 +29,10 @@ LABEL summary="$SUMMARY" \
       version="1.8" \
       release="1"
 
-ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
+ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d \
+    NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d \
+    NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
+    NGINX_APP_ROOT=/opt/app-root/
 
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh epel-release && \
@@ -50,6 +53,8 @@ COPY ./root/ /
 # random UID.
 RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx18/nginx/nginx.conf && \
     mkdir -p /opt/app-root/etc/nginx.d/ && \
+    mkdir -p /opt/app-root/etc/nginx.default.d/ && \
+    mkdir -p /opt/app-root/etc/nginx-pre-init/ && \
     chmod -R a+rwx /opt/app-root/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx18 && \
     chown -R 1001:0 /opt/app-root && \
