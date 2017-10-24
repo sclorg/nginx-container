@@ -53,7 +53,8 @@ RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx18/nginx/nginx.con
     chmod -R a+rwx /opt/app-root/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx18 && \
     chown -R 1001:0 /opt/app-root && \
-    chown -R 1001:0 /var/opt/rh/rh-nginx18
+    chown -R 1001:0 /var/opt/rh/rh-nginx18 && \
+    rpm-file-permissions
 
 USER 1001
 
