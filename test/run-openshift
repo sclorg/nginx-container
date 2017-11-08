@@ -1,16 +1,10 @@
 #!/bin/bash
 #
-# Test the ???? image in OpenShift.
+# Test the Nginx image in OpenShift.
 #
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-#############################################
-#                                           #
-#    THIS IS A COPY FROM SCLORG/MARIADB     #
-#         AND NEEDS TO BE EDITED            #
-#                                           #
-#############################################
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
@@ -18,18 +12,16 @@ source ${THISDIR}/test-lib-openshift.sh
 
 set -exo nounset
 
-function check_mysql_os_service_connection() {
+function check_nginx_os_service_connection() {
   local util_image_name="${1}" ; shift
   local service_name="${1}" ; shift
-  local user="${1}" ; shift
-  local pass="${1}" ; shift
   local timeout="${1:-60}" ; shift || :
   local pod_ip=$(ct_os_get_service_ip ${service_name})
 
   : "  Service ${service_name} check ..."
 
-  local cmd="echo 'SELECT 42 as testval\g' | mysql --connect-timeout=15 -h ${pod_ip} -u${user} -p${pass}"
-  local expected_value='^42'
+  local cmd="curl -s 172.0.0.1:8080 | grep Welcome | tr -s '\n' ' '"
+  local expected_value='^ <title>Welcome to OpenShift</title> <h1>Welcome to your static nginx application on OpenShift</h1> $'
   local output
   local ret
   SECONDS=0
@@ -50,28 +42,30 @@ function check_mysql_os_service_connection() {
   return 1
 }
 
-function test_mysql_pure_image() {
-  local image_name=${1:-centos/mariadb-101-centos7}
+function test_nginx_pure_image() {
+  local image_name=${1}
   local image_name_no_namespace=${image_name##*/}
   local service_name=${image_name_no_namespace}
+
+  [[ -z "${image_name}" ]] && exit 1
 
   ct_os_new_project
   ct_os_upload_image "${image_name}"
 
-  ct_os_deploy_pure_image "${image_name}" \
-                          --name "${service_name}" \
-                          --env MYSQL_ROOT_PASSWORD=test
+  ct_os_deploy_pure_image "${image_name}"
 
   ct_os_wait_pod_ready "${service_name}" 60
-  check_mysql_os_service_connection "${image_name}" "${service_name}" root test
+  check_nginx_os_service_connection "${image_name}" "${service_name}"
 
   ct_os_delete_project
 }
 
 function test_mysql_template() {
-  local image_name=${1:-centos/mariadb-101-centos7}
+  local image_name=${1}
   local image_name_no_namespace=${image_name##*/}
   local service_name=${image_name_no_namespace}
+
+  [[ -z "${image_name}" ]] && exit 1
 
   ct_os_new_project
   ct_os_upload_image "${image_name}"
@@ -84,7 +78,7 @@ function test_mysql_template() {
                               MYSQL_DATABASE=testdb
 
   ct_os_wait_pod_ready "${service_name}" 60
-  check_mysql_os_service_connection "${image_name}" "${service_name}" testu testp
+  check_nginx_os_service_connection "${image_name}" "${service_name}" testu testp
 
   ct_os_delete_project
 }
