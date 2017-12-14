@@ -63,7 +63,9 @@ RUN sed -i -f /opt/app-root/nginxconf-fed.sed /etc/nginx/nginx.conf && \
 
 USER 1001
 
-VOLUME ["/usr/share/nginx/html"]
-VOLUME ["/var/log/nginx/"]
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/usr/share/nginx/html"]
+# VOLUME ["/var/log/nginx/"]
 
 CMD $STI_SCRIPTS_PATH/usage

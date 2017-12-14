@@ -58,8 +58,10 @@ RUN sed -i -f /opt/app-root/nginxconf.sed /etc/opt/rh/rh-nginx18/nginx/nginx.con
 
 USER 1001
 
-VOLUME ["/opt/rh/rh-nginx18/root/usr/share/nginx/html"]
-VOLUME ["/var/opt/rh/rh-nginx18/log/nginx/"]
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/opt/rh/rh-nginx18/root/usr/share/nginx/html"]
+# VOLUME ["/var/opt/rh/rh-nginx18/log/nginx/"]
 
 ENV BASH_ENV=/opt/app-root/etc/scl_enable \
     ENV=/opt/app-root/etc/scl_enable \
