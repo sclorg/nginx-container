@@ -11,12 +11,27 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 
-set -exo nounset
+# TODO: branch should be changed to master, once code in example app
+# stabilizes on with referencing latest version
+BRANCH_TO_TEST=staging
+
+set -eo nounset
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 ct_os_cluster_up
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/nginx-ex.git#staging" . 'Welcome to your static nginx application on OpenShift'
 
+# test local app
+ct_os_test_s2i_app ${IMAGE_NAME} "${THISDIR}/test-app" . 'Test NGINX passed'
+
+# test remote example app
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/nginx-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your static nginx application on OpenShift'
+
+# test template from the example app
+ct_os_test_template_app ${IMAGE_NAME} \
+                        https://raw.githubusercontent.com/sclorg/nginx-ex/${BRANCH_TO_TEST}/openshift/templates/nginx.json \
+                        nginx \
+                        'Welcome to your static nginx application on OpenShift' \
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p NGINX_VERSION=${VERSION}"
 
