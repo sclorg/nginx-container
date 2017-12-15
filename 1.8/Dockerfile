@@ -8,7 +8,7 @@ FROM centos/s2i-core-centos7
 EXPOSE 8080
 EXPOSE 8443
 
-ENV NGINX_VERSION=1.10
+ENV NGINX_VERSION=1.8
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
