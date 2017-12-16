@@ -47,21 +47,27 @@ S2I build support
 Nginx server image can be extended using S2I tool (see Usage section).
 S2I build folder structure:
 
-|    Folder name              |    Description                            |
-| :-------------------------- | ----------------------------------------- |
-|  ./nginx-cfg/*.conf         | Should contain all nginx configuration we want to include into image |
-|  ./nginx-default-cfg/*.conf | Contains any nginx config snippets to include in the default server block |
-|  ./nginx-start-hook/*.sh | Contains shell scripts that are sourced right before nginx is launched |
-|  ./                         | Should contain nginx application source code                         |
+**`./nginx-cfg/*.conf`**  
+       Should contain all nginx configuration we want to include into image
+
+**`./nginx-default-cfg/*.conf`**  
+       Contains any nginx config snippets to include in the default server block
+
+**`./nginx-start-hook/*.sh`**  
+       Contains shell scripts that are sourced right before nginx is launched
+
+**`./`**  
+       Should contain nginx application source code
+
 
 Environment variables and volumes
 -------------
 The nginx container image supports the following configuration variable, which can be set by using the `-e` option with the docker run command:
 
 
-|    Variable name       |    Description                            |
-| :--------------------- | ----------------------------------------- |
-|  `NGINX_LOG_TO_VOLUME` | When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/opt/rh/rh-nginx110/log/nginx/` |
+**`NGINX_LOG_TO_VOLUME`**  
+       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/opt/rh/rh-nginx110/log/nginx/`
+
 
 You can mount your own web root like this:
 ```
