@@ -6,8 +6,6 @@ set -e
 
 source ${NGINX_CONTAINER_SCRIPTS_PATH}/common.sh
 
-if [ "$(ls -A ${NGINX_APP_ROOT}/etc/nginx-pre-init)" ]; then
-	process_extending_files ${NGINX_APP_ROOT}/etc/nginx-pre-init ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init
-fi
+process_extending_files ${NGINX_APP_ROOT}/src/nginx-pre-init ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init
 
 exec nginx -g "daemon off;"
