@@ -218,16 +218,16 @@ test_application() {
 
 test_pre_init_script() {
   # Verify that the HTTP connection can be established to test application container
-  run_test_application "pre-init-test-app" &
+  run_test_application "start-hook-test-app" &
 
   # Wait for the container to write it's CID file
   wait_for_cid
 
   test_command "cat /opt/app-root/etc/nginx.d/default.conf | grep 'resolver' | sed -e 's/resolver\(.*\);/\1/' | grep 'DNS_SERVER'" ""
-  check_result $? "pre-init-test-app"
+  check_result $? "start-hook-test-app"
 
   test_connection_s2i
-  check_result $? "pre-init-test-app"
+  check_result $? "start-hook-test-app"
   cleanup_test_app
 
 }
@@ -257,14 +257,14 @@ test_application
 CONTAINER_ARGS="-u 12345" test_application
 cleanup "test-app"
 
-# Test pre-init script functionality
+# Test start-hook script functionality
 cid_file=$(mktemp -u --suffix=.cid)
 
-prepare "pre-init-test-app"
-run_s2i_build "pre-init-test-app"
-check_result $? "pre-init-test-app"
+prepare "start-hook-test-app"
+run_s2i_build "start-hook-test-app"
+check_result $? "start-hook-test-app"
 
 test_pre_init_script
-cleanup "pre-init-test-app"
+cleanup "start-hook-test-app"
 
 info "All tests finished successfully."

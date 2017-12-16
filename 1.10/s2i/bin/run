@@ -6,6 +6,6 @@ set -e
 
 source ${NGINX_CONTAINER_SCRIPTS_PATH}/common.sh
 
-process_extending_files ${NGINX_APP_ROOT}/src/nginx-pre-init ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init
+process_extending_files ${NGINX_APP_ROOT}/src/nginx-start-hook ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook
 
 exec nginx -g "daemon off;"

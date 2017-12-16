@@ -51,7 +51,7 @@ S2I build folder structure:
 | :-------------------------- | ----------------------------------------- |
 |  ./nginx-cfg/*.conf         | Should contain all nginx configuration we want to include into image |
 |  ./nginx-default-cfg/*.conf | Contains any nginx config snippets to include in the default server block |
-|  ./nginx-pre-init/*.sh | Contains shell scripts that are sourced right before nginx is launched |
+|  ./nginx-start-hook/*.sh | Contains shell scripts that are sourced right before nginx is launched |
 |  ./                         | Should contain nginx application source code                         |
 
 Environment variables and volumes
