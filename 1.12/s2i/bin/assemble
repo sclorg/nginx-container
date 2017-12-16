@@ -26,7 +26,7 @@ fi
 if [ -d ./nginx-pre-init ]; then
   echo "---> Copying nginx pre-init scripts..."
   if [ "$(ls -A ./nginx-pre-init/*)" ]; then
-    cp -v ./nginx-pre-init/* "${NGINX_APP_ROOT}/etc/nginx-pre-init"
+    cp -v ./nginx-pre-init/* "${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-pre-init/"
     rm -rf ./nginx-pre-init
   fi
 fi
