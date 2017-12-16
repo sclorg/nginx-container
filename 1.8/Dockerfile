@@ -66,7 +66,7 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed /etc/opt/rh/rh-nginx18/nginx/nginx
     chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook && \
     chown -R 1001:0 ${NGINX_APP_ROOT} && \
     chown -R 1001:0 /var/opt/rh/rh-nginx18 && \
-    chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook
+    chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook && \
     rpm-file-permissions
 
 USER 1001
@@ -76,8 +76,8 @@ USER 1001
 # VOLUME ["/opt/rh/rh-nginx18/root/usr/share/nginx/html"]
 # VOLUME ["/var/opt/rh/rh-nginx18/log/nginx/"]
 
-ENV BASH_ENV=/opt/app-root/etc/scl_enable \
-    ENV=/opt/app-root/etc/scl_enable \
-    PROMPT_COMMAND=". /opt/app-root/etc/scl_enable"
+ENV BASH_ENV=${NGINX_APP_ROOT}/etc/scl_enable \
+    ENV=${NGINX_APP_ROOT}/etc/scl_enable \
+    PROMPT_COMMAND=". ${NGINX_APP_ROOT}/etc/scl_enable"
 
 CMD $STI_SCRIPTS_PATH/usage
