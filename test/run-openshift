@@ -15,7 +15,7 @@ source ${THISDIR}/test-lib-openshift.sh
 # stabilizes on with referencing latest version
 BRANCH_TO_TEST=staging
 
-set -eo nounset
+set -exo nounset
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
