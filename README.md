@@ -99,7 +99,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel7 VERSIONS=5.7
+    $ make test TARGET=rhel7 VERSIONS=1.12
     ```
 
 *  **CentOS based image**
@@ -107,10 +107,10 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=centos7 VERSIONS=5.7
+    $ make test TARGET=centos7 VERSIONS=1.12
     ```
 
-For using other versions of Nginx, just replace the `5.7` value by particular version
+For using other versions of Nginx, just replace the `1.12` value by particular version
 in the commands above.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
