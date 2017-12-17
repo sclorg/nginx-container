@@ -25,7 +25,7 @@ fi
 
 if [ -d ./nginx-start-hook ]; then
   echo "---> Copying nginx start-hook scripts..."
-  if [ "$(ls -A ./nginx-start-hook/*)" ]; then
+  if [ "$(ls -A ./nginx-start-hook/* 2>/dev/null)" ]; then
     cp -v ./nginx-start-hook/* "${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook/"
     rm -rf ./nginx-start-hook
   fi
