@@ -8,7 +8,12 @@ FROM centos/s2i-core-centos7
 EXPOSE 8080
 EXPOSE 8443
 
-ENV NGINX_VERSION=1.10
+ENV NAME=nginx \
+    NGINX_VERSION=1.10 \
+    NGINX_SHORT_VER=110 \
+    VERSION=0 \
+    RELEASE=1 \
+    ARCH=x86_64
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
@@ -20,14 +25,16 @@ Nginx server image can be extended using source-to-image tool."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Nginx 1.10" \
+      io.k8s.display-name="Nginx $NGINX_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx110" \
-      com.redhat.component="rh-nginx110-docker" \
-      name="centos/nginx-110-centos7" \
-      version="1.10" \
-      release="1"
+      io.openshift.tags="builder,$NAME,rh-$NAME$NGINX_SHORT_VER" \
+      com.redhat.component="rh-$NAME$NGINX_SHORT_VER-docker" \
+      name="centos/$NAME-$NGINX_SHORT_VER-centos7" \
+      version="$NGINX_VERSION" \
+      release="$RELEASE" \
+      architecture="$ARCH" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d

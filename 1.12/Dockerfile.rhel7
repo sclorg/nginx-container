@@ -8,7 +8,12 @@ FROM rhscl/s2i-core-rhel7:1
 EXPOSE 8080
 EXPOSE 8443
 
-ENV NGINX_VERSION=1.12
+ENV NAME=nginx \
+    NGINX_VERSION=1.12 \
+    NGINX_SHORT_VER=112 \
+    VERSION=0 \
+    RELEASE=1 \
+    ARCH=x86_64
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
@@ -20,13 +25,15 @@ Nginx server image can be extended using source-to-image tool."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Nginx 1.12" \
+      io.k8s.display-name="Nginx $NGINX_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx112" \
-      com.redhat.component="rh-nginx112-docker" \
-      name="rhscl/nginx-112-rhel7" \
-      version="1"
+      io.openshift.tags="builder,$NAME,rh-$NAME$NGINX_SHORT_VER" \
+      com.redhat.component="rh-$NAME$NGINX_SHORT_VER-docker" \
+      name="rhscl/$NAME-$NGINX_SHORT_VER-rhel7" \
+      version="$NGINX_VERSION" \
+      architecture="$ARCH" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
