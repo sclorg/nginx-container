@@ -22,19 +22,20 @@ image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The
 as a base image for other applications based on nginx $NGINX_VERSION web server. \
 Nginx server image can be extended using source-to-image tool."
 
-LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Nginx $NGINX_VERSION" \
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,$NAME,rh-$NAME$NGINX_SHORT_VER" \
-      com.redhat.component="rh-$NAME$NGINX_SHORT_VER-docker" \
-      name="rhscl/$NAME-$NGINX_SHORT_VER-rhel7" \
-      version="$NGINX_VERSION" \
+      io.openshift.tags="builder,${NAME},rh-${NAME}${NGINX_SHORT_VER}" \
+      com.redhat.component="rh-${NAME}${NGINX_SHORT_VER}-docker" \
+      name="rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7" \
+      version="${NGINX_VERSION}" \
+      release="${RELEASE}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
-      help="For more information visit https://github.com/sclorg/$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> rhscl/$NAME-$$NGINX_SHORT_VER-rhel7:latest <APP-NAME>"
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
