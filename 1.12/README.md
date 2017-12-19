@@ -64,7 +64,7 @@ The nginx container image supports the following configuration variable, which c
 
 You can mount your own web root like this:
 ```
-$ docker run -v <DIR>:/var/www/html/
+$ docker run -v <DIR>:/var/www/html/ <container>
 ```
 You can replace \<DIR> with location of your web root. Please note that this has to be an **absolute** path, due to Docker requirements.
 
