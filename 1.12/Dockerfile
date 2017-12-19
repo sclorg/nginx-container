@@ -33,8 +33,9 @@ LABEL summary="$SUMMARY" \
       name="centos/$NAME-$NGINX_SHORT_VER-centos7" \
       version="$NGINX_VERSION" \
       release="$RELEASE" \
-      architecture="$ARCH" \
-      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/$NAME-container" \
+      usage="s2i build <SOURCE-REPOSITORY> centos/$NAME-$$NGINX_SHORT_VER-centos7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
