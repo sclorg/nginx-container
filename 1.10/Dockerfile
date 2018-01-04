@@ -11,7 +11,7 @@ EXPOSE 8443
 ENV NAME=nginx \
     NGINX_VERSION=1.10 \
     NGINX_SHORT_VER=110 \
-    VERSION=0 \
+    VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
