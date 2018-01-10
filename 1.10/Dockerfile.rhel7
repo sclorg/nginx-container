@@ -8,7 +8,10 @@ FROM rhscl/s2i-core-rhel7:1
 EXPOSE 8080
 EXPOSE 8443
 
-ENV NGINX_VERSION=1.10
+ENV NAME=nginx \
+    NGINX_VERSION=1.10 \
+    NGINX_SHORT_VER=110 \
+    VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
@@ -17,17 +20,19 @@ image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The
 as a base image for other applications based on nginx $NGINX_VERSION web server. \
 Nginx server image can be extended using source-to-image tool."
 
-LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Nginx 1.10" \
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,rh-nginx110" \
-      com.redhat.component="rh-nginx110-docker" \
-      name="rhscl/nginx-110-rhel7" \
-      version="1.10" \
-      release="1.2"
+      io.openshift.tags="builder,${NAME},rh-${NAME}${NGINX_SHORT_VER}" \
+      com.redhat.component="rh-${NAME}${NGINX_SHORT_VER}-docker" \
+      name="rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7" \
+      version="${NGINX_VERSION}" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d

@@ -62,6 +62,12 @@ The nginx container image supports the following configuration variable, which c
 | :--------------------- | ----------------------------------------- |
 |  `NGINX_LOG_TO_VOLUME` | When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/opt/rh/rh-nginx110/log/nginx/` |
 
+You can mount your own web root like this:
+```
+$ docker run -v <DIR>:/var/www/html/ <container>
+```
+You can replace \<DIR> with location of your web root. Please note that this has to be an **absolute** path, due to Docker requirements.
+
 
 Troubleshooting
 ---------------

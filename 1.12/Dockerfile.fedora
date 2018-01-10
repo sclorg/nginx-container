@@ -10,8 +10,9 @@ EXPOSE 8443
 
 ENV NAME=nginx \
     NGINX_VERSION=1.12 \
+    NGINX_SHORT_VER=112 \
     VERSION=0 \
-    RELEASE=1 \
+    RELEASE=2 \
     ARCH=x86_64
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
@@ -21,19 +22,20 @@ image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The
 as a base image for other applications based on nginx $NGINX_VERSION web server. \
 Nginx server image can be extended using source-to-image tool."
 
-LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$SUMMARY" \
-      io.k8s.display-name="Nginx $NGINX_VERSION" \
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,nginx112" \
-      com.redhat.component="$NAME" \
-      name="$FGC/$NAME" \
-      version="$VERSION" \
-      release="$RELEASE.$DISTTAG" \
-      architecture="$ARCH" \
-      usage="s2i build file:///your/app $FGC/nginx your-app"
+      io.openshift.tags="builder,${NAME},${NAME}${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}" \
+      name="${FGC}/${NAME}" \
+      version="${VERSION}" \
+      release="${RELEASE}.${DISTTAG}" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build file:///your/app ${FGC}/nginx your-app"
 
 ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
