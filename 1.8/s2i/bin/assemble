@@ -11,6 +11,24 @@ if [ -d ./nginx-cfg ]; then
     cp -v ./nginx-cfg/*.conf "${NGINX_CONFIGURATION_PATH}"
     rm -rf ./nginx-cfg
   fi
+  chmod -Rf g+rw ${NGINX_CONFIGURATION_PATH}
+fi
+
+if [ -d ./nginx-default-cfg ]; then
+  echo "---> Copying nginx default server configuration files..."
+  if [ "$(ls -A ./nginx-default-cfg/*.conf)" ]; then
+    cp -v ./nginx-default-cfg/*.conf "${NGINX_DEFAULT_CONF_PATH}"
+    rm -rf ./nginx-default-cfg
+  fi
+  chmod -Rf g+rw ${NGINX_DEFAULT_CONF_PATH}
+fi
+
+if [ -d ./nginx-pre-init ]; then
+  echo "---> Copying nginx pre-init scripts..."
+  if [ "$(ls -A ./nginx-pre-init/*)" ]; then
+    cp -v ./nginx-pre-init/* "${NGINX_APP_ROOT}/etc/nginx-pre-init"
+    rm -rf ./nginx-pre-init
+  fi
 fi
 
 # Fix source directory permissions
