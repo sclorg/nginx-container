@@ -13,7 +13,7 @@ source ${THISDIR}/test-lib-openshift.sh
 
 # TODO: branch should be changed to master, once code in example app
 # stabilizes on with referencing latest version
-BRANCH_TO_TEST=staging
+BRANCH_TO_TEST=master
 
 set -eo nounset
 
@@ -33,5 +33,5 @@ ct_os_test_template_app ${IMAGE_NAME} \
                         https://raw.githubusercontent.com/sclorg/nginx-ex/${BRANCH_TO_TEST}/openshift/templates/nginx.json \
                         nginx \
                         'Welcome to your static nginx application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p NGINX_VERSION=${VERSION}"
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p NGINX_VERSION=${VERSION}"
 
