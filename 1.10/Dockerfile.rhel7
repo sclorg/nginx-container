@@ -40,10 +40,7 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_APP_ROOT=${APP_ROOT}
 
 RUN yum install -y yum-utils && \
-    yum-config-manager --disable \* &> /dev/null && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
     INSTALL_PKGS="nss_wrapper bind-utils gettext hostname rh-nginx110 rh-nginx110-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
