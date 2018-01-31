@@ -29,7 +29,7 @@ LABEL summary="${SUMMARY}" \
       io.openshift.tags="builder,${NAME},rh-${NAME}${NGINX_SHORT_VER}" \
       com.redhat.component="rh-${NAME}${NGINX_SHORT_VER}-docker" \
       name="rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7" \
-      version="${NGINX_VERSION}" \
+      version="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
       usage="s2i build <SOURCE-REPOSITORY> rhscl/${NAME}-${NGINX_SHORT_VER}-rhel7:latest <APP-NAME>"
@@ -38,10 +38,7 @@ ENV NGINX_CONFIGURATION_PATH=/opt/app-root/etc/nginx.d
 ENV NGINX_DEFAULT_CONF_PATH=/opt/app-root/etc/nginx.default.d
 
 RUN yum install -y yum-utils && \
-    yum-config-manager --disable \* &> /dev/null && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
     INSTALL_PKGS="nss_wrapper bind-utils gettext hostname rh-nginx112 rh-nginx112-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
