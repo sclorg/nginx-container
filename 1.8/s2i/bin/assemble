@@ -23,11 +23,11 @@ if [ -d ./nginx-default-cfg ]; then
   chmod -Rf g+rw ${NGINX_DEFAULT_CONF_PATH}
 fi
 
-if [ -d ./nginx-start-hook ]; then
+if [ -d ./nginx-start ]; then
   echo "---> Copying nginx start-hook scripts..."
-  if [ "$(ls -A ./nginx-start-hook/* 2>/dev/null)" ]; then
-    cp -v ./nginx-start-hook/* "${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start-hook/"
-    rm -rf ./nginx-start-hook
+  if [ "$(ls -A ./nginx-start/* 2>/dev/null)" ]; then
+    cp -v ./nginx-start/* "${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start/"
+    rm -rf ./nginx-start
   fi
 fi
 
