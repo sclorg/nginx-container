@@ -47,6 +47,9 @@ S2I build support
 Nginx server image can be extended using S2I tool (see Usage section).
 S2I build folder structure:
 
+**`./nginx.conf`**--
+       The main nginx configuration file
+
 **`./nginx-cfg/*.conf`**  
        Should contain all nginx configuration we want to include into image
 

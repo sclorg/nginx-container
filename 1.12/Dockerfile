@@ -35,6 +35,7 @@ LABEL summary="${SUMMARY}" \
       usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${NGINX_SHORT_VER}-centos7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
+    NGINX_CONF_PATH=/etc/opt/rh/rh-nginx112/nginx/nginx.conf \
     NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
     NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
     NGINX_APP_ROOT=${APP_ROOT}
@@ -56,7 +57,8 @@ COPY ./root/ /
 # In order to drop the root user, we have to make some directories world
 # writeable as OpenShift default security model is to run the container under
 # random UID.
-RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed /etc/opt/rh/rh-nginx112/nginx/nginx.conf && \
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
+    chmod a+rwx ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
