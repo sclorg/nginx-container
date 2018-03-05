@@ -1,4 +1,4 @@
-Nginx 1.12 server and a reverse proxy server Docker image
+Nginx 1.12 server and a reverse proxy server container image
 =========================================================
 
 This container image includes Nginx 1.12 server and a reverse server for OpenShift and general usage.
@@ -85,7 +85,7 @@ By default, nginx logs into standard output, so the log is available in the cont
 
     docker logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/opt/rh/rh-nginx112/log/nginx/`, which can be mounted to host system using the Docker volumes.**
+**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/opt/rh/rh-nginx112/log/nginx/`, which can be mounted to host system using the container volumes.**
 
 
 See also
