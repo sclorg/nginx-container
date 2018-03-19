@@ -24,6 +24,9 @@
           "kind": "DockerImage",
           "name": "registry.access.redhat.com/rhscl/nginx-18-rhel7:latest"
         },
+        "referencePolicy": {
+          "type": "Local"
+        },
         "name": "1.8"
       },
       {
@@ -40,6 +43,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "registry.access.redhat.com/rhscl/nginx-110-rhel7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         },
         "name": "1.10"
       },
@@ -58,6 +64,9 @@
           "kind": "DockerImage",
           "name": "registry.access.redhat.com/rhscl/nginx-112-rhel7:latest"
         },
+        "referencePolicy": {
+          "type": "Local"
+        },
         "name": "1.12"
       },
       {
@@ -73,6 +82,9 @@
         "from": {
           "kind": "ImageStreamTag",
           "name": "1.12"
+        },
+        "referencePolicy": {
+          "type": "Local"
         },
         "name": "latest"
       }

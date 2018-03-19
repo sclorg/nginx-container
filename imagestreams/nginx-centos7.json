@@ -24,6 +24,9 @@
           "kind": "DockerImage",
           "name": "docker.io/centos/nginx-18-centos7:latest"
         },
+        "referencePolicy": {
+          "type": "Local"
+        },
         "name": "1.8"
       },
       {
@@ -40,6 +43,9 @@
         "from": {
           "kind": "DockerImage",
           "name": "docker.io/centos/nginx-110-centos7:latest"
+        },
+        "referencePolicy": {
+          "type": "Local"
         },
         "name": "1.10"
       },
@@ -58,6 +64,9 @@
           "kind": "DockerImage",
           "name": "docker.io/centos/nginx-112-centos7:latest"
         },
+        "referencePolicy": {
+          "type": "Local"
+        },
         "name": "1.12"
       },
       {
@@ -73,6 +82,9 @@
         "from": {
           "kind": "ImageStreamTag",
           "name": "1.12"
+        },
+        "referencePolicy": {
+          "type": "Local"
         },
         "name": "latest"
       }
