@@ -40,8 +40,7 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_APP_ROOT=${APP_ROOT}
 
 RUN yum install -y yum-utils gettext hostname && \
-    yum install -y centos-release-scl-rh epel-release && \
-    yum-config-manager --enable centos-sclo-rh-testing && \
+    yum install -y centos-release-scl-rh && \
     INSTALL_PKGS="nss_wrapper bind-utils rh-nginx18 rh-nginx18-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
