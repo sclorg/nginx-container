@@ -84,6 +84,18 @@ see [usage documentation](1.10).
 For information about usage of Dockerfile for nginx 1.12,
 see [usage documentation](1.12).
 
+Build
+---------------------------------
+Images can be built using `make` command.
+
+```
+$ cd nginx-container
+$ git submodule update --init
+$ make build TARGET=centos7 VERSIONS=1.12
+```
+
+For more information about make rules see [README](https://github.com/sclorg/container-common-scripts/blob/master/README.md).
+
 Test
 ---------------------------------
 
