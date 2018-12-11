@@ -1,16 +1,16 @@
-FROM centos/s2i-core-centos7
+FROM centos/s2i-core-centos7:1
 
-# RHSCL rh-nginx112 image.
+# RHSCL rh-nginx114 image.
 #
 # Volumes:
-#  * /var/opt/rh/rh-nginx112/log/nginx/ - Storage for logs
+#  * /var/opt/rh/rh-nginx114/log/nginx/ - Storage for logs
 
 EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.12 \
-    NGINX_SHORT_VER=112 \
+    NGINX_VERSION=1.14 \
+    NGINX_SHORT_VER=114 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
@@ -35,14 +35,14 @@ LABEL summary="${SUMMARY}" \
       usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${NGINX_SHORT_VER}-centos7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
-    NGINX_CONF_PATH=/etc/opt/rh/rh-nginx112/nginx/nginx.conf \
+    NGINX_CONF_PATH=/etc/opt/rh/rh-nginx${NGINX_SHORT_VER}/nginx/nginx.conf \
     NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
     NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
     NGINX_APP_ROOT=${APP_ROOT}
 
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh && \
-    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx112 rh-nginx112-nginx" && \
+    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx${NGINX_SHORT_VER} rh-nginx${NGINX_SHORT_VER}-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all
@@ -77,8 +77,8 @@ USER 1001
 
 # Not using VOLUME statement since it's not working in OpenShift Online:
 # https://github.com/sclorg/httpd-container/issues/30
-# VOLUME ["/opt/rh/rh-nginx112/root/usr/share/nginx/html"]
-# VOLUME ["/var/opt/rh/rh-nginx112/log/nginx/"]
+# VOLUME ["/opt/rh/rh-nginx114/root/usr/share/nginx/html"]
+# VOLUME ["/var/opt/rh/rh-nginx114/log/nginx/"]
 
 ENV BASH_ENV=${NGINX_APP_ROOT}/etc/scl_enable \
     ENV=${NGINX_APP_ROOT}/etc/scl_enable \
