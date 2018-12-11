@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
+IMAGE_NAME=${IMAGE_NAME:-rhscl/nginx-112-rhel7}
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
@@ -210,7 +210,7 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "nginx -v" "nginx version: nginx/1.14."
+  test_scl_usage "nginx -v" "nginx version: nginx/1.12."
   check_result $? "test-app"
 
   test_connection
@@ -240,13 +240,13 @@ cid_file=$(mktemp -u --suffix=.cid)
 # it from Docker hub
 s2i_args="--pull-policy=never"
 
-if [ "$TARGET" == "fedora" ] || [ "$TARGET" == "rhel8" ]; then
+if [ "$TARGET" == "fedora" ]; then
   mv ${test_dir}/test-app/nginx.conf{,.bkp}
   cp ${test_dir}/test-app/nginx.conf{.fedora,}
 fi
 prepare "test-app"
 run_s2i_build "test-app"
-if [ "$TARGET" == "fedora" ] || [ "$TARGET" == "rhel8" ]; then
+if [ "$TARGET" == "fedora" ]; then
   mv ${test_dir}/test-app/nginx.conf{.bkp,}
 fi
 check_result $? "test-app"
