@@ -41,7 +41,7 @@ resulting image with [Docker](http://docker.io) execute:
     $ git clone https://github.com/sclorg/nginx-container.git
     $ cd nginx-container/1.14
     $ docker build -f Dockerfile.fedora -t nginx-114-fedora
-    $ s2i build https://github.com/sclorg/nginx-container.git --context-dir=1.14/test/test-app/ nginx-114-fedora nginx-sample-app
+    $ s2i build https://github.com/sclorg/nginx-container.git -e OS=fedora --context-dir=1.14/test/test-app/ nginx-114-fedora nginx-sample-app
     $ docker run -p 8080:8080 nginx-sample-app
     ```
 
