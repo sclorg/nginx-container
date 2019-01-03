@@ -42,7 +42,7 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_APP_ROOT=${APP_ROOT}
 
 RUN dnf install -y gettext hostname && \
-    INSTALL_PKGS="nss_wrapper bind-utils nginx" && \
+    INSTALL_PKGS="nss_wrapper bind-utils ${NAME}-${NGINX_VERSION}.*" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf clean all

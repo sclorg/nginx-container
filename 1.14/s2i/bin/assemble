@@ -5,7 +5,11 @@ set -e
 echo "---> Installing application source"
 cp -Rf /tmp/src/. ./
 
-if [ -f ./nginx.conf ]; then
+if [[ -n "${OS}"  &&  -f ./nginx.conf.${OS} ]]; then
+  echo "---> Copying nginx.conf.${OS} configuration file..."
+  cp -v ./nginx.conf.${OS} "${NGINX_CONF_PATH}"
+  rm -f ./nginx.conf.${OS}
+elif [ -f ./nginx.conf ]; then
   echo "---> Copying nginx.conf configuration file..."
   cp -v ./nginx.conf "${NGINX_CONF_PATH}"
   rm -f ./nginx.conf
