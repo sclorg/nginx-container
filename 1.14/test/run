@@ -234,6 +234,38 @@ test_pre_init_script() {
 
 }
 
+test_log_output() {
+  info "Testing log output"
+
+  # Verify that the HTTP connection can be established to test application container
+  run_test_application "test-app" &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+
+  info "Testing that GET / was logged as 200"  
+
+  test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
+  check_result $? "test-app"
+
+  out=$(docker logs $(cat ${cid_file}))
+  echo $out | grep '"GET / HTTP/1.1" 200'
+  check_result $? "test-app"
+
+  info "Testing that GET /nothing-at-all was logged as 404"  
+
+  test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
+  check_result $? "test-app"
+
+  out=$(docker logs $(cat ${cid_file}))
+  echo $out | grep '"GET /nothing-at-all HTTP/1.1" 404'
+  check_result $? "test-app"
+
+  cleanup_test_app
+}
+
+
 cid_file=$(mktemp -u --suffix=.cid)
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
@@ -261,6 +293,9 @@ check_result $? "test-app"
 
 # Test application with default uid
 test_application 
+
+# Test logging works
+test_log_output
 
 # Test application with random uid
 CONTAINER_ARGS="--user 12345" test_application
