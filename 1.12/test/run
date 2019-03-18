@@ -54,6 +54,7 @@ prepare() {
 
 run_test_application() {
   run_args=${CONTAINER_ARGS:-}
+  info "Running docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-${1}"
   docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-${1}
 }
 
@@ -154,6 +155,10 @@ test_logs() {
   fi
   if [ -n "$logfile" ]; then
       out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xvO '*')
+  elif [ "$logfile" = "stdout" ]; then
+      out=$(docker logs $(cat ${cid_file}) 2>/dev/null)
+  elif [ "$logfile" = "stderr" ]; then
+      out=$(docker logs $(cat ${cid_file}) 1>/dev/null 2>&1)
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
@@ -269,7 +274,7 @@ test_log_output() {
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
   check_result $? "test-app"
 
-  test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200'
+  test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' stdout
   check_result $? "test-app"
 
   info "Testing that GET /nothing-at-all was logged as 404"  
@@ -277,9 +282,14 @@ test_log_output() {
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
   check_result $? "test-app"
 
-  test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404'
+  test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' stdout
   check_result $? "test-app"
 
+  test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' stderr
+  check_result $? "test-app"
+
+  info "Log output tested successfully."
+  
   cleanup_test_app
 }
 
@@ -310,6 +320,8 @@ test_log_volume_output() {
 
 #  test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' /var/log/nginx/error.log
 #  check_result $? "test-app"
+
+  info "Log volume output tested successfully."
 
   cleanup_test_app
 }
