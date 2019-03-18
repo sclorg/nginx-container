@@ -362,4 +362,4 @@ check_result $? "start-hook-test-app"
 test_pre_init_script
 cleanup "start-hook-test-app"
 
-info "All tests finished successfully."
+info "All tests finished successfully for ${IMAGE_NAME}."
