@@ -144,6 +144,27 @@ test_command() {
   return 0
 }
 
+test_logs() {
+  local expected="$1"
+  local message="$2"
+  local logfile="$3"
+
+  if [ "$message" ]; then
+    info ${message}
+  fi
+  if [ -n "$logfile" ]; then
+      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xvO '*')
+  else
+      out=$(docker logs $(cat ${cid_file}) 2>&1)
+  fi
+  if ! echo "${out}" | egrep -q "${expected}"; then
+    echo "ERROR[docker logs $logfile] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+
+  return 0
+}
+
 test_for_output()
 {
   local url="$1"
@@ -243,14 +264,12 @@ test_log_output() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-
   info "Testing that GET / was logged as 200"  
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
   check_result $? "test-app"
 
-  out=$(docker logs $(cat ${cid_file}))
-  echo $out | grep '"GET / HTTP/1.1" 200'
+  test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200'
   check_result $? "test-app"
 
   info "Testing that GET /nothing-at-all was logged as 404"  
@@ -258,13 +277,42 @@ test_log_output() {
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
   check_result $? "test-app"
 
-  out=$(docker logs $(cat ${cid_file}))
-  echo $out | grep '"GET /nothing-at-all HTTP/1.1" 404'
+  test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404'
   check_result $? "test-app"
 
   cleanup_test_app
 }
 
+test_log_volume_output() {
+  info "Testing log volume output"
+
+  # Verify that the HTTP connection can be established to test application container
+  CONTAINER_ARGS="-e NGINX_LOG_TO_VOLUME=y" run_test_application "test-app" &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+  info "Testing that GET / was logged as 200"  
+
+  test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
+  check_result $? "test-app"
+
+  test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' /var/log/nginx/access.log
+  check_result $? "test-app"
+
+  info "Testing that GET /nothing-at-all was logged as 404"  
+
+  test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
+  check_result $? "test-app"
+
+  test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' /var/log/nginx/access.log
+  check_result $? "test-app"
+
+#  test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' /var/log/nginx/error.log
+#  check_result $? "test-app"
+
+  cleanup_test_app
+}
 
 cid_file=$(mktemp -u --suffix=.cid)
 
@@ -296,6 +344,9 @@ test_application
 
 # Test logging works
 test_log_output
+
+# Test logging to volume works
+test_log_volume_output
 
 # Test application with random uid
 CONTAINER_ARGS="--user 12345" test_application

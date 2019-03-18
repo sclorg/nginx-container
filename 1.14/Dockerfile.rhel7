@@ -64,8 +64,7 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
     mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     mkdir -p ${NGINX_LOG_PATH} && \
-    ln -sf /dev/stdout ${NGINX_LOG_PATH}/access.log && \
-    ln -sf /dev/stderr ${NGINX_LOG_PATH}/error.log && \
+    ln -s ${NGINX_LOG_PATH} /var/log/nginx && \
     chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
     chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
