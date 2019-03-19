@@ -159,7 +159,8 @@ test_logs() {
   elif [ "x$logfile" = "xstderr" ]; then
       out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
   elif [ -n "$logfile" ]; then
-      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xvO '*')
+      info "Extracting $logfile via docker cp..."
+      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xO '*')
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
@@ -262,7 +263,7 @@ test_pre_init_script() {
 }
 
 test_log_output() {
-  info "Testing log output"
+  info "Testing log output for $IMAGE_NAME"
 
   # Verify that the HTTP connection can be established to test application container
   run_test_application "test-app" &
@@ -295,7 +296,7 @@ test_log_output() {
 }
 
 test_log_volume_output() {
-  info "Testing log volume output"
+  info "Testing log volume output for $IMAGE_NAME"
 
   # Verify that the HTTP connection can be established to test application container
   CONTAINER_ARGS="-e NGINX_LOG_TO_VOLUME=y" run_test_application "test-app" &
