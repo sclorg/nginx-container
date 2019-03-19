@@ -37,11 +37,12 @@ LABEL summary="${SUMMARY}" \
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
     NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
-    NGINX_APP_ROOT=${APP_ROOT}
+    NGINX_APP_ROOT=${APP_ROOT} \
+    NGINX_LOG_PATH=/var/opt/rh/rh-nginx${NGINX_SHORT_VER}/log/nginx
 
 RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh && \
-    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx110 rh-nginx110-nginx" && \
+    INSTALL_PKGS="nss_wrapper bind-utils rh-nginx${NGINX_SHORT_VER} rh-nginx${NGINX_SHORT_VER}-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all
@@ -55,14 +56,14 @@ COPY ./root/ /
 # In order to drop the root user, we have to make some directories world
 # writeable as OpenShift default security model is to run the container under
 # random UID.
-RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed /etc/opt/rh/rh-nginx${NGINX_SHORT_VER}/nginx/nginx.conf && \
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
+    chmod a+rwx ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
     mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
-    mkdir -p /var/opt/rh/rh-nginx${NGINX_SHORT_VER}/log/nginx && \
-    ln -sf /dev/stdout /var/opt/rh/rh-nginx${NGINX_SHORT_VER}/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/opt/rh/rh-nginx${NGINX_SHORT_VER}/log/nginx/error.log && \
+    mkdir -p ${NGINX_LOG_PATH} && \
+    ln -s ${NGINX_LOG_PATH} /var/log/nginx && \
     chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
     chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
