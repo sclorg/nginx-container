@@ -78,7 +78,7 @@ You can replace \<DIR> with location of your web root. Please note that this has
 
 Troubleshooting
 ---------------
-By default, nginx logs into standard output, so the log is available in the container log. The log can be examined by running:
+By default, nginx access logs are written to standard output and error logs are written to standard error, so both are available in the container log. The log can be examined by running:
 
     docker logs <container>
 
