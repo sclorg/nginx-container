@@ -154,7 +154,9 @@ test_logs() {
   if [ "$message" ]; then
     info ${message}
   fi
-  if [ "x$logfile" = "xstdout" ]; then
+  if [ "x$logfile" = "xstdouterr" ]; then
+      out=$(docker logs $(cat ${cid_file}) 2>&1)
+  elif [ "x$logfile" = "xstdout" ]; then
       out=$(docker logs $(cat ${cid_file}) 2>/dev/null)
   elif [ "x$logfile" = "xstderr" ]; then
       out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
@@ -287,7 +289,7 @@ test_log_output() {
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' stdout
   check_result $? "test-app"
 
-  test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' stderr
+  test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' stdouterr
   check_result $? "test-app"
 
   info "Log output tested successfully."
