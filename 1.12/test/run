@@ -154,12 +154,12 @@ test_logs() {
   if [ "$message" ]; then
     info ${message}
   fi
-  if [ -n "$logfile" ]; then
-      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xvO '*')
-  elif [ "$logfile" = "stdout" ]; then
+  if [ "x$logfile" = "xstdout" ]; then
       out=$(docker logs $(cat ${cid_file}) 2>/dev/null)
-  elif [ "$logfile" = "stderr" ]; then
-      out=$(docker logs $(cat ${cid_file}) 1>/dev/null 2>&1)
+  elif [ "x$logfile" = "xstderr" ]; then
+      out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
+  elif [ -n "$logfile" ]; then
+      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xvO '*')
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
