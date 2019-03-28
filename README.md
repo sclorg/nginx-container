@@ -35,7 +35,7 @@ Choose either the CentOS7 or RHEL7 based image:
     To download it run:
 
     ```
-    $ docker pull registry.access.redhat.com/rhscl/nginx-112-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/nginx-112-rhel7
     ```
 
     To build a RHEL7 based Nginx image, you need to run Docker build on a properly
@@ -53,7 +53,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ docker pull centos/nginx-112-centos7
+    $ podman pull centos/nginx-112-centos7
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -67,6 +67,8 @@ Choose either the CentOS7 or RHEL7 based image:
 
 For using other versions of Nginx, just replace the `1.12` value by particular version
 in the commands above.
+
+Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all provided versions of Nginx, which must be specified in  `VERSIONS` variable.
