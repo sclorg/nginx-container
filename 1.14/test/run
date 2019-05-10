@@ -336,15 +336,8 @@ cid_file=$(mktemp -u --suffix=.cid)
 # it from Docker hub
 s2i_args="--pull-policy=never"
 
-if [ "$TARGET" == "fedora" ] || [ "$TARGET" == "rhel8" ]; then
-  mv ${test_dir}/test-app/nginx.conf{,.bkp}
-  cp ${test_dir}/test-app/nginx.conf{.fedora,}
-fi
 prepare "test-app"
 run_s2i_build "test-app"
-if [ "$TARGET" == "fedora" ] || [ "$TARGET" == "rhel8" ]; then
-  mv ${test_dir}/test-app/nginx.conf{.bkp,}
-fi
 check_result $? "test-app"
 
 # Verify the 'usage' script is working properly when running the base image with 's2i usage ...'

@@ -68,7 +68,7 @@ The nginx container image supports the following configuration variable, which c
 
 
 **`NGINX_LOG_TO_VOLUME`**  
-       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/opt/rh/rh-nginx112/log/nginx/`
+       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx112/log/nginx/`.
 
 
 You can mount your own web root like this:
@@ -84,7 +84,7 @@ By default, nginx access logs are written to standard output and error logs are 
 
     podman logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/opt/rh/rh-nginx112/log/nginx/`, which can be mounted to host system using the container volumes.**
+**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx112/log/nginx/`, which can be mounted to host system using the container volumes.**
 
 
 See also
