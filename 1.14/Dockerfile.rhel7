@@ -65,12 +65,16 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     mkdir -p ${NGINX_LOG_PATH} && \
     ln -s ${NGINX_LOG_PATH} /var/log/nginx && \
+    ln -s /etc/opt/rh/rh-nginx${NGINX_SHORT_VER}/nginx /etc/nginx && \
+    ln -s /opt/rh/rh-nginx${NGINX_SHORT_VER}/root/usr/share/nginx /usr/share/nginx && \
     chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
     chmod -R a+rwx /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
     chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     chown -R 1001:0 ${NGINX_APP_ROOT} && \
     chown -R 1001:0 /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
     chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chmod -R a+rwx /var/run && \
+    chown -R 1001:0 /var/run && \
     rpm-file-permissions
 
 USER 1001
