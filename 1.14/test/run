@@ -161,8 +161,8 @@ test_logs() {
   elif [ "x$logfile" = "xstderr" ]; then
       out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
   elif [ -n "$logfile" ]; then
-      info "Extracting $logfile via docker cp..."
-      out=$(docker cp $(cat ${cid_file}):${logfile} - | tar -xO '*')
+      info "Extracting $logfile via docker exec <cont> cat ${logfile}..."
+      out=$(docker exec $(cat ${cid_file}) cat ${logfile})
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
