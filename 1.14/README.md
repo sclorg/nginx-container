@@ -96,4 +96,3 @@ https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
 for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
-
