@@ -9,7 +9,6 @@ The resulting image can be run using [podman](https://github.com/containers/libp
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
-
 Description
 -----------
 
