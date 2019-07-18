@@ -41,7 +41,7 @@ RUN yum install -y centos-release-scl-rh && \
     INSTALL_PKGS="bind-utils nginx16 nginx16-nginx" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum clean all
+    yum -y clean all --enablerepo='*'
 
 # When bash is started non-interactively, to run a shell script, for example it
 # looks for this variable and source the content of this file. This will enable
