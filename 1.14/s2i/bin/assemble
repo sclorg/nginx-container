@@ -4,6 +4,8 @@ set -e
 
 echo "---> Installing application source"
 cp -Rf /tmp/src/. ./
+# Fix source directory permissions
+fix-permissions ./
 
 if [ -f ./nginx.conf ]; then
   echo "---> Copying nginx.conf configuration file..."
@@ -37,5 +39,3 @@ if [ -d ./nginx-start ]; then
   fi
 fi
 
-# Fix source directory permissions
-fix-permissions ./
