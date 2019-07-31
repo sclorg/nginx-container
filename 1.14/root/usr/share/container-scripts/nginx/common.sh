@@ -24,6 +24,12 @@ function process_extending_files() {
       if [ -f $custom_dir/$filename ]; then
         source $custom_dir/$filename
       elif [ -f $default_dir/$filename ]; then 
+	      # debug output
+	      echo "DEBUG OUTPUT BEGIN"
+	      umask
+	      id -a
+	      ls -l $default_dir/$filename
+	      echo "DEBUG OUTPUT END"
         source $default_dir/$filename
       fi
     fi
