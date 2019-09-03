@@ -27,6 +27,7 @@ LABEL summary="${SUMMARY}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
       name="rhel8/${NAME}-${NGINX_SHORT_VER}" \
       version="1" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
       usage="s2i build <SOURCE-REPOSITORY> rhel8/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
