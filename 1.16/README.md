@@ -1,6 +1,6 @@
-Nginx 1.14 server and a reverse proxy server container image
+Nginx 1.16 server and a reverse proxy server container image
 =========================================================
-This container image includes Nginx 1.14 server and a reverse server for OpenShift and general usage.
+This container image includes Nginx 1.16 server and a reverse server for OpenShift and general usage.
 Users can choose between RHEL, CentOS and Fedora based images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
@@ -14,26 +14,26 @@ Description
 
 Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP 
 protocols, with a strong focus on high concurrency, performance and low memory usage. The container 
-image provides a containerized packaging of the nginx 1.14 daemon. The image can be used 
-as a base image for other applications based on nginx 1.14 web server. 
+image provides a containerized packaging of the nginx 1.16 daemon. The image can be used
+as a base image for other applications based on nginx 1.16 web server.
 Nginx server image can be extended using Openshift's `Source` build feature.
 
 
 Usage
 -----
 
-For this, we will assume that you are using the `rhel8/nginx-114` image, available via `nginx:1.14` imagestream tag in Openshift.
-Building a simple [sample-app](https://github.com/sclorg/nginx-container/tree/master/1.14/test/test-app) application
+For this, we will assume that you are using the `rhel8/nginx-116` image, available via `nginx:1.16` imagestream tag in Openshift.
+Building a simple [sample-app](https://github.com/sclorg/nginx-container/tree/master/1.16/test/test-app) application
 in Openshift can be achieved with the following step:
 
     ```
-    oc new-app nginx:1.14~https://github.com/sclorg/nginx-container.git --context-dir=1.14/test/test-app/
+    oc new-app nginx:1.16~https://github.com/sclorg/nginx-container.git --context-dir=1.16/test/test-app/
     ```
 
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
 
     ```
-    $ s2i build https://github.com/sclorg/nginx-container.git ---context-dir=1.14/test/test-app/ rhel8/nginx-114 nginx-sample-app
+    $ s2i build https://github.com/sclorg/nginx-container.git ---context-dir=1.16/test/test-app/ rhel8/nginx-116 nginx-sample-app
     ```
 
 **Accessing the application:**
@@ -70,7 +70,7 @@ The nginx container image supports the following configuration variable, which c
 
 
 **`NGINX_LOG_TO_VOLUME`**  
-       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx114/log/nginx/`.
+       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx116/log/nginx/`.
 
 
 You can mount your own web root like this:
@@ -86,7 +86,7 @@ By default, nginx access logs are written to standard output and error logs are 
 
     podman logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx114/log/nginx/`, which can be mounted to host system using the container volumes.**
+**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx116/log/nginx/`, which can be mounted to host system using the container volumes.**
 
 
 See also
@@ -96,3 +96,4 @@ https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
 for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
+
