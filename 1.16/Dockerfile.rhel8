@@ -1,13 +1,13 @@
 FROM ubi8/s2i-core:1
 
-# RHSCL rh-nginx114 image.
+# RHSCL rh-nginx116 image.
 
 EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.14 \
-    NGINX_SHORT_VER=114 \
+    NGINX_VERSION=1.16 \
+    NGINX_SHORT_VER=116 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
