@@ -15,6 +15,7 @@ Versions
 Nginx versions currently provided are:
 * [nginx-1.10](1.10)
 * [nginx-1.14](1.14)
+* [nginx-1.16](1.16)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -30,11 +31,11 @@ Choose either the CentOS7 or RHEL7 based image:
 
 *  **RHEL7 based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/nginx-114-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/nginx-116-rhel7).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/nginx-114-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/nginx-116-rhel7
     ```
 
     To build a RHEL7 based Nginx image, you need to run Docker build on a properly
@@ -44,7 +45,7 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel7 VERSIONS=1.14
+    $ make build TARGET=rhel7 VERSIONS=1.16
     ```
 
 *  **CentOS7 based image**
@@ -52,7 +53,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ podman pull centos/nginx-114-centos7
+    $ podman pull centos/nginx-116-centos7
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -61,10 +62,10 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=centos7 VERSIONS=1.14
+    $ make build TARGET=centos7 VERSIONS=1.16
     ```
 
-For using other versions of Nginx, just replace the `1.14` value by particular version
+For using other versions of Nginx, just replace the `1.16` value by particular version
 in the commands above.
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -83,6 +84,8 @@ see [usage documentation](1.10).
 For information about usage of Dockerfile for nginx 1.14,
 see [usage documentation](1.14).
 
+For information about usage of Dockerfile for nginx 1.16,
+see [usage documentation](1.16).
 
 Build
 ---------------------------------
@@ -91,7 +94,7 @@ Images can be built using `make` command.
 ```
 $ cd nginx-container
 $ git submodule update --init
-$ make build TARGET=centos7 VERSIONS=1.14
+$ make build TARGET=centos7 VERSIONS=1.16
 ```
 
 For more information about make rules see [README](https://github.com/sclorg/container-common-scripts/blob/master/README.md).
@@ -112,7 +115,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel7 VERSIONS=1.14
+    $ make test TARGET=rhel7 VERSIONS=1.16
     ```
 
 *  **CentOS based image**
@@ -120,10 +123,10 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=centos7 VERSIONS=1.14
+    $ make test TARGET=centos7 VERSIONS=1.16
     ```
 
-For using other versions of Nginx, just replace the `1.14` value by particular version
+For using other versions of Nginx, just replace the `1.16` value by particular version
 in the commands above.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
