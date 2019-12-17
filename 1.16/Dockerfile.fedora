@@ -1,6 +1,6 @@
-FROM registry.fedoraproject.org/f29/s2i-core:latest
+FROM registry.fedoraproject.org/f32/s2i-core:latest
 
-# nginx 1.14 image.
+# nginx 1.16 image.
 #
 # Volumes:
 #  * /var/log/nginx/ - Storage for logs
@@ -9,8 +9,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.14 \
-    NGINX_SHORT_VER=114 \
+    NGINX_VERSION=1.16 \
+    NGINX_SHORT_VER=116 \
     VERSION=0 \
     ARCH=x86_64
 
