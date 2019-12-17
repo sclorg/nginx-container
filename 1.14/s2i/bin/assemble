@@ -3,7 +3,7 @@
 set -e
 
 echo "---> Installing application source"
-mv /tmp/src/* ./
+cp -Rf /tmp/src/* ./
 
 # Fix source directory permissions
 fix-permissions ./
