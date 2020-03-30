@@ -45,8 +45,6 @@ RUN yum install -y yum-utils gettext hostname && \
     yum install -y centos-release-scl-rh && \
     INSTALL_PKGS="nss_wrapper bind-utils rh-nginx${NGINX_SHORT_VER} rh-nginx${NGINX_SHORT_VER}-nginx \
                   rh-nginx${NGINX_SHORT_VER}-nginx-mod-stream" && \
-    yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-nginx116-rh-candidate/x86_64/os/ && \
-    echo gpgcheck=0 >> /etc/yum.repos.d/cbs.centos.org_repos_sclo7-rh-nginx116-rh-candidate_x86_64_os_.repo && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
