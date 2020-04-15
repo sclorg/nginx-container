@@ -12,10 +12,10 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP 
-protocols, with a strong focus on high concurrency, performance and low memory usage. The container 
-image provides a containerized packaging of the nginx 1.14 daemon. The image can be used 
-as a base image for other applications based on nginx 1.14 web server. 
+Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP
+protocols, with a strong focus on high concurrency, performance and low memory usage. The container
+image provides a containerized packaging of the nginx 1.14 daemon. The image can be used
+as a base image for other applications based on nginx 1.14 web server.
 Nginx server image can be extended using Openshift's `Source` build feature.
 
 
@@ -51,16 +51,19 @@ S2I build folder structure:
 **`./nginx.conf`**--
        The main nginx configuration file
 
-**`./nginx-cfg/*.conf`**  
+**`./nginx-cfg/*.conf`**
        Should contain all nginx configuration we want to include into image
 
-**`./nginx-default-cfg/*.conf`**  
+**`./nginx-default-cfg/*.conf`**
        Contains any nginx config snippets to include in the default server block
 
-**`./nginx-start/*.sh`**  
+**`./nginx-start/*.sh`**
        Contains shell scripts that are sourced right before nginx is launched
 
-**`./`**  
+**`./nginx-perl/*.pm`**
+       Contains perl modules to be use by `perl_modules` and `perl_require` directives
+
+**`./`**
        Should contain nginx application source code
 
 
@@ -69,7 +72,7 @@ Environment variables and volumes
 The nginx container image supports the following configuration variable, which can be set by using the `-e` option with the podman run command:
 
 
-**`NGINX_LOG_TO_VOLUME`**  
+**`NGINX_LOG_TO_VOLUME`**
        When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx114/log/nginx/`.
 
 

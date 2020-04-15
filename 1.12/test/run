@@ -141,7 +141,7 @@ test_command() {
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
-  fi  
+  fi
 
   return 0
 }
@@ -174,8 +174,7 @@ test_logs() {
   return 0
 }
 
-test_for_output()
-{
+test_for_output() {
   local url="$1"
   local expect="$2"
   local host="${3-localhost}"
@@ -187,9 +186,9 @@ test_for_output()
   info "Testing URL $url with HTTP hostname ${host} produces output $expect"
 
   while [ $attempt -le $max_attempts ]; do
-    response=$(curl -s -H "Host: ${host}" ${url})
-    echo "${response}"
+    response=$(curl -is -H "Host: ${host}" ${url})
     status=$?
+    echo "${response}"
     if [ $status -eq 0 ]; then
       if echo "${response}" | grep -q "${expect}"; then
         info "Success!"
@@ -273,7 +272,7 @@ test_log_output() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  info "Testing that GET / was logged as 200"  
+  info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
   check_result $? "test-app"
@@ -281,7 +280,7 @@ test_log_output() {
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' stdout
   check_result $? "test-app"
 
-  info "Testing that GET /nothing-at-all was logged as 404"  
+  info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
   check_result $? "test-app"
@@ -293,7 +292,7 @@ test_log_output() {
   check_result $? "test-app"
 
   info "Log output tested successfully."
-  
+
   cleanup_test_app
 }
 
@@ -306,7 +305,7 @@ test_log_volume_output() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  info "Testing that GET / was logged as 200"  
+  info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
   check_result $? "test-app"
@@ -314,7 +313,7 @@ test_log_volume_output() {
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' /var/log/nginx/access.log
   check_result $? "test-app"
 
-  info "Testing that GET /nothing-at-all was logged as 404"  
+  info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
   check_result $? "test-app"
@@ -326,6 +325,25 @@ test_log_volume_output() {
   check_result $? "test-app"
 
   info "Log volume output tested successfully."
+
+  cleanup_test_app
+}
+
+test_perl_directive() {
+  run_test_application "perl-test-app" &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+  local perl_version=$(docker exec $(cat ${cid_file}) /bin/bash -c "perl -e 'print \"$^V\"'" 2>&1)
+
+  info "Testing perl_set directive sets header with perl version"
+  test_for_output "http://$(container_ip):${test_port}/" "X-Perl-Version: ${perl_version}"
+  check_result $? "perl-test-app"
+
+  info "Testing perl directive runs perl location handler"
+  test_for_output "http://$(container_ip):${test_port}/perl" "Perl location handler is working"
+  check_result $? "perl-test-app"
 
   cleanup_test_app
 }
@@ -356,7 +374,7 @@ test_docker_run_usage
 check_result $? "test-app"
 
 # Test application with default uid
-test_application 
+test_application
 
 # Test logging works
 test_log_output
@@ -377,5 +395,16 @@ check_result $? "start-hook-test-app"
 
 test_pre_init_script
 cleanup "start-hook-test-app"
+
+# Test perl module functionality
+cid_file=$(mktemp -u --suffix=.cid)
+
+prepare "perl-test-app"
+run_s2i_build "perl-test-app"
+check_result $? "perl-test-app"
+
+test_perl_directive
+
+cleanup "perl-test-app"
 
 info "All tests finished successfully for ${IMAGE_NAME}."

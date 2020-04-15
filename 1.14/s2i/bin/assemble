@@ -39,3 +39,12 @@ if [ -d ./nginx-start ]; then
     rm -rf ./nginx-start
   fi
 fi
+
+if [ -d ./nginx-perl ]; then
+  echo "---> Copying nginx perl module files..."
+  if [ "$(ls -A ./nginx-perl/*.pm)" ]; then
+    cp -av ./nginx-perl/*.pm "${NGINX_PERL_MODULE_PATH}"
+    rm -rf ./nginx-perl
+  fi
+  chmod -Rf g+rw ${NGINX_PERL_MODULE_PATH}
+fi
