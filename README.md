@@ -13,7 +13,6 @@ For more information about concepts used in these container images, see the
 Versions
 ---------------
 Nginx versions currently provided are:
-* [nginx-1.10](1.10)
 * [nginx-1.14](1.14)
 * [nginx-1.16](1.16)
 
@@ -77,9 +76,6 @@ This variable must be set to a list with possible versions (subdirectories).**
 
 Usage
 ---------------------------------
-
-For information about usage of Dockerfile for nginx 1.10,
-see [usage documentation](1.10).
 
 For information about usage of Dockerfile for nginx 1.14,
 see [usage documentation](1.14).
