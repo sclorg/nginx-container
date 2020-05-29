@@ -13,12 +13,10 @@ source ${THISDIR}/test-lib-openshift.sh
 
 function test_nginx_integration() {
   local image_name=$1
-  local version=$2
-  local import_image=$3
-  VERSION=$version ct_os_test_s2i_app "${image_name}" \
-                                      "https://github.com/sclorg/nginx-container.git" \
-                                      "examples/${version}/test-app" \
-                                      "Test NGINX passed"
+  ct_os_test_s2i_app "${image_name}" \
+                     "https://github.com/sclorg/nginx-container.git" \
+                     "examples/${VERSION}/test-app" \
+                     "Test NGINX passed"
 }
 
 # Check the imagestream
