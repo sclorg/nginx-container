@@ -33,7 +33,7 @@ in Openshift can be achieved with the following step:
 The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
 
     ```
-    $ s2i build https://github.com/sclorg/nginx-container.git ---context-dir=1.16/test/test-app/ rhel8/nginx-116 nginx-sample-app
+    $ s2i build https://github.com/sclorg/nginx-container.git --context-dir=1.16/test/test-app/ rhel8/nginx-116 nginx-sample-app
     ```
 
 **Accessing the application:**
