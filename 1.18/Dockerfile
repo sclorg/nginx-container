@@ -1,16 +1,16 @@
 FROM centos/s2i-core-centos7:1
 
-# RHSCL rh-nginx116 image.
+# RHSCL rh-nginx118 image.
 #
 # Volumes:
-#  * /var/opt/rh/rh-nginx116/log/nginx/ - Storage for logs
+#  * /var/opt/rh/rh-nginx118/log/nginx/ - Storage for logs
 
 EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.16 \
-    NGINX_SHORT_VER=116 \
+    NGINX_VERSION=1.18 \
+    NGINX_SHORT_VER=118 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
@@ -84,8 +84,8 @@ USER 1001
 
 # Not using VOLUME statement since it's not working in OpenShift Online:
 # https://github.com/sclorg/httpd-container/issues/30
-# VOLUME ["/opt/rh/rh-nginx116/root/usr/share/nginx/html"]
-# VOLUME ["/var/opt/rh/rh-nginx116/log/nginx/"]
+# VOLUME ["/opt/rh/rh-nginx118/root/usr/share/nginx/html"]
+# VOLUME ["/var/opt/rh/rh-nginx118/log/nginx/"]
 
 ENV BASH_ENV=${NGINX_APP_ROOT}/etc/scl_enable \
     ENV=${NGINX_APP_ROOT}/etc/scl_enable \
