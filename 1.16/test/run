@@ -348,6 +348,17 @@ test_perl_directive() {
   cleanup_test_app
 }
 
+test_latest_imagestreams() {
+  local result=1
+  # Switch to root directory of a container
+  echo "Testing the latest version in imagestreams"
+  pushd "${test_dir}/../.." >/dev/null || return 1
+  ct_check_latest_imagestreams
+  result=$?
+  popd >/dev/null || return 1
+  return $result
+}
+
 cid_file=$(mktemp -u --suffix=.cid)
 
 # Since we built the candidate image locally, we don't want S2I attempt to pull
@@ -397,6 +408,9 @@ run_s2i_build "perl-test-app"
 check_result $? "perl-test-app"
 
 test_perl_directive
+
+test_latest_imagestreams
+check_result $?
 
 cleanup "perl-test-app"
 
