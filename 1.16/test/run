@@ -96,9 +96,7 @@ cleanup() {
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
-    info "TEST FAILED (${result})"
-    cleanup $2
-    exit $result
+    TESTSUITE_RESULT=1
   fi
 }
 
@@ -248,7 +246,6 @@ test_connection_s2i() {
 }
 
 test_application() {
-  local res=0
   # Verify that the HTTP connection can be established to test application container
   run_test_application "test-app" &
 
@@ -256,21 +253,15 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "nginx -v" "nginx version: nginx/$VERSION."
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_connection
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   cleanup_test_app
-  return "$res"
 }
 
 test_pre_init_script() {
-  local res=0
   # Verify that the HTTP connection can be established to test application container
   run_test_application "start-hook-test-app" &
 
@@ -278,21 +269,15 @@ test_pre_init_script() {
   wait_for_cid
 
   test_command "cat /opt/app-root/etc/nginx.d/default.conf | grep 'resolver' | sed -e 's/resolver\(.*\);/\1/' | grep 'DNS_SERVER'" ""
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_connection_s2i
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
-  cleanup_test_app
-  return "$res"
+  check_result $?
 
+  cleanup_test_app
 }
 
 test_log_output() {
-  local res=0
   info "Testing log output for $IMAGE_NAME"
 
   # Verify that the HTTP connection can be established to test application container
@@ -304,40 +289,26 @@ test_log_output() {
   info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' stdout
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' stdout
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' stdouterr
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
-
-  info "Log output tested successfully."
+  check_result $?
 
   cleanup_test_app
-  return "$res"
 }
 
 test_log_volume_output() {
-  local res=0
   info "Testing log volume output for $IMAGE_NAME"
 
   # Verify that the HTTP connection can be established to test application container
@@ -349,31 +320,21 @@ test_log_volume_output() {
   info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' /var/log/nginx/access.log
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' /var/log/nginx/access.log
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' /var/log/nginx/error.log
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   info "Log volume output tested successfully."
 
@@ -381,7 +342,6 @@ test_log_volume_output() {
 }
 
 test_perl_directive() {
-  local res=0
   run_test_application "perl-test-app" &
 
   # Wait for the container to write it's CID file
@@ -391,15 +351,11 @@ test_perl_directive() {
 
   info "Testing perl_set directive sets header with perl version"
   test_for_output "http://$(container_ip):${test_port}/" "X-Perl-Version: ${perl_version}"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   info "Testing perl directive runs perl location handler"
   test_for_output "http://$(container_ip):${test_port}/perl" "Perl location handler is working"
-  if [[ "$?" != "0" ]]; then
-    res=1
-  fi
+  check_result $?
 
   cleanup_test_app
 }
@@ -432,7 +388,6 @@ function run_all_tests() {
     fi
   done;
   cleanup "${APP_NAME}"
-  return $suite_result
 }
 
 function build_image() {
@@ -445,32 +400,23 @@ function build_image() {
 
   prepare "${test_name}"
   run_s2i_build "${test_name}"
-  check_result $? "${test_name}"
+  check_result $?
 }
 
 build_image "test-app"
 
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_APP} run_all_tests
-if [[ "$?" != "0" ]]; then
-    TESTSUITE_RESULT=1
-fi
 
 build_image "start-hook-test-app"
 
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests
-if [[ "$?" != "0" ]]; then
-    TESTSUITE_RESULT=1
-fi
 
 build_image "perl-test-app"
 
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests
-if [[ "$?" != "0" ]]; then
-    TESTSUITE_RESULT=1
-fi
 
 echo "$test_short_summary"
 
