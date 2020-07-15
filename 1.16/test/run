@@ -406,17 +406,17 @@ function build_image() {
 build_image "test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_APP} run_all_tests
+TEST_LIST=${TEST_LIST_APP} run_all_tests "test-app"
 
 build_image "start-hook-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests
+TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
 
 build_image "perl-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests
+TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
 
 echo "$test_short_summary"
 
