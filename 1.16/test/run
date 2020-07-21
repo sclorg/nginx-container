@@ -96,8 +96,10 @@ cleanup() {
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
+    cleanup_test_app
     TESTSUITE_RESULT=1
   fi
+  return $result
 }
 
 wait_for_cid() {
@@ -253,12 +255,13 @@ test_application() {
   wait_for_cid
 
   test_scl_usage "nginx -v" "nginx version: nginx/$VERSION."
-  check_result $?
+  check_result $? || return 1
 
   test_connection
-  check_result $?
+  check_result $? || return 1
 
   cleanup_test_app
+  return 0
 }
 
 test_pre_init_script() {
@@ -269,12 +272,13 @@ test_pre_init_script() {
   wait_for_cid
 
   test_command "cat /opt/app-root/etc/nginx.d/default.conf | grep 'resolver' | sed -e 's/resolver\(.*\);/\1/' | grep 'DNS_SERVER'" ""
-  check_result $?
+  check_result $? || return 1
 
   test_connection_s2i
-  check_result $?
+  check_result $? || return 1
 
   cleanup_test_app
+  return 0
 }
 
 test_log_output() {
@@ -289,23 +293,24 @@ test_log_output() {
   info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
-  check_result $?
+  check_result $? || return 1
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' stdout
-  check_result $?
+  check_result $? || return 1
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
-  check_result $?
+  check_result $? || return 1
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' stdout
-  check_result $?
+  check_result $? || return 1
 
   test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' stdouterr
-  check_result $?
+  check_result $? || return 1
 
   cleanup_test_app
+  return 0
 }
 
 test_log_volume_output() {
@@ -320,25 +325,26 @@ test_log_volume_output() {
   info "Testing that GET / was logged as 200"
 
   test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
-  check_result $?
+  check_result $? || return 1
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' /var/log/nginx/access.log
-  check_result $?
+  check_result $? || return 1
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
   test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
-  check_result $?
+  check_result $? || return 1
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' /var/log/nginx/access.log
-  check_result $?
+  check_result $? || return 1
 
   test_logs 'open.*failed.*No such file or directory' 'Test that bad GET is logged to error.log' /var/log/nginx/error.log
-  check_result $?
+  check_result $? || return 1
 
   info "Log volume output tested successfully."
 
   cleanup_test_app
+  return 0
 }
 
 test_perl_directive() {
@@ -351,13 +357,14 @@ test_perl_directive() {
 
   info "Testing perl_set directive sets header with perl version"
   test_for_output "http://$(container_ip):${test_port}/" "X-Perl-Version: ${perl_version}"
-  check_result $?
+  check_result $? || return 1
 
   info "Testing perl directive runs perl location handler"
   test_for_output "http://$(container_ip):${test_port}/perl" "Perl location handler is working"
-  check_result $?
+  check_result $? || return 1
 
   cleanup_test_app
+  return 0
 }
 
 test_latest_imagestreams() {
