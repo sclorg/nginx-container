@@ -22,7 +22,6 @@ test_application
 test_log_output
 test_log_volume_output
 test_application_user
-test_latest_imagestreams
 "
 TEST_LIST_HOOK_APP="test_pre_init_script"
 TEST_LIST_PERL_APP="test_perl_directive"
@@ -365,17 +364,6 @@ test_perl_directive() {
 
   cleanup_test_app
   return 0
-}
-
-test_latest_imagestreams() {
-  local result=1
-  # Switch to root directory of a container
-  echo "Testing the latest version in imagestreams"
-  pushd "${test_dir}/../.." >/dev/null || return 1
-  ct_check_latest_imagestreams
-  result=$?
-  popd >/dev/null || return 1
-  return $result
 }
 
 test_application_user() {
