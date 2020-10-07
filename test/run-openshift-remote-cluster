@@ -11,8 +11,11 @@
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
 source ${THISDIR}/test-lib-nginx.sh
+source ${THISDIR}/test-lib-remote-openshift.sh
 
 set -eo nounset
+
+ct_os_set_ocp4
 
 trap ct_os_cleanup EXIT SIGINT
 
@@ -20,14 +23,13 @@ ct_os_check_compulsory_vars
 
 oc status || false "It looks like oc is not properly logged in."
 
-export CT_SKIP_NEW_PROJECT=true
-export CT_SKIP_UPLOAD_IMAGE=true
-export CT_NAMESPACE=openshift
+# For testing on OpenShift 4 we use internal registry
+export CT_EXTERNAL_REGISTRY=true
 
 test_nginx_integration "${IMAGE_NAME}"
 
 # Check the imagestream
-test_nginx_imagestream
+# test_nginx_imagestream
 
 OS_TESTSUITE_RESULT=0
 
