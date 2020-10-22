@@ -7,6 +7,7 @@
 #
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
+test_dir="$(readlink -f $(dirname ${BASH_SOURCE[0]}))"
 
 source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
