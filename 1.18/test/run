@@ -69,13 +69,13 @@ prepare() {
 
 run_test_application() {
   run_args=${CONTAINER_ARGS:-}
-  info "Running docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-${1}"
-  docker run --user=100001 ${run_args} --cidfile=${cid_file} ${IMAGE_NAME}-${1}
+  info "Running docker run --user=10001 ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}"
+  docker run --user=10001 ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}
 }
 
 cleanup_test_app() {
   info "Cleaning up the test application"
-  if [ -f $cid_file ]; then
+  if [ -n "$cid_file" ] && [ -f "$cid_file" ]; then
     if container_exists; then
       docker stop $(cat $cid_file)
       docker rm $(cat $cid_file)
@@ -146,12 +146,12 @@ test_command() {
   if [ $message ]; then
     info ${3}
   fi
-  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  out=$(docker exec -ti "$(cat ${cid_file})" /bin/bash -c "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
   fi
-  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  out=$(docker exec -ti "$(cat ${cid_file})" /bin/sh -ic "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
@@ -176,7 +176,7 @@ test_logs() {
       out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
   elif [ -n "$logfile" ]; then
       info "Extracting $logfile via docker exec <cont> cat ${logfile}..."
-      out=$(docker exec $(cat ${cid_file}) cat ${logfile})
+      out=$(docker exec -ti $(cat ${cid_file}) cat ${logfile})
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
@@ -368,11 +368,11 @@ test_perl_directive() {
 
 test_application_user() {
   # Test application with random uid
-  CONTAINER_ARGS="--user 12345" test_application
+  CONTAINER_ARGS="--user=12345" test_application
 }
 
 function run_all_tests() {
-  local APP_NAME="$1"
+  local APP_NAME="${1:-}"
   for test_case in $TEST_LIST; do
     info "Running test $test_case ...."
     if $test_case; then
@@ -382,12 +382,12 @@ function run_all_tests() {
       [ -n "${FAIL_QUICKLY:-}" ] && echo "$sum" && return 1
     fi
   done;
-  cleanup "${APP_NAME}"
+  [ -n "${APP_NAME}" ] && cleanup "${APP_NAME}"
 }
 
 function build_image() {
   local test_name="$1"
-  cid_file=$(mktemp -u --suffix=.cid)
+  cid_file="$CID_FILE_DIR/$test_name"
 
   # Since we built the candidate image locally, we don't want S2I attempt to pull
   # it from Docker hub
@@ -398,20 +398,46 @@ function build_image() {
   check_result $?
 }
 
+test_scl_enable() {
+  echo "Testing nginx availability in Dockerfile"
+  ct_binary_found_from_df nginx
+  check_result $? || return 1
+
+  echo "Testing variable presence during \`docker exec\`"
+  ct_check_exec_env_vars
+  check_result $? || return 1
+
+  echo "Checking if all scl variables are defined in Dockerfile"
+  ct_check_scl_enable_vars
+  check_result $? || return 1
+}
+
+set -x
+CID_FILE_DIR=$(mktemp -d)
+
 build_image "test-app"
 
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_APP} run_all_tests "test-app"
 
-build_image "start-hook-test-app"
+#build_image "start-hook-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
+#TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
 
-build_image "perl-test-app"
+#build_image "perl-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
+#TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
+
+# These tests only make sense for rhscl
+#if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+  # autocleanup only enabled here as only the following tests so far use it
+#  CID_FILE_DIR=$(mktemp -d)
+#  ct_enable_cleanup
+
+#  TEST_LIST=test_scl_enable run_all_tests
+#fi
 
 echo "$test_short_summary"
 
