@@ -1,30 +1,19 @@
-# `test-app`
-This is a simple example of static content served using nginx.
+# Test application for Nginx
 
-## Building with s2i
-### Version 1.8
-```
-s2i build https://github.com/sclorg/nginx-container.git --context-dir=examples/1.8/test-app/ centos/nginx-18-centos7 nginx-sample-app
-```
-### Version 1.10
-```
-s2i build https://github.com/sclorg/nginx-container.git --context-dir=examples/1.10/test-app/ centos/nginx-110-centos7 nginx-sample-app
-```
-### Version 1.12
-```
-s2i build https://github.com/sclorg/nginx-container.git --context-dir=examples/1.12/test-app/ centos/nginx-112-centos7 nginx-sample-app
-```
+This is a simple example of static content and configuration files served using nginx.
+
+## Building with s2i and Dockerfile
+
+See [the main documentation](/1.18/README.md) for steps how to use this image
+with a podman directly or in a Dockerfile, utilizing the source-to-image scripts.
 
 ## Building and deploying in OpenShift
-### Version 1.8
+
+### Version 1.16
 ```
-oc new-app centos/nginx-18-centos7~https://github.com/sclorg/nginx-container.git --context-dir=examples/1.8/test-app/
+oc new-app nginx:1.16~https://github.com/sclorg/nginx-container.git --context-dir=1.16/test/test-app/
 ```
-### Version 1.10
+### Version 1.18
 ```
-oc new-app centos/nginx-110-centos7~https://github.com/sclorg/nginx-container.git --context-dir=examples/1.10/test-app/
-```
-### Version 1.12
-```
-oc new-app centos/nginx-112-centos7~https://github.com/sclorg/nginx-container.git --context-dir=examples/1.12/test-app/
+oc new-app nginx:1.18~https://github.com/sclorg/nginx-container.git --context-dir=1.18/test/test-app/
 ```

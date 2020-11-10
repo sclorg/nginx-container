@@ -1,17 +1,19 @@
 #!/bin/sh
 
 DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
-NAMESPACE=centos
-[[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
 
 cat <<EOF
-This is a S2I ${IMAGE_DESCRIPTION} ${DISTRO} base image:
-To use it, install S2I: https://github.com/openshift/source-to-image
+This is a S2I ${IMAGE_DESCRIPTION} ${DISTRO} base image.
 
-Sample invocation:
+To use it in OpenShift, run:
 
-s2i build https://github.com/sclorg/nginx-container.git --context-dir=${NGINX_VERSION}/test/test-app/ ${NAMESPACE}/nginx-${NGINX_SHORT_VER}-${DISTRO}7 nginx-sample-app
+  oc new-app nginx:${NGINX_VERSION}~https://github.com/sclorg/nginx-container.git --context-dir=${NGINX_VERSION}/test/test-app/
 
 You can then run the resulting image via:
-docker run -p 8080:8080 nginx-sample-app
+
+  docker run -p 8080:8080 nginx-sample-app
+
+Alternatively, to run the image directly using podman or docker, or how to use it as a parent image in a Dockerfile, see documentation at
+
+  https://github.com/sclorg/nginx-container/blob/master/${NGINX_VERSION}/README.md.
 EOF
