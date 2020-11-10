@@ -129,7 +129,7 @@ test_scl_usage() {
   local expected="$2"
 
   info "Testing the image SCL enable"
-  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd} 2>&1")
+  out=$(docker run -ti --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd} 2>&1")
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
@@ -412,7 +412,6 @@ test_scl_enable() {
   check_result $? || return 1
 }
 
-set -x
 CID_FILE_DIR=$(mktemp -d)
 
 build_image "test-app"
@@ -420,24 +419,23 @@ build_image "test-app"
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_APP} run_all_tests "test-app"
 
-#build_image "start-hook-test-app"
+build_image "start-hook-test-app"
 
 # Run the chosen tests
-#TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
+TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
 
-#build_image "perl-test-app"
+build_image "perl-test-app"
 
 # Run the chosen tests
-#TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
+TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
 
 # These tests only make sense for rhscl
-#if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
   # autocleanup only enabled here as only the following tests so far use it
-#  CID_FILE_DIR=$(mktemp -d)
-#  ct_enable_cleanup
+  ct_enable_cleanup
 
-#  TEST_LIST=test_scl_enable run_all_tests
-#fi
+  TEST_LIST=test_scl_enable run_all_tests
+fi
 
 echo "$test_short_summary"
 
