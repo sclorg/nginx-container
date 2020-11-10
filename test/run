@@ -129,7 +129,7 @@ test_scl_usage() {
   local expected="$2"
 
   info "Testing the image SCL enable"
-  out=$(docker run -ti --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd} 2>&1")
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd} 2>&1")
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
@@ -146,12 +146,12 @@ test_command() {
   if [ $message ]; then
     info ${3}
   fi
-  out=$(docker exec -ti "$(cat ${cid_file})" /bin/bash -c "${run_cmd}" 2>&1)
+  out=$(docker exec "$(cat ${cid_file})" /bin/bash -c "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
   fi
-  out=$(docker exec -ti "$(cat ${cid_file})" /bin/sh -ic "${run_cmd}" 2>&1)
+  out=$(docker exec "$(cat ${cid_file})" /bin/sh -ic "${run_cmd}" 2>&1)
   if ! echo "${out}" | grep -q "${expected}"; then
     echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
@@ -176,7 +176,7 @@ test_logs() {
       out=$(docker logs $(cat ${cid_file}) 2>&1 1>/dev/null)
   elif [ -n "$logfile" ]; then
       info "Extracting $logfile via docker exec <cont> cat ${logfile}..."
-      out=$(docker exec -ti $(cat ${cid_file}) cat ${logfile})
+      out=$(docker exec $(cat ${cid_file}) cat ${logfile})
   else
       out=$(docker logs $(cat ${cid_file}) 2>&1)
   fi
