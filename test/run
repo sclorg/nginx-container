@@ -412,6 +412,13 @@ test_scl_enable() {
   check_result $? || return 1
 }
 
+function run_dockerfiles_test() {
+  ct_test_app_dockerfile ../examples/Dockerfile 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
+  check_result $? || return 1
+  ct_test_app_dockerfile ../examples/Dockerfile.s2i 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
+  check_result $? || return 1
+}
+
 CID_FILE_DIR=$(mktemp -d)
 
 build_image "test-app"
@@ -429,14 +436,20 @@ build_image "perl-test-app"
 # Run the chosen tests
 TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
 
+# Run the rest of the tests by defining TEST_LIST to include the rest of the relevant cases
+TEST_LIST=run_dockerfiles_test
+
 # These tests only make sense for rhscl
 if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
   # autocleanup only enabled here as only the following tests so far use it
   ct_enable_cleanup
-
-  TEST_LIST=test_scl_enable run_all_tests
+  TEST_LIST="$TEST_LIST test_scl_enable"
 fi
 
+# Execute the rest of the tests depending on what TEST_LIST includes now
+run_all_tests
+
+# All tests executed, see the results
 echo "$test_short_summary"
 
 if [ $TESTSUITE_RESULT -eq 0 ] ; then
