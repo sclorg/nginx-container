@@ -22,7 +22,7 @@ Nginx server image can be extended using Openshift's `Source` build feature.
 
 Usage in OpenShift
 ------------------
-In this example, we assume that you are using the `rhel8/nginx-118` image, available through the `nginx:1.18` imagestream tag in Openshift.
+In this example, we assume that you are using the `ubi8/nginx-118` image, available through the `nginx:1.18` imagestream tag in Openshift.
 To build a simple [test-app](https://github.com/sclorg/nginx-container/tree/master/examples/1.18/test-app) application in Openshift:
 
 ```
@@ -83,7 +83,7 @@ To use the Nginx image in a Dockerfile, follow these steps:
 
 #### 1. Pull a base builder image to build on
 
-podman pull rhel8/nginx-118
+podman pull ubi8/nginx-118
 
 #### 2. Pull an application code
 
@@ -162,7 +162,7 @@ If you want to run the image directly and mount the static pages available in th
 as a container volume, execute the following command:
 
 ```
-$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z rhel8/nginx-118 nginx -g "daemon off;"
+$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z ubi8/nginx-118 nginx -g "daemon off;"
 ```
 
 This creates a container named `nginx` running the Nginx server, serving data from
