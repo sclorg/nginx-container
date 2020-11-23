@@ -1,4 +1,4 @@
-FROM centos/s2i-core-centos7:1
+FROM quay.io/centos7/s2i-core-centos7:1
 
 # RHSCL rh-nginx118 image.
 #
@@ -28,11 +28,11 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},rh-${NAME}${NGINX_SHORT_VER}" \
       com.redhat.component="rh-${NAME}${NGINX_SHORT_VER}-container" \
-      name="centos/${NAME}-${NGINX_SHORT_VER}-centos7" \
+      name="centos7/${NAME}-${NGINX_SHORT_VER}-centos7" \
       version="${NGINX_VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${NGINX_SHORT_VER}-centos7:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> centos7/${NAME}-${NGINX_SHORT_VER}-centos7:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/opt/rh/rh-nginx${NGINX_SHORT_VER}/nginx/nginx.conf \

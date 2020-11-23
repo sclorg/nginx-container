@@ -1,5 +1,11 @@
 Nginx container images
-===================
+======================
+
+nginx-container 1.14 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-114-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-114-centos7)
+
+nginx-container 1.16 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-116-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-116-centos7)
+
+nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
 
 This repository contains Dockerfiles for Nginx images for OpenShift.
 Users can choose between RHEL and CentOS based images.
@@ -11,7 +17,7 @@ For more information about concepts used in these container images, see the
 
 
 Versions
----------------
+--------
 Nginx versions currently provided are:
 * [nginx-1.14](1.14)
 * [nginx-1.16](1.16)
@@ -52,7 +58,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ podman pull centos/nginx-116-centos7
+    $ podman pull quay.io/centos7/nginx-116-centos7
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -75,7 +81,7 @@ This variable must be set to a list with possible versions (subdirectories).**
 
 
 Usage
----------------------------------
+-----
 
 For information about usage of Dockerfile for nginx 1.14,
 see [usage documentation](1.14).
@@ -84,7 +90,7 @@ For information about usage of Dockerfile for nginx 1.16,
 see [usage documentation](1.16).
 
 Build
----------------------------------
+-----
 Images can be built using `make` command.
 
 ```

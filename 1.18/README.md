@@ -1,9 +1,9 @@
 Nginx 1.18 server and a reverse proxy server container image
-=========================================================
+============================================================
 This container image includes Nginx 1.18 server and a reverse server for OpenShift and general usage.
 Users can choose between RHEL, CentOS and Fedora based images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -43,7 +43,7 @@ $ curl 127.0.0.1:8080
 
 
 S2I build support
--------------
+-----------------
 This image can be extended in Openshift using the `Source` build strategy or via the standalone
 [source-to-image](https://github.com/openshift/source-to-image) application (where available).
 S2I build folder structure:
@@ -68,7 +68,7 @@ S2I build folder structure:
 
 
 Environment variables and volumes
--------------
+---------------------------------
 The nginx container image supports the following configuration variable, which can be set by using the `-e` option with the podman run command:
 
 
