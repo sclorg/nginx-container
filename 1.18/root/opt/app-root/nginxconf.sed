@@ -1,4 +1,4 @@
-/listen/s%80%8080%
+/listen/s%80%8080 default_server%
 s/^user *nginx;//
 s%/etc/opt/rh/rh-nginx118/nginx/conf.d/%/opt/app-root/etc/nginx.d/%
 s%/etc/opt/rh/rh-nginx118/nginx/default.d/%/opt/app-root/etc/nginx.default.d/%
