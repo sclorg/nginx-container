@@ -1,4 +1,4 @@
-FROM quay.io/centos7/s2i-core-centos7:1
+FROM quay.io/centos7/s2i-core-centos7
 
 # RHSCL rh-nginx114 image.
 #
