@@ -11,6 +11,7 @@ EXPOSE 8443
 ENV NAME=nginx \
     NGINX_VERSION=1.14 \
     NGINX_SHORT_VER=114 \
+    PERL_SCL_SHORT_VER=526 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
@@ -18,7 +19,13 @@ ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based a
 protocols, with a strong focus on high concurrency, performance and low memory usage. The container \
 image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
 as a base image for other applications based on nginx $NGINX_VERSION web server. \
-Nginx server image can be extended using source-to-image tool."
+Nginx server image can be extended using source-to-image tool." \
+    X_SCLS="rh-perl$PERL_SCL_SHORT_VER rh-nodejs$NGINX_SHORT_VER" \
+    PATH=/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/local/bin:/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/bin:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/bin:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/sbin${PATH:+:${PATH}} \
+    MANPATH=/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/share/man:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/share/man:${MANPATH} \
+    PKG_CONFIG_PATH=/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/lib64/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}} \
+    LD_LIBRARY_PATH=/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/lib64 \
+    PERL5LIB="/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/lib64/perl5/vendor_perl${PERL5LIB:+:${PERL5LIB}}"
 
 LABEL summary="${SUMMARY}" \
       description="${DESCRIPTION}" \
