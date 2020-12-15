@@ -1,5 +1,7 @@
 FROM registry.access.redhat.com/ubi8/nginx-118
 
+ENV NGINX_VERSION=1.18
+
 # This image supports the Source-to-Image
 # (see more at https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html).
 # In order to support the Source-to-Image framework, there are some interesting
