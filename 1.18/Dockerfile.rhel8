@@ -1,7 +1,5 @@
 FROM ubi8/s2i-core:1
 
-# RHSCL rh-nginx118 image.
-
 EXPOSE 8080
 EXPOSE 8443
 
@@ -25,12 +23,12 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="rhel8/${NAME}-${NGINX_SHORT_VER}" \
+      name="ubi8/${NAME}-${NGINX_SHORT_VER}" \
       version="1" \
-      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> rhel8/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> ubi8/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
