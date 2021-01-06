@@ -1,8 +1,6 @@
 Nginx container images
 ======================
 
-nginx-container 1.14 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-114-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-114-centos7)
-
 nginx-container 1.16 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-116-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-116-centos7)
 
 nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
