@@ -20,7 +20,7 @@ protocols, with a strong focus on high concurrency, performance and low memory u
 image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
 as a base image for other applications based on nginx $NGINX_VERSION web server. \
 Nginx server image can be extended using source-to-image tool." \
-    X_SCLS="rh-perl$PERL_SCL_SHORT_VER rh-nodejs$NGINX_SHORT_VER" \
+    X_SCLS="rh-perl$PERL_SCL_SHORT_VER rh-nginx$NGINX_SHORT_VER" \
     PATH=/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/local/bin:/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/bin:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/bin:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/sbin${PATH:+:${PATH}} \
     MANPATH=/opt/rh/rh-perl$PERL_SCL_SHORT_VER/root/usr/share/man:/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/share/man:${MANPATH} \
     PKG_CONFIG_PATH=/opt/rh/rh-nginx$NGINX_SHORT_VER/root/usr/lib64/pkgconfig${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}} \
