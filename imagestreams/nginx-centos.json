@@ -141,7 +141,7 @@
         },
         "from": {
           "kind": "DockerImage",
-          "name": "docker.io/centos/nginx-114-centos8:latest"
+          "name": "quay.io/centos7/nginx-114-centos8:latest"
         },
         "referencePolicy": {
           "type": "Local"
