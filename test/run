@@ -420,10 +420,10 @@ test_scl_enable() {
 
 function run_dockerfiles_test() {
   local dockerfile_tmp=$(mktemp)
-  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" ../examples/Dockerfile >"$dockerfile_tmp"
+  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" examples/Dockerfile >"$dockerfile_tmp"
   ct_test_app_dockerfile "$dockerfile_tmp" 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
   check_result $? || return 1
-  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" ../examples/Dockerfile >"$dockerfile_tmp"
+  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" examples/Dockerfile >"$dockerfile_tmp"
   ct_test_app_dockerfile "$dockerfile_tmp" 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
   check_result $? || return 1
   rm "$dockerfile_tmp"
