@@ -1,6 +1,6 @@
 # Variables are documented in common/build.sh.
 BASE_IMAGE_NAME = nginx
-VERSIONS = 1.14 1.16 1.18
+VERSIONS = 1.16 1.18
 OPENSHIFT_NAMESPACES = 
 
 # HACK:  Ensure that 'git pull' for old clones doesn't cause confusion.
