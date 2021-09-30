@@ -84,7 +84,7 @@ Usage
 For information about usage of Dockerfile for nginx 1.16,
 see [usage documentation](1.16).
 
-For information about usage of Dockerfile for nginx 1.16,
+For information about usage of Dockerfile for nginx 1.18,
 see [usage documentation](1.18).
 
 Build
