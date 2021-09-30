@@ -56,7 +56,7 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 COPY ./root/ /
 
 # In order to drop the root user, we have to make some directories world
-# writeable as OpenShift default security model is to run the container under
+# writable as OpenShift default security model is to run the container under
 # random UID.
 RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf-fed.sed ${NGINX_CONF_PATH} && \
     chmod a+rwx ${NGINX_CONF_PATH} && \
