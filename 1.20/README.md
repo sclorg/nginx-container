@@ -51,7 +51,7 @@ To support the Source-to-Image framework, important scripts are included in the 
 
 * The `/usr/libexec/s2i/run` script is set as the default command in the resulting container image (the new image with the application artifacts).
 
-* The `/usr/libexec/s2i/assemble` script inside the image is ran to produce a new image with the application artifacts. The script takes sources of a given application (HTML pages), Nginx configuration files, and places them into appropriate directories inside the image. The structure of nginx-app can look like this:
+* The `/usr/libexec/s2i/assemble` script inside the image is run to produce a new image with the application artifacts. The script takes sources of a given application (HTML pages), Nginx configuration files, and places them into appropriate directories inside the image. The structure of nginx-app can look like this:
 
 **`./nginx.conf`**--
        The main nginx configuration file
@@ -102,7 +102,7 @@ This step usually consists of at least these parts:
 * moving configuration files to the correct place (if available in the application source code)
 * setting the default command in the resulting image
 
-For all these three parts, you can either set up all manually and use the `nginx` command explicitly in the Dockerfile ([3.1.](#31-to-use-own-setup-create-a-dockerfile-with-this-content)), or you can use the Source-to-Image scripts inside the image ([3.2.](#32-to-use-the-source-to-image-scripts-and-build-an-image-using-a-dockerfile-create-a-dockerfile-with-this-content), that already know how to set-up and run some common Nginx applications.
+For all these three parts, you can either set up all manually and use the `nginx` command explicitly in the Dockerfile ([3.1.](#31-to-use-own-setup-create-a-dockerfile-with-this-content)), or you can use the Source-to-Image scripts inside the image ([3.2.](#32-to-use-the-source-to-image-scripts-and-build-an-image-using-a-dockerfile-create-a-dockerfile-with-this-content); see more about these scripts in the section "Source-to-Image framework and scripts" above), that already know how to set-up and run some common Nginx applications.
 
 ##### 3.1. To use your own setup, create a Dockerfile with this content:
 
