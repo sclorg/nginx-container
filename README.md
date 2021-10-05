@@ -5,6 +5,8 @@ nginx-container 1.16 status: [![Docker Repository on Quay](https://quay.io/repos
 
 nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
 
+nginx-container 1.20 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-120-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-120-centos7)
+
 This repository contains Dockerfiles for Nginx images for OpenShift.
 Users can choose between RHEL and CentOS based images.
 
@@ -19,6 +21,7 @@ Versions
 Nginx versions currently provided are:
 * [nginx-1.16](1.16)
 * [nginx-1.18](1.18)
+* [nginx-1.20](1.20)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -34,11 +37,11 @@ Choose either the CentOS7 or RHEL7 based image:
 
 *  **RHEL7 based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/nginx-116-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/nginx-120-rhel7).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/nginx-118-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/nginx-120-rhel7
     ```
 
     To build a RHEL7 based Nginx image, you need to run Docker build on a properly
@@ -48,7 +51,7 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel7 VERSIONS=1.18
+    $ make build TARGET=rhel7 VERSIONS=1.20
     ```
 
 *  **CentOS7 based image**
@@ -56,7 +59,7 @@ Choose either the CentOS7 or RHEL7 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ podman pull quay.io/centos7/nginx-118-centos7
+    $ podman pull quay.io/centos7/nginx-120-centos7
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -65,10 +68,10 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=centos7 VERSIONS=1.18
+    $ make build TARGET=centos7 VERSIONS=1.20
     ```
 
-For using other versions of Nginx, just replace the `1.18` value by particular version
+For using other versions of Nginx, just replace the `1.20` value by particular version
 in the commands above.
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -87,6 +90,9 @@ see [usage documentation](1.16).
 For information about usage of Dockerfile for nginx 1.18,
 see [usage documentation](1.18).
 
+For information about usage of Dockerfile for nginx 1.20,
+see [usage documentation](1.20).
+
 Build
 -----
 Images can be built using `make` command.
@@ -94,7 +100,7 @@ Images can be built using `make` command.
 ```
 $ cd nginx-container
 $ git submodule update --init
-$ make build TARGET=centos7 VERSIONS=1.18
+$ make build TARGET=centos7 VERSIONS=1.20
 ```
 
 For more information about make rules see [README](https://github.com/sclorg/container-common-scripts/blob/master/README.md).
@@ -115,7 +121,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel7 VERSIONS=1.18
+    $ make test TARGET=rhel7 VERSIONS=1.20
     ```
 
 *  **CentOS based image**
@@ -123,10 +129,10 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=centos7 VERSIONS=1.18
+    $ make test TARGET=centos7 VERSIONS=1.20
     ```
 
-For using other versions of Nginx, just replace the `1.18` value by particular version
+For using other versions of Nginx, just replace the `1.20` value by particular version
 in the commands above.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
