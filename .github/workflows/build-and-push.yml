@@ -8,17 +8,17 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        version: [1.18, 1.20]
         include:
-          - dockerfile: "Dockerfile"
+          - version: "1.18"
+            dockerfile: "Dockerfile"
             registry_namespace: "centos7"
-            registry_suffix: "-centos7"
             tag: "centos7"
-          - dockerfile: "Dockerfile.c9s"
-            registry_namespace: "sclorg"
-            registry_suffix: ""
-            tag: "c9s"
+          - version: "1.20"
+            dockerfile: "Dockerfile"
+            registry_namespace: "centos7"
+            tag: "centos7"
 
     steps:
       - uses: actions/checkout@v2
@@ -60,13 +60,13 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           dockerfiles: ${{ matrix.version }}/${{ matrix.dockerfile }}
-          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}${{ matrix.registry_suffix }}
+          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-${{ matrix.tag }}
           context: ${{ matrix.version }}
           tags: latest ${{ matrix.tag }} ${{ github.sha }}
 
-      - name: Push CentOS7 image to Quay.io
-        if: steps.check_exclude_file.outputs.files_exists == 'false'
-        id: push-to-quay
+      - name: Push image to Quay.io/${{ matrix.registry_namespace }} namespace
+        if: steps.check_exclude_file.outputs.files_exists == 'false' and ${{ matrix.registry_namespace == 'centos7' }}
+        id: push-to-quay-centos7
         uses: redhat-actions/push-to-registry@v2.2
         with:
           image: ${{ steps.build-image.outputs.image }}
@@ -75,5 +75,21 @@ jobs:
           username: ${{ secrets.QUAY_IMAGE_BUILDER_USERNAME }}
           password: ${{ secrets.QUAY_IMAGE_BUILDER_TOKEN }}
 
+      - name: Push image to Quay.io/${{ matrix.registry_namespace }} namespace
+        if: steps.check_exclude_file.outputs.files_exists == 'false' and ${{ matrix.registry_namespace != 'centos7' }}
+        id: push-to-quay-sclorg
+        uses: redhat-actions/push-to-registry@v2.2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/${{ matrix.registry_namespace }}
+          username: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}
+          password: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN  }}
+
       - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+        if: ${{ matrix.registry_namespace == 'centos7' }}
+        run: echo "Image pushed to ${{ steps.push-to-quay-centos7.outputs.registry-paths }}"
+
+      - name: Print image url
+        if: ${{ matrix.registry_namespace != 'centos7' }}
+        run: echo "Image pushed to ${{ steps.push-to-quay-sclorg.outputs.registry-paths }}"
