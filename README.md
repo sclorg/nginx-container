@@ -1,8 +1,6 @@
 Nginx container images
 ======================
 
-nginx-container 1.16 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-116-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-116-centos7)
-
 nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
 
 nginx-container 1.20 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-120-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-120-centos7)
@@ -19,7 +17,6 @@ For more information about concepts used in these container images, see the
 Versions
 --------
 Nginx versions currently provided are:
-* [nginx-1.16](1.16)
 * [nginx-1.18](1.18)
 * [nginx-1.20](1.20)
 
@@ -83,9 +80,6 @@ This variable must be set to a list with possible versions (subdirectories).**
 
 Usage
 -----
-
-For information about usage of Dockerfile for nginx 1.16,
-see [usage documentation](1.16).
 
 For information about usage of Dockerfile for nginx 1.18,
 see [usage documentation](1.18).
