@@ -142,7 +142,7 @@ test_command() {
   local run_cmd="$1"
   local expected="$2"
   local message="$3"
-
+  echo "Test command"
   if [ $message ]; then
     info ${3}
   fi
