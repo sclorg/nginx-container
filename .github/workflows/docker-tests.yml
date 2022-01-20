@@ -92,15 +92,11 @@ jobs:
         run: |
           # Update ubuntu-20.04 in order to install curl and jq
           sudo apt update && sudo apt -y install curl jq
-          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ]; then
+          api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
+          branch_name="master"
+          if [ "${{ matrix.tmt_plan }}" == "fedora" ] || [ "${{ matrix.tmt_plan }}" == "centos7" ] || [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
             api_key="${{ secrets.TF_PUBLIC_API_KEY }}"
             branch_name="main"
-          else
-            api_key="${{ secrets.TF_INTERNAL_API_KEY }}"
-            branch_name="master"
-            if [ "${{ matrix.tmt_plan }}" == "c9s" ]; then
-              branch_name="main"
-            fi
           fi
           cat << EOF > request.json
           {
@@ -119,6 +115,10 @@ jobs:
                 "PR_NUMBER": "${{ steps.pr_nr.outputs.PR_NR }}",
                 "OS": "${{ matrix.os_test }}",
                 "TEST_NAME": "test"
+              },
+              "secrets": {
+                "QUAY_USERNAME": "${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}",
+                "QUAY_TOKEN": "${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN }}"
               }
             }]
           }
