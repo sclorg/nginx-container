@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-base:c9s
+FROM quay.io/sclorg/s2i-base-c9s:c9s
 
 EXPOSE 8080
 EXPOSE 8443
@@ -23,12 +23,12 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="sclorg/${NAME}-${NGINX_SHORT_VER}" \
+      name="sclorg/${NAME}-${NGINX_SHORT_VER}-c9s" \
       version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${NGINX_SHORT_VER}-c9s:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
