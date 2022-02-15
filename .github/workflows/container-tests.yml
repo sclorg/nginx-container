@@ -80,7 +80,7 @@ jobs:
           git_url: ${{ steps.tf_values.outputs.TMT_REPO }}
           git_ref: ${{ steps.tf_values.outputs.BRANCH_NAME }}
           tmt_plan_regex: ${{ matrix.tmt_plan }}
-          pull_request_status_name: ${{ matrix.context }}
+          pull_request_status_name: "new ${{ matrix.context }}"
           variables: "REPO_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY;REPO_NAME=$GITHUB_REPOSITORY;PR_NUMBER=${{ steps.pr_nr.outputs.PR_NR }};OS=${{ matrix.os_test }};TEST_NAME=test"
           secrets: "QUAY_USERNAME=${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }};QUAY_TOKEN=${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN }}"
           compose: ${{ matrix.compose }}
