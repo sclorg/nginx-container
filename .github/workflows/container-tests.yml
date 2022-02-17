@@ -1,4 +1,4 @@
-name: container-tests at Testing Farm
+name: Container-tests by GitHub Action at Testing Farm
 
 on:
   issue_comment:
@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     # This job only runs for '[test]' pull request comments by owner, member
-    name: Container tests on Testing Farm service
+    name: Container-tests by GitHub Action on Testing Farm service
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
