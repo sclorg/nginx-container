@@ -3,8 +3,11 @@ on:
   push:
     branches:
       - master
+  schedule:
+      - cron: '0 1 * * 3'
 jobs:
   build-and-push:
+    if: github.repository_owner == 'sclorg'
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
