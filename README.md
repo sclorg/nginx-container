@@ -3,10 +3,6 @@ Nginx container images
 
 [![Build and push container images to quay.io registry](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml)
 
-nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
-
-nginx-container 1.20 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-120-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-120-centos7)
-
 This repository contains Dockerfiles for Nginx images for OpenShift.
 Users can choose between RHEL and CentOS based images.
 

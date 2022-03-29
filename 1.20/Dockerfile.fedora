@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/f34/s2i-core:latest
+FROM quay.io/fedora/s2i-core:35
 
 # nginx 1.20 image.
 #
@@ -29,7 +29,7 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}" \
-      name="${FGC}/${NAME}" \
+      name="fedora/${NAME}-${NGINX_SHORT_VER}" \
       version="${VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
