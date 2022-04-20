@@ -13,10 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - tmt_plan: "c8s"
+          - tmt_plan: "fedora"
             os_test: "fedora"
             context: "Fedora"
-            compose: "CentOS-Stream-8"
+            compose: "Fedora-latest"
             api_key: "TF_PUBLIC_API_KEY"
             branch: "main"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
