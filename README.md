@@ -13,7 +13,7 @@ Images available on Quay are:
 
 
 This repository contains Dockerfiles for Nginx images for OpenShift.
-Users can choose between RHEL and CentOS based images.
+Users can choose between RHEL, Fedora, CentOS and CentOS Stream based images.
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
