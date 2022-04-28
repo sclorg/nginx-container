@@ -3,12 +3,17 @@ Nginx container images
 
 [![Build and push container images to quay.io registry](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml)
 
-nginx-container 1.18 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-118-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-118-centos7)
+Images available on Quay are:
+* CentOS 7 [nginx-1.18](https://quay.io/repository/centos7/nginx-118-centos7)
+* CentOS 7 [nginx-1.20](https://quay.io/repository/centos7/nginx-120-centos7)
+* CentOS Stream 8 [nginx-1.18](https://quay.io/repository/sclorg/nginx-118-c8s)
+* CentOS Stream 8 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c8s)
+* CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
+* Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 
-nginx-container 1.20 status: [![Docker Repository on Quay](https://quay.io/repository/centos7/nginx-120-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/nginx-120-centos7)
 
 This repository contains Dockerfiles for Nginx images for OpenShift.
-Users can choose between RHEL and CentOS based images.
+Users can choose between RHEL, Fedora, CentOS and CentOS Stream based images.
 
 For more information about contributing, see
 [the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).

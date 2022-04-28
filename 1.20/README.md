@@ -1,10 +1,11 @@
 Nginx 1.20 server and a reverse proxy server container image
 ============================================================
 This container image includes Nginx 1.20 server and a reverse server for OpenShift and general usage.
-Users can choose between RHEL, CentOS and Fedora based images.
+Users can choose between RHEL, CentOS, CentOS Stream and Fedora based images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
-and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+the CentOS images are available in the [Quay.io](https://quay.io/organization/centos7),
+the CentOS Stream images are available in the [Quay.io](https://quay.io/organization/sclorg),
+and the Fedora images are available in the [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -204,5 +205,5 @@ https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
 Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
 for RHEL8 it's `Dockerfile.rhel8`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
-Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`and the Fedora Dockerfile is called Dockerfile.fedora.
+Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
 
