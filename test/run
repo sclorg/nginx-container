@@ -43,8 +43,9 @@ container_exists() {
 }
 
 container_ip() {
-  local ip=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file))
-  echo ${ip:-localhost}
+  # local ip=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file))
+  # echo ${ip:-localhost}
+  echo localhost
 }
 
 test_port() {
