@@ -44,6 +44,7 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
 RUN dnf install -y gettext hostname && \
+    yum -y module enable nginx:$NGINX_VERSION && \
     INSTALL_PKGS="nss_wrapper bind-utils nginx nginx-mod-stream nginx-mod-http-perl" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
