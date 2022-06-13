@@ -10,6 +10,7 @@ Images available on Quay are:
 * CentOS Stream 8 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c8s)
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
+* Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
 
 
 This repository contains Dockerfiles for Nginx images for OpenShift.
@@ -26,6 +27,7 @@ Versions
 Nginx versions currently provided are:
 * [nginx-1.18](1.18)
 * [nginx-1.20](1.20)
+* [nginx-1.22](1.22)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -95,6 +97,9 @@ see [usage documentation](1.18).
 
 For information about usage of Dockerfile for nginx 1.20,
 see [usage documentation](1.20).
+
+For information about usage of Dockerfile for nginx 1.22,
+see [usage documentation](1.22).
 
 Build
 -----
