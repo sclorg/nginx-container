@@ -1,9 +1,8 @@
-Nginx 1.20 server and a reverse proxy server container image
+Nginx 1.22 server and a reverse proxy server container image
 ============================================================
-This container image includes Nginx 1.20 server and a reverse server for OpenShift and general usage.
+This container image includes Nginx 1.22 server and a reverse server for OpenShift and general usage.
 Users can choose between RHEL, CentOS, CentOS Stream and Fedora based images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available in the [Quay.io](https://quay.io/organization/centos7),
 the CentOS Stream images are available in the [Quay.io](https://quay.io/organization/sclorg),
 and the Fedora images are available in the [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
@@ -16,18 +15,18 @@ Description
 
 Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP
 protocols, with a strong focus on high concurrency, performance and low memory usage. The container
-image provides a containerized packaging of the nginx 1.20 daemon. The image can be used
-as a base image for other applications based on nginx 1.20 web server.
+image provides a containerized packaging of the nginx 1.22 daemon. The image can be used
+as a base image for other applications based on nginx 1.22 web server.
 Nginx server image can be extended using Openshift's `Source` build feature.
 
 
 Usage in OpenShift
 ------------------
-In this example, we assume that you are using the `ubi8/nginx-120` image, available through the `nginx:1.20` imagestream tag in Openshift.
-To build a simple [test-app](https://github.com/sclorg/nginx-container/tree/master/examples/1.20/test-app) application in Openshift:
+In this example, we assume that you are using the `ubi8/nginx-122` image, available through the `nginx:1.22` imagestream tag in Openshift.
+To build a simple [test-app](https://github.com/sclorg/nginx-container/tree/master/examples/1.22/test-app) application in Openshift:
 
 ```
-oc new-app nginx:1.20~https://github.com/sclorg/nginx-container.git --context-dir=1.20/test/test-app/
+oc new-app nginx:1.22~https://github.com/sclorg/nginx-container.git --context-dir=1.22/test/test-app/
 ```
 
 To access the application:
@@ -84,7 +83,7 @@ To use the Nginx image in a Dockerfile, follow these steps:
 
 #### 1. Pull a base builder image to build on
 
-podman pull ubi8/nginx-120
+podman pull ubi8/nginx-122
 
 #### 2. Pull an application code
 
@@ -92,7 +91,7 @@ An example application available at https://github.com/sclorg/nginx-container.gi
 
 ```
 git clone https://github.com/sclorg/nginx-container.git nginx-container
-cd nginx-container/examples/1.20/
+cd nginx-container/examples/1.22/
 ```
 
 #### 3. Prepare an application inside a container
@@ -108,7 +107,7 @@ For all these three parts, you can either set up all manually and use the `nginx
 ##### 3.1. To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM registry.access.redhat.com/ubi8/nginx-120
+FROM registry.access.redhat.com/ubi8/nginx-122
 
 # Add application sources
 ADD test-app/nginx.conf "${NGINX_CONF_PATH}"
@@ -123,7 +122,7 @@ CMD nginx -g "daemon off;"
 ##### 3.2. To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM registry.access.redhat.com/ubi8/nginx-120
+FROM registry.access.redhat.com/ubi8/nginx-122
 
 # Add application sources to a directory where the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -166,7 +165,7 @@ If you want to run the image directly and mount the static pages available in th
 as a container volume, execute the following command:
 
 ```
-$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z ubi8/nginx-120 nginx -g "daemon off;"
+$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z ubi8/nginx-122 nginx -g "daemon off;"
 ```
 
 This creates a container named `nginx` running the Nginx server, serving data from
@@ -186,7 +185,7 @@ The nginx container image supports the following configuration variable, which c
 
 
 **`NGINX_LOG_TO_VOLUME`**
-       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`.
+       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`.
 
 
 Troubleshooting
@@ -195,15 +194,11 @@ By default, nginx access logs are written to standard output and error logs are 
 
     podman logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`, which can be mounted to host system using the container volumes.**
-
-
 See also
 --------
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
 for RHEL8 it's `Dockerfile.rhel8`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
 Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
 
