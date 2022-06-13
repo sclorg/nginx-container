@@ -1,6 +1,6 @@
 FROM quay.io/fedora/s2i-core:35
 
-# nginx 1.20 image.
+# nginx 1.22 image.
 #
 # Volumes:
 #  * /var/log/nginx/ - Storage for logs
@@ -9,8 +9,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.20 \
-    NGINX_SHORT_VER=120 \
+    NGINX_VERSION=1.22 \
+    NGINX_SHORT_VER=122 \
     VERSION=0 \
     ARCH=x86_64
 
@@ -44,7 +44,6 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
 RUN dnf install -y gettext hostname && \
-    yum -y module enable nginx:$NGINX_VERSION && \
     INSTALL_PKGS="nss_wrapper bind-utils nginx nginx-mod-stream nginx-mod-http-perl" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
