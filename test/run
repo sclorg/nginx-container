@@ -61,6 +61,10 @@ prepare() {
     echo "ERROR: The image ${IMAGE_NAME} must exist before this script is executed."
     exit 1
   fi
+  if ! [ -d "${test_dir}/${1}" ] ; then
+    echo "ERROR: The testing app ${test_dir}/${1} does not exist."
+    exit 1
+  fi
   # TODO: S2I build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
   info "Build the test application image"
@@ -249,7 +253,7 @@ test_application() {
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "nginx -v" "nginx version: nginx/$VERSION."
+  test_scl_usage "nginx -v" "nginx version: nginx/${VERSION%%-*}."
   check_result $? || return 1
 
   test_connection
@@ -420,10 +424,11 @@ build_image "start-hook-test-app"
 # Run the chosen tests
 TEST_SET=${TEST_LIST_HOOK_APP} ct_run_tests_from_testset "start-hook-test-app"
 
-build_image "perl-test-app"
-
-# Run the chosen tests
-TEST_SET=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
+# Run the chosen tests (not for minimal variant which lacks perl)
+if ! [[ "${IMAGE_NAME}" =~ .*minimal.* ]] ; then
+  build_image "perl-test-app"
+  TEST_LIST=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
+fi
 
 
 # Execute the rest of the tests depending on what TEST_LIST includes now
