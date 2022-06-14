@@ -1,0 +1,98 @@
+FROM quay.io/centos/centos:stream9 AS build
+
+RUN mkdir -p /mnt/rootfs
+ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
+RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
+    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst bind-utils" && \
+    dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever 9 --setopt install_weak_deps=false --nodocs -y && \
+    dnf -y --installroot /mnt/rootfs clean all && \
+    rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
+
+FROM quay.io/centos/centos:stream9
+
+EXPOSE 8080
+EXPOSE 8443
+
+ENV NAME=nginx \
+    NGINX_VERSION=1.22 \
+    NGINX_SHORT_VER=122 \
+    VERSION=0
+
+ENV SUMMARY="Platform for running a minimal nginx $NGINX_VERSION or building nginx-based application" \
+    DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
+protocols, with a strong focus on high concurrency, performance and low memory usage. The container \
+image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
+as a base image for other applications based on nginx $NGINX_VERSION web server. \
+Nginx server image can be extended using source-to-image tool. \
+This is a minimal nginx container that does not include tools for installing RPMs, \
+therefore options for extending this image are limited." \
+# The following variables are usually available from parent s2i images \
+    STI_SCRIPTS_PATH=/usr/libexec/s2i \
+    APP_ROOT=/opt/app-root \
+    HOME=/opt/app-root/src \
+    PLATFORM="el9"
+
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.expose-services="8443:https" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="sclorg/${NAME}-${NGINX_SHORT_VER}-minimal-c9s" \
+      version="1" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${NGINX_SHORT_VER}-c9s:latest <APP-NAME>"
+
+COPY --from=build /mnt/rootfs/ /
+
+ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
+    NGINX_CONF_PATH=/etc/nginx/nginx.conf \
+    NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
+    NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
+    NGINX_APP_ROOT=${APP_ROOT} \
+    NGINX_LOG_PATH=/var/log/nginx
+
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+COPY 1.22-minimal/s2i/bin/ $STI_SCRIPTS_PATH
+
+# Copy extra files to the image.
+COPY 1.22-minimal/root/ /
+
+COPY 1.22-minimal/core-scripts/usr /usr
+
+WORKDIR ${HOME}
+
+# In order to drop the root user, we have to make some directories world
+# writable as OpenShift default security model is to run the container under
+# random UID.
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf-fed.sed ${NGINX_CONF_PATH} && \
+    chmod a+rwx ${NGINX_CONF_PATH} && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
+    mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    mkdir -p ${NGINX_LOG_PATH} && \
+    chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
+    chmod -R a+rwx /var/lib/nginx && \
+    chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chown -R 1001:0 ${NGINX_APP_ROOT} && \
+    chown -R 1001:0 /var/lib/nginx && \
+    chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chmod -R a+rwx ${NGINX_LOG_PATH} && \
+    chown -R 1001:0 ${NGINX_LOG_PATH} && \
+    # FIXME: Not sure if this is safe to do, just a hack to make the image work
+    chmod -R a+rwx /var/run && \
+    chown -R 1001:0 /var/run
+
+USER 1001
+
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/usr/share/nginx/html"]
+# VOLUME ["/var/log/nginx/"]
+
+CMD $STI_SCRIPTS_PATH/usage

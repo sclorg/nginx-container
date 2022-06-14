@@ -40,7 +40,7 @@ if [ -d ./nginx-start ]; then
   fi
 fi
 
-if [ -d ./nginx-perl ]; then
+if [ -n "${NGINX_PERL_MODULE_PATH}" ] && [ -d ./nginx-perl ]; then
   echo "---> Copying nginx perl module files..."
   if [ "$(ls -A ./nginx-perl/*.pm)" ]; then
     cp -av ./nginx-perl/*.pm "${NGINX_PERL_MODULE_PATH}"
