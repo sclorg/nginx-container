@@ -65,11 +65,18 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 # Copy extra files to the image.
 COPY ./root/ /
 
-# In order to drop the root user, we have to make some directories world
-# writeable as OpenShift default security model is to run the container under
-# random UID.
-RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
-    chmod a+rwx ${NGINX_CONF_PATH} && \
+# Changing ownership and user rights to support following use-cases:
+# 1) running container on OpenShift, whose default security model
+#    is to run the container under random UID, but GID=0
+# 2) for working root-less container with UID=1001, which does not have
+#    to have GID=0
+# 3) for default use-case, that is running container directly on operating system,
+#    with default UID and GID (1001:0)
+# Supported combinations of UID:GID are thus following:
+# UID=1001 && GID=0
+# UID=<any>&& GID=0
+# UID=1001 && GID=<any>
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf-rhscl.sed ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
@@ -79,14 +86,18 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
     ln -s ${NGINX_LOG_PATH} /var/log/nginx && \
     ln -s /etc/opt/rh/rh-nginx${NGINX_SHORT_VER}/nginx /etc/nginx && \
     ln -s /opt/rh/rh-nginx${NGINX_SHORT_VER}/root/usr/share/nginx /usr/share/nginx && \
-    chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
-    chmod -R a+rwx /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
-    chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
-    chown -R 1001:0 ${NGINX_APP_ROOT} && \
-    chown -R 1001:0 /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
+    chown -R 1001:0 ${NGINX_CONF_PATH} && \
+    chown -R 1001:0 ${NGINX_APP_ROOT}/etc && \
+    chown -R 1001:0 ${NGINX_APP_ROOT}/src/nginx-start/  && \
     chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
-    chmod -R a+rwx /var/run && \
-    chown -R 1001:0 /var/run && \
+    chown -R 1001:0 /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
+    chown -R 1001:0 /run && \
+    chmod -R ug+rwX /run && \
+    chmod -R ug+rwX /var/opt/rh/rh-nginx${NGINX_SHORT_VER} && \
+    chmod    ug+rw  ${NGINX_CONF_PATH} && \
+    chmod -R ug+rwX ${NGINX_APP_ROOT}/etc && \
+    chmod -R ug+rwX ${NGINX_APP_ROOT}/src/nginx-start/  && \
+    chmod -R ug+rwX ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     rpm-file-permissions
 
 USER 1001
