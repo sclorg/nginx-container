@@ -399,11 +399,25 @@ test_scl_enable() {
 }
 
 function run_dockerfiles_test() {
+  # This is a hack for moby engine.
+  # From unknown reason, moby does not like when using glob in a directory
+  # behind a symlink. In this case, 1.22-minimal is a symlink to 1.22 example
+  # app and when using this example app, moby engine does not match *.html
+  # files despite being there (confirmed that replacing glob with file names
+  # works). Here we also expect that symlinks are only the minimal variants,
+  # so therefore we remove -minimal suffix in case when the example app
+  # directory is a symlink.
+  exammple_to_use="$VERSION"
+  if [ -L ${test_dir}/examples/$VERSION ] ; then
+    exammple_to_use="${VERSION%-minimal}"
+    echo "WARNING: using '${exammple_to_use}' example app instead of '${VERSION}' to make the test work in moby"
+  fi
+
   local dockerfile_tmp=$(mktemp)
-  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" "${test_dir}/examples/Dockerfile" >"$dockerfile_tmp"
+  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$exammple_to_use/" -e "s/\$NGINX_VERSION/$exammple_to_use/g" "${test_dir}/examples/Dockerfile" >"$dockerfile_tmp"
   ct_test_app_dockerfile "$dockerfile_tmp" 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
   check_result $? || return 1
-  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$VERSION/" -e "s/\$NGINX_VERSION/$VERSION/g" "${test_dir}/examples/Dockerfile" >"$dockerfile_tmp"
+  sed -e "s/^ENV NGINX_VERSION.*$/ENV NGINX_VERSION=$exammple_to_use/" -e "s/\$NGINX_VERSION/$exammple_to_use/g" "${test_dir}/examples/Dockerfile.s2i" >"$dockerfile_tmp"
   ct_test_app_dockerfile "$dockerfile_tmp" 'https://github.com/sclorg/nginx-container.git' "NGINX is working" nginx-container
   check_result $? || return 1
   rm "$dockerfile_tmp"
