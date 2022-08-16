@@ -10,7 +10,7 @@ RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
     dnf -y --installroot /mnt/rootfs clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
-FROM registry.fedoraproject.org/fedora:36
+FROM scratch
 
 EXPOSE 8080
 EXPOSE 8443
