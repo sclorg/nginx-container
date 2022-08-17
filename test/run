@@ -401,15 +401,15 @@ test_scl_enable() {
 function run_dockerfiles_test() {
   # This is a hack for moby engine.
   # From unknown reason, moby does not like when using glob in a directory
-  # behind a symlink. In this case, 1.22-minimal is a symlink to 1.22 example
+  # behind a symlink. In this case, 1.22-micro is a symlink to 1.22 example
   # app and when using this example app, moby engine does not match *.html
   # files despite being there (confirmed that replacing glob with file names
-  # works). Here we also expect that symlinks are only the minimal variants,
-  # so therefore we remove -minimal suffix in case when the example app
+  # works). Here we also expect that symlinks are only the micro variants,
+  # so therefore we remove -micro suffix in case when the example app
   # directory is a symlink.
   exammple_to_use="$VERSION"
   if [ -L ${test_dir}/examples/$VERSION ] ; then
-    exammple_to_use="${VERSION%-minimal}"
+    exammple_to_use="${VERSION%-micro}"
     echo "WARNING: using '${exammple_to_use}' example app instead of '${VERSION}' to make the test work in moby"
   fi
 
@@ -438,8 +438,8 @@ build_image "start-hook-test-app"
 # Run the chosen tests
 TEST_SET=${TEST_LIST_HOOK_APP} ct_run_tests_from_testset "start-hook-test-app"
 
-# Run the chosen tests (not for minimal variant which lacks perl)
-if ! [[ "${IMAGE_NAME}" =~ .*minimal.* ]] ; then
+# Run the chosen tests (not for micro variant which lacks perl)
+if ! [[ "${IMAGE_NAME}" =~ .*micro.* ]] ; then
   build_image "perl-test-app"
   TEST_LIST=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
 fi
