@@ -1,6 +1,6 @@
-Nginx 1.22 minimal server and a reverse proxy server container image
+Nginx 1.22 micro server and a reverse proxy server container image
 ====================================================================
-This container image includes Nginx 1.22 server and a reverse server for OpenShift and general usage with a minimal footprint (small image).
+This container image includes Nginx 1.22 server and a reverse server for OpenShift and general usage with a micro footprint (small image).
 Users can choose between RHEL, CentOS, CentOS Stream and Fedora based images.
 the CentOS Stream images are available in the [Quay.io](https://quay.io/organization/sclorg),
 and the Fedora images are available in the [Quay.io](https://quay.io/organization/fedora).
