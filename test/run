@@ -11,9 +11,6 @@ test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
-image_dir=$(readlink -f ${test_dir}/..)
-test_short_summary=''
-TESTSUITE_RESULT=0
 
 TEST_LIST_APP="\
 test_s2i_usage
@@ -82,14 +79,6 @@ cleanup_test_app() {
     fi
     rm $cid_file
   fi
-}
-
-cleanup() {
-  info "Cleaning up the test application image"
-  if image_exists ${IMAGE_NAME}-${1}; then
-    docker rmi -f ${IMAGE_NAME}-${1}
-  fi
-  rm -rf ${test_dir}/${1}/.git
 }
 
 check_result() {
@@ -371,26 +360,6 @@ test_application_user() {
   CONTAINER_ARGS="--user=12345" test_application
 }
 
-function run_all_tests() {
-  local APP_NAME="${1:-}"
-  for test_case in $TEST_LIST; do
-    info "Running test $test_case ...."
-    TESTCASE_RESULT=0
-    $test_case
-    check_result $?
-    local test_msg
-    if [ $TESTCASE_RESULT -eq 0 ]; then
-      test_msg="[PASSED]"
-    else
-      test_msg="[FAILED]"
-      TESTSUITE_RESULT=1
-    fi
-    printf -v test_short_summary "%s %s %s\n" "${test_short_summary}" "${test_msg}" "$test_case"
-    [ -n "${FAIL_QUICKLY:-}" ] && cleanup "${APP_NAME}" && return 1
-  done;
-  [ -n "${APP_NAME}" ] && cleanup "${APP_NAME}"
-}
-
 function build_image() {
   local test_name="$1"
   cid_file="$CID_FILE_DIR/$test_name"
@@ -429,43 +398,34 @@ function run_dockerfiles_test() {
   rm "$dockerfile_tmp"
 }
 
+TEST_SUMMARY=''
+ct_enable_cleanup
+
 CID_FILE_DIR=$(mktemp -d)
 
 build_image "test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_APP} run_all_tests "test-app"
+TEST_SET=${TEST_LIST_APP} ct_run_tests_from_testset "test-app"
 
 build_image "start-hook-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_HOOK_APP} run_all_tests "start-hook-test-app"
+TEST_SET=${TEST_LIST_HOOK_APP} ct_run_tests_from_testset "start-hook-test-app"
 
 build_image "perl-test-app"
 
 # Run the chosen tests
-TEST_LIST=${TEST_LIST_PERL_APP} run_all_tests "perl-test-app"
+TEST_SET=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
 
 # Run the rest of the tests by defining TEST_LIST to include the rest of the relevant cases
-TEST_LIST=run_dockerfiles_test
+TEST_SET=run_dockerfiles_test
 
 # These tests only make sense for rhscl
 if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-  # autocleanup only enabled here as only the following tests so far use it
-  ct_enable_cleanup
-  TEST_LIST="$TEST_LIST test_scl_enable"
+  TEST_SET="$TEST_SET test_scl_enable"
 fi
 
 # Execute the rest of the tests depending on what TEST_LIST includes now
-run_all_tests
-
-# All tests executed, see the results
-echo "$test_short_summary"
-
-if [ $TESTSUITE_RESULT -eq 0 ] ; then
-  echo "Tests for ${IMAGE_NAME} succeeded."
-else
-  echo "Tests for ${IMAGE_NAME} failed."
-fi
-
-exit $TESTSUITE_RESULT
+ct_run_tests_from_testset "rest-of-the-tests"
+# vim: set tabstop=2:shiftwidth=2:expandtab:
