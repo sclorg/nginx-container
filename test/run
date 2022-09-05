@@ -8,6 +8,7 @@
 #
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
+test -n "${OS-}" || false 'make sure $OS is defined'
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
@@ -22,6 +23,12 @@ test_application_user
 "
 TEST_LIST_HOOK_APP="test_pre_init_script"
 TEST_LIST_PERL_APP="test_perl_directive"
+TEST_LIST_MISC=run_dockerfiles_test
+
+# These tests only make sense for rhscl
+if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+  TEST_LIST_MISC="$TEST_LIST_MISC test_scl_enable"
+fi
 
 
 . $test_dir/test-lib.sh
@@ -418,14 +425,7 @@ build_image "perl-test-app"
 # Run the chosen tests
 TEST_SET=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
 
-# Run the rest of the tests by defining TEST_LIST to include the rest of the relevant cases
-TEST_SET=run_dockerfiles_test
-
-# These tests only make sense for rhscl
-if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-  TEST_SET="$TEST_SET test_scl_enable"
-fi
 
 # Execute the rest of the tests depending on what TEST_LIST includes now
-ct_run_tests_from_testset "rest-of-the-tests"
+TEST_SET=${TEST_LIST_MISC} ct_run_tests_from_testset "miscellaneous-tests"
 # vim: set tabstop=2:shiftwidth=2:expandtab:
