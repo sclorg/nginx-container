@@ -6,20 +6,13 @@ jobs:
   container-tests:
     # This job only runs for '[test]' pull request comments by owner, member
     runs-on: ubuntu-20.04
-    name: Container-tests ${{ matrix.context }} - ${{ matrix.version }}
+    name: "Container-tests: ${{ matrix.version }} - ${{ matrix.context }}"
     strategy:
       fail-fast: false
       matrix:
         version: [ "1.18", "1.20", "1.22" ]
         os_test: [ "fedora", "centos7", "rhel7", "rhel8", "rhel9", "c9s"]
         include:
-          - tmt_plan: "fedora"
-            os_test: "fedora"
-            context: "Fedora"
-            compose: "Fedora-latest"
-            api_key: "TF_PUBLIC_API_KEY"
-            branch: "main"
-            tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
           - tmt_plan: "fedora"
             os_test: "fedora"
             context: "Fedora"
@@ -38,22 +31,6 @@ jobs:
             os_test: "rhel7"
             context: "RHEL7"
             compose: "RHEL-7.9-Released"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            tf_scope: "private"
-          - tmt_plan: "rhel7-docker"
-            os_test: "rhel7"
-            context: "RHEL7"
-            compose: "RHEL-7.9-Released"
-            api_key: "TF_INTERNAL_API_KEY"
-            branch: "master"
-            tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
-            tf_scope: "private"
-          - tmt_plan: "rhel8-docker"
-            os_test: "rhel8"
-            context: "RHEL8"
-            compose: "RHEL-8.6.0-Nightly"
             api_key: "TF_INTERNAL_API_KEY"
             branch: "master"
             tmt_repo: "https://gitlab.cee.redhat.com/platform-eng-core-services/sclorg-tmt-plans"
