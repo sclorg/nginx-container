@@ -6,6 +6,7 @@ jobs:
   container-tests:
     # This job only runs for '[test]' pull request comments by owner, member
     runs-on: ubuntu-20.04
+    name: Container-tests ${{ matrix.context }} - ${{ matrix.version }}
     strategy:
       fail-fast: false
       matrix:
