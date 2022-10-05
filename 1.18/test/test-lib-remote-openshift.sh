@@ -1,1 +1,1 @@
-../../test/test-lib-remote-openshift.sh
+../../common/test-lib-remote-openshift.sh
