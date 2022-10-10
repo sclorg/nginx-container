@@ -11,9 +11,9 @@ Images available on Quay are:
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 * Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
-* Minimal CentOS Stream 8 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c8s)
-* Minimal CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
-* Minimal Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
+* Micro CentOS Stream 8 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c8s)
+* Micro CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
+* Micro Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
 
 
 This repository contains Dockerfiles for Nginx images for OpenShift.
