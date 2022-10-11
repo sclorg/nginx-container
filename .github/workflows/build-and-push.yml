@@ -40,6 +40,18 @@ jobs:
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "fedora"
+          - dockerfile_path: "1.22"
+            dockerfile: "Dockerfile.fedora"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "fedora"
+          - dockerfile_path: "1.22-micro"
+            dockerfile: "Dockerfile.fedora"
+            registry_namespace: "fedora"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+            tag: "fedora"
 
     steps:
       - name: Build and push to quay.io registry
