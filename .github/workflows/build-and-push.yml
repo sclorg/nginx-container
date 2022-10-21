@@ -62,7 +62,7 @@ jobs:
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
           dockerfile: ${{ matrix.dockerfile }}
-          docker_context: ${{ matrix.dockerfile_path }}
+          docker_context: ${{ matrix.dockerfile_path }}/..
           dockerfile_path: ${{ matrix.dockerfile_path }}
           tag: ${{ matrix.tag }}
           suffix: ${{ matrix.suffix }}
