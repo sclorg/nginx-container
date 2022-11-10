@@ -121,7 +121,7 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage"
-  docker run ${IMAGE_NAME} &>/dev/null
+  docker run --rm ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
@@ -427,6 +427,7 @@ TEST_SUMMARY=''
 ct_enable_cleanup
 
 CID_FILE_DIR=$(mktemp -d)
+cid_file="$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)"
 
 build_image "test-app"
 
