@@ -423,10 +423,8 @@ function run_dockerfiles_test() {
   rm "$dockerfile_tmp"
 }
 
-TEST_SUMMARY=''
-ct_enable_cleanup
+ct_init
 
-CID_FILE_DIR=$(mktemp -d)
 cid_file="$CID_FILE_DIR/$(mktemp -u -p . --suffix .cid)"
 
 build_image "test-app"
@@ -446,6 +444,6 @@ if ! [[ "${IMAGE_NAME}" =~ .*micro.* ]] ; then
 fi
 
 
-# Execute the rest of the tests depending on what TEST_LIST includes now
+# Execute the rest of the tests
 TEST_SET=${TEST_LIST_MISC} ct_run_tests_from_testset "miscellaneous-tests"
 # vim: set tabstop=2:shiftwidth=2:expandtab:
