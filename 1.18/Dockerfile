@@ -59,10 +59,10 @@ RUN yum install -y yum-utils gettext hostname && \
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH
+COPY 1.18/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY $NGINX_VERSION/root/ /
+COPY 1.18/root/ /
 
 # In order to drop the root user, we have to make some directories world
 # writeable as OpenShift default security model is to run the container under
