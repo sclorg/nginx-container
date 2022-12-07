@@ -4,9 +4,7 @@ Nginx container images
 [![Build and push container images to quay.io registry](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [nginx-1.18](https://quay.io/repository/centos7/nginx-118-centos7)
 * CentOS 7 [nginx-1.20](https://quay.io/repository/centos7/nginx-120-centos7)
-* CentOS Stream 8 [nginx-1.18](https://quay.io/repository/sclorg/nginx-118-c8s)
 * CentOS Stream 8 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c8s)
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
@@ -28,7 +26,6 @@ For more information about concepts used in these container images, see the
 Versions
 --------
 Nginx versions currently provided are:
-* [nginx-1.18](1.18)
 * [nginx-1.20](1.20)
 * [nginx-1.22](1.22)
 * [nginx-1.22 micro](1.22-micro)
@@ -96,9 +93,6 @@ This variable must be set to a list with possible versions (subdirectories).**
 
 Usage
 -----
-
-For information about usage of Dockerfile for nginx 1.18,
-see [usage documentation](1.18).
 
 For information about usage of Dockerfile for nginx 1.20,
 see [usage documentation](1.20).

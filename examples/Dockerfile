@@ -1,6 +1,6 @@
-FROM registry.access.redhat.com/ubi8/nginx-118
+FROM registry.access.redhat.com/ubi8/nginx-120
 
-ENV NGINX_VERSION=1.18
+ENV NGINX_VERSION=1.20
 
 # Add application sources
 ADD nginx-container/examples/$NGINX_VERSION/test-app/nginx.conf "${NGINX_CONF_PATH}"
