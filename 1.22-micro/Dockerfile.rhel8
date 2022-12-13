@@ -70,6 +70,9 @@ COPY $NGINX_VERSION-micro/core-scripts/usr /usr
 
 WORKDIR ${HOME}
 
+# Fail early if there is a version we do not expect
+RUN nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION"
+
 # In order to drop the root user, we have to make some directories world
 # writable as OpenShift default security model is to run the container under
 # random UID.

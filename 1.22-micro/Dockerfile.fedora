@@ -67,6 +67,9 @@ COPY $NGINX_VERSION-micro/core-scripts/usr /usr
 
 WORKDIR ${HOME}
 
+# Fail early if there is a version we do not expect
+RUN nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION"
+
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
 #    is to run the container under random UID, but GID=0
