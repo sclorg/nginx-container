@@ -31,7 +31,7 @@ if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
 fi
 
 
-. $test_dir/test-lib.sh
+source "$test_dir/test-lib.sh"
 
 # TODO: This should be part of the image metadata
 test_port=8080
