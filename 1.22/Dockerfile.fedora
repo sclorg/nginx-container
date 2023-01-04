@@ -62,7 +62,7 @@ COPY $NGINX_VERSION/root/ /
 # 2) for working root-less container with UID=1001, which does not have
 #    to have GID=0
 # 3) for default use-case, that is running container directly on operating system,
-#    with default UID and GID (1001:1)
+#    with default UID and GID (1001:0)
 # Supported combinations of UID:GID are thus following:
 # UID=1001 && GID=0
 # UID=<any>&& GID=0
