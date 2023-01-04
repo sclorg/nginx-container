@@ -84,13 +84,12 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     mkdir -p ${NGINX_LOG_PATH} && \
     chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
-    chmod -R a+rwx /var/lib/nginx && \
     chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     chown -R 1001:0 ${NGINX_APP_ROOT} && \
-    chown -R 1001:0 /var/lib/nginx && \
+    chown -R 1001:0 /var/lib/nginx /var/log/nginx && \
     chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     # FIXME: Not sure if this is safe to do, just a hack to make the image work
-    chmod -R a+rwx /var/run && \
+    chmod -R ug+rwX /var/run /var/log/nginx /var/lib/nginx && \
     chown -R 1001:0 /var/run
 
 USER 1001
