@@ -20,9 +20,6 @@ function test_nginx_integration() {
 
 # Check the imagestream
 function test_nginx_imagestream() {
-  if [[ "${VERSION}" == *"micro"* ]]; then
-    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
-  fi
   ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/nginx-${OS%[0-9]*}.json" "${IMAGE_NAME}" \
                               "https://github.com/sclorg/nginx-container.git" \
                               "examples/${VERSION}/test-app" \
