@@ -20,11 +20,6 @@ function test_nginx_integration() {
 
 # Check the imagestream
 function test_nginx_imagestream() {
-  case ${OS} in
-    rhel7|centos7|rhel8|rhel9) ;;
-    *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
-  esac
-
   ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/nginx-${OS%[0-9]*}.json" "${IMAGE_NAME}" \
                               "https://github.com/sclorg/nginx-container.git" \
                               "examples/${VERSION}/test-app" \
