@@ -90,6 +90,8 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
 
 USER 1001
 
+STOPSIGNAL SIGQUIT
+
 # Not using VOLUME statement since it's not working in OpenShift Online:
 # https://github.com/sclorg/httpd-container/issues/30
 # VOLUME ["/opt/rh/rh-nginx118/root/usr/share/nginx/html"]
