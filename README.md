@@ -9,6 +9,7 @@ Images available on Quay are:
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 * Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
+* Fedora [nginx-1.24](https://quay.io/repository/fedora/nginx-124)
 * Micro CentOS Stream 8 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c8s)
 * Micro CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
 * Micro Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
@@ -29,6 +30,7 @@ Nginx versions currently provided are:
 * [nginx-1.20](1.20)
 * [nginx-1.22](1.22)
 * [nginx-1.22 micro](1.22-micro)
+* [nginx-1.24](1.24)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -100,6 +102,9 @@ see [usage documentation](1.20).
 For information about usage of Dockerfile for nginx 1.22,
 see [usage documentation](1.22).
 
+For information about usage of Dockerfile for nginx 1.24,
+see [usage documentation](1.24).
+
 Build
 -----
 Images can be built using `make` command.
@@ -107,7 +112,7 @@ Images can be built using `make` command.
 ```
 $ cd nginx-container
 $ git submodule update --init
-$ make build TARGET=centos7 VERSIONS=1.20
+$ make build TARGET=rhel8 VERSIONS=1.22
 ```
 
 For more information about make rules see [README](https://github.com/sclorg/container-common-scripts/blob/master/README.md).
@@ -128,7 +133,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel7 VERSIONS=1.20
+    $ make test TARGET=rhel8 VERSIONS=1.22
     ```
 
 *  **CentOS based image**
