@@ -7,10 +7,10 @@ updates:
     schedule:
       interval: weekly
     labels:
-      - 'git-submodule'
+      - 'ready for review'
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
     labels:
-      - 'github-actions'
+      - 'ready for review'
