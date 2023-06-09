@@ -8,3 +8,9 @@ updates:
       interval: weekly
     labels:
       - 'git-submodule'
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - 'github-actions'
