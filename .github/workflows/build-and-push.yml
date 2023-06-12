@@ -13,49 +13,45 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile_path: "1.20"
-            dockerfile: "Dockerfile"
+          - dockerfile: "1.20/Dockerfile"
             registry_namespace: "centos7"
             quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
+            image_name: "nginx-120-centos7"
             tag: "centos7"
-            suffix: "centos7"
-          - dockerfile_path: "1.20"
-            dockerfile: "Dockerfile.c9s"
+          - dockerfile: "1.20/Dockerfile.c9s"
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             tag: "c9s"
-            suffix: "c9s"
-          - dockerfile_path: "1.22"
-            dockerfile: "Dockerfile.fedora"
+            image_name: "nginx-120-c9s"
+          - dockerfile: "1.22/Dockerfile.fedora"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "fedora"
-          - dockerfile_path: "1.24"
-            dockerfile: "Dockerfile.fedora"
+            image_name: "nginx-122"
+          - dockerfile: "1.24/Dockerfile.fedora"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "fedora"
-          - dockerfile_path: "1.22-micro"
-            dockerfile: "Dockerfile.fedora"
+            image_name: "nginx-124"
+          - dockerfile: "1.22-micro/Dockerfile.fedora"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "fedora"
+            image_name: "nginx-124-micro"
 
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v2
+        uses: sclorg/build-and-push-action@v4
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
           dockerfile: ${{ matrix.dockerfile }}
-          docker_context: ${{ matrix.dockerfile_path }}/..
-          dockerfile_path: ${{ matrix.dockerfile_path }}
           tag: ${{ matrix.tag }}
-          suffix: ${{ matrix.suffix }}
+          image_name: ${{ matrix.image_name }}
