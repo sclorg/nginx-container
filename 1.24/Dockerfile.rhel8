@@ -4,8 +4,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.22 \
-    NGINX_SHORT_VER=122 \
+    NGINX_VERSION=1.24 \
+    NGINX_SHORT_VER=124 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
@@ -46,10 +46,10 @@ RUN yum -y module enable nginx:$NGINX_VERSION && \
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY 1.22/s2i/bin/ $STI_SCRIPTS_PATH
+COPY 1.24/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY 1.22/root/ /
+COPY 1.24/root/ /
 
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
