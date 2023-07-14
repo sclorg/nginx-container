@@ -1,9 +1,8 @@
 Nginx 1.22 server and a reverse proxy server container image
 ============================================================
 This container image includes Nginx 1.22 server and a reverse server for OpenShift and general usage.
-Users can choose between RHEL, CentOS, CentOS Stream and Fedora based images.
+Users can choose between RHEL, CentOS Stream and Fedora based images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS Stream images are available in the [Quay.io](https://quay.io/organization/sclorg),
 and the Fedora images are available in the [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
