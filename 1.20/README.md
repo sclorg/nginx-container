@@ -186,7 +186,7 @@ The nginx container image supports the following configuration variable, which c
 
 
 **`NGINX_LOG_TO_VOLUME`**
-       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`.
+       When `NGINX_LOG_TO_VOLUME` is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`.
 
 
 Troubleshooting
@@ -195,7 +195,7 @@ By default, nginx access logs are written to standard output and error logs are 
 
     podman logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 and CentOS-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`, which can be mounted to host system using the container volumes.**
+**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`. In case of RHEL-7 images, this is a symlink to `/var/opt/rh/rh-nginx120/log/nginx/`, which can be mounted to host system using the container volumes.**
 
 
 See also
@@ -203,7 +203,7 @@ See also
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
-for RHEL8 it's `Dockerfile.rhel8`, for RHEL9 it's `Dockerfile.rhel9`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
+Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 it's `Dockerfile.rhel8`,
+for RHEL9 it's `Dockerfile.rhel9`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
 Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
 
