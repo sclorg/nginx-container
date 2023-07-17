@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora:36 AS build
+FROM registry.fedoraproject.org/fedora:37 AS build
 
 RUN mkdir -p /mnt/rootfs
 # this is an alternative build of some packages with even smaller footprint on RPM level

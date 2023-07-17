@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-core:36
+FROM quay.io/fedora/s2i-core:37
 
 # nginx 1.22 image.
 #
