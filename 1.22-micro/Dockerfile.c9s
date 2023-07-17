@@ -1,9 +1,11 @@
 FROM quay.io/centos/centos:stream9 AS build
 
 RUN mkdir -p /mnt/rootfs
-ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
+# this is an alternative build of some packages with even smaller footprint on RPM level
+# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
+#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst bind-utils" && \
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
-    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst bind-utils" && \
+    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs gettext bind-utils" && \
     dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever 9 --setopt install_weak_deps=false --nodocs -y && \
     dnf -y --installroot /mnt/rootfs clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
@@ -69,27 +71,31 @@ WORKDIR ${HOME}
 # Fail early if there is a version we do not expect
 RUN nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION"
 
-# In order to drop the root user, we have to make some directories world
-# writable as OpenShift default security model is to run the container under
-# random UID.
-RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf-fed.sed ${NGINX_CONF_PATH} && \
-    chmod a+rwx ${NGINX_CONF_PATH} && \
+# Changing ownership and user rights to support following use-cases:
+# 1) running container on OpenShift, whose default security model
+#    is to run the container under random UID, but GID=0
+# 2) for working root-less container with UID=1001, which does not have
+#    to have GID=0
+# 3) for default use-case, that is running container directly on operating system,
+#    with default UID and GID (1001:0)
+# Supported combinations of UID:GID are thus following:
+# UID=1001 && GID=0
+# UID=<any>&& GID=0
+# UID=1001 && GID=<any>
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
     mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
     mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
     mkdir -p ${NGINX_LOG_PATH} && \
-    chmod -R a+rwx ${NGINX_APP_ROOT}/etc && \
-    chmod -R a+rwx /var/lib/nginx && \
-    chmod -R a+rwx ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chown -R 1001:0 ${NGINX_CONF_PATH} && \
     chown -R 1001:0 ${NGINX_APP_ROOT} && \
-    chown -R 1001:0 /var/lib/nginx && \
     chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
-    chmod -R a+rwx ${NGINX_LOG_PATH} && \
-    chown -R 1001:0 ${NGINX_LOG_PATH} && \
-    # FIXME: Not sure if this is safe to do, just a hack to make the image work
-    chmod -R a+rwx /var/run && \
-    chown -R 1001:0 /var/run
+    chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
+    chmod    ug+rw  ${NGINX_CONF_PATH} && \
+    chmod -R ug+rwX ${NGINX_APP_ROOT} && \
+    chmod -R ug+rwX ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
 
 USER 1001
 
