@@ -15,7 +15,11 @@ source "${THISDIR}/test-lib-remote-openshift.sh"
 
 TEST_LIST="\
 test_nginx_integration
+test_nginx_local_example
+test_nginx_remote_example
+test_nginx_template_from_example_app
 test_nginx_imagestream
+test_latest_imagestreams
 "
 
 trap ct_os_cleanup EXIT SIGINT
