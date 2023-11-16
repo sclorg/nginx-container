@@ -13,24 +13,9 @@ source ${THISDIR}/test-lib.sh
 source ${THISDIR}/test-lib-openshift.sh
 source ${THISDIR}/test-lib-nginx.sh
 
-# TODO: branch should be changed to master, once code in example app
-# stabilizes on with referencing latest version
-BRANCH_TO_TEST=master
-
 set -eo nounset
 
 trap ct_os_cleanup EXIT SIGINT
-
-test_latest_imagestreams() {
-  local result=1
-  # Switch to root directory of a container
-  echo "Testing the latest version in imagestreams"
-  pushd "${test_dir}/../.." >/dev/null || return 1
-  ct_check_latest_imagestreams
-  result=$?
-  popd >/dev/null || return 1
-  return $result
-}
 
 ct_os_check_compulsory_vars
 
@@ -38,18 +23,11 @@ ct_os_enable_print_logs
 
 ct_os_cluster_up
 
-# test local app
-ct_os_test_s2i_app ${IMAGE_NAME} "${THISDIR}/test-app" . 'Test NGINX passed'
+test_nginx_local_example
 
-# test remote example app
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/nginx-ex.git#${BRANCH_TO_TEST}" . 'Welcome to your static nginx application on OpenShift'
+test_nginx_remote_example
 
-# test template from the example app
-ct_os_test_template_app ${IMAGE_NAME} \
-                        https://raw.githubusercontent.com/sclorg/nginx-ex/${BRANCH_TO_TEST}/openshift/templates/nginx.json \
-                        nginx \
-                        'Welcome to your static nginx application on OpenShift' \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p NGINX_VERSION=${VERSION} -p NAME=nginx-testing"
+test_nginx_template_from_example_app
 
 # Check the imagestream
 test_nginx_imagestream
