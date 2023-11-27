@@ -52,6 +52,7 @@ function test_nginx_template_from_example_app() {
                           8080 http 200 "-p SOURCE_REPOSITORY_REF=${BRANCH_TO_TEST} -p NGINX_VERSION=${VERSION} -p NAME=nginx-testing"
 
 }
+
 function test_latest_imagestreams() {
   local result=1
   # Switch to root directory of a container
