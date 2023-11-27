@@ -23,7 +23,7 @@ jobs:
       && (contains(github.event.comment.body, '[test-openshift]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
-      - uses: sclorg/tfaga-wrapper@typescript
+      - uses: sclorg/tfaga-wrapper@main
         with:
           os_test: ${{ matrix.os_test }}
           version: ${{ matrix.version }}
