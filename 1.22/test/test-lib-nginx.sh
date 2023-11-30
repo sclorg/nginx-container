@@ -12,6 +12,9 @@ source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
 
 function test_nginx_integration() {
+  if [[ "${VERSION}" == *"micro"* ]]; then
+    VERSION=$(echo "${VERSION}" | cut -d "-" -f 1)
+  fi
   ct_os_test_s2i_app "${IMAGE_NAME}" \
                      "https://github.com/sclorg/nginx-container.git" \
                      "examples/${VERSION}/test-app" \
@@ -46,7 +49,7 @@ function test_nginx_template_from_example_app() {
   BRANCH_TO_TEST="master"
   # test template from the example app
   ct_os_test_template_app "${IMAGE_NAME}" \
-                          "https://raw.githubusercontent.com/phracek/nginx-ex/${BRANCH_TO_TEST}/openshift/templates/nginx.json" \
+                          "https://raw.githubusercontent.com/sclorg/nginx-ex/${BRANCH_TO_TEST}/openshift/templates/nginx.json" \
                           nginx \
                           'Welcome to your static nginx application on OpenShift' \
                           8080 http 200 "-p SOURCE_REPOSITORY_REF=master -p NGINX_VERSION=${VERSION} -p NAME=nginx-testing"
@@ -55,6 +58,10 @@ function test_nginx_template_from_example_app() {
 
 function test_latest_imagestreams() {
   local result=1
+  if [[ "${VERSION}" == *"micro"* ]]; then
+    echo "Do not check 'micro' imagestreams. Only main versions."
+    return 0
+  fi
   # Switch to root directory of a container
   echo "Testing the latest version in imagestreams"
   pushd "${THISDIR}/../.." >/dev/null || return 1
