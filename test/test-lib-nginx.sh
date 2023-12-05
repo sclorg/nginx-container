@@ -55,6 +55,10 @@ function test_nginx_template_from_example_app() {
 
 function test_latest_imagestreams() {
   local result=1
+  if [[ "${VERSION}" == *"micro"* ]]; then
+    echo "Do not check 'micro' imagestreams. Only main versions."
+    return 0
+  fi
   # Switch to root directory of a container
   echo "Testing the latest version in imagestreams"
   pushd "${THISDIR}/../.." >/dev/null || return 1
