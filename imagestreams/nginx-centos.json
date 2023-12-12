@@ -81,7 +81,7 @@
         },
         "from": {
           "kind": "DockerImage",
-          "name": "registry.access.redhat.com/ubi8/nginx-120:latest"
+          "name": "registry.access.redhat.com/ubi8/nginx-122:latest"
         },
         "referencePolicy": {
           "type": "Local"
