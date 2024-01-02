@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-base-c9s:c9s
+FROM quay.io/sclorg/s2i-core-c9s:c9s
 
 EXPOSE 8080
 EXPOSE 8443
