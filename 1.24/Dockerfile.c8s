@@ -85,9 +85,4 @@ USER 1001
 
 STOPSIGNAL SIGQUIT
 
-# Not using VOLUME statement since it's not working in OpenShift Online:
-# https://github.com/sclorg/httpd-container/issues/30
-# VOLUME ["/usr/share/nginx/html"]
-# VOLUME ["/var/log/nginx/"]
-
 CMD $STI_SCRIPTS_PATH/usage
