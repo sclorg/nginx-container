@@ -1,4 +1,4 @@
-FROM quay.io/sclorg/s2i-core-c9s:c9s
+FROM ubi9/s2i-core:1
 
 EXPOSE 8080
 EXPOSE 8443
@@ -23,12 +23,12 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="sclorg/${NAME}-${NGINX_SHORT_VER}-c9s" \
+      name="ubi9/${NAME}-${NGINX_SHORT_VER}" \
       version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${NGINX_SHORT_VER}-c9s:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> ubi9/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
@@ -38,7 +38,6 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_LOG_PATH=/var/log/nginx \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
-# Modules does not exist
 RUN yum -y module enable nginx:$NGINX_VERSION && \
     INSTALL_PKGS="nss_wrapper bind-utils gettext hostname nginx nginx-mod-stream nginx-mod-http-perl" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \

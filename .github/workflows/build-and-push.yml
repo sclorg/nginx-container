@@ -31,6 +31,18 @@ jobs:
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
             tag: "fedora"
             image_name: "nginx-124"
+          - dockerfile: "1.24/Dockerfile.c8s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c8s"
+            image_name: "nginx-124-c8s"
+          - dockerfile: "1.24/Dockerfile.c9s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            tag: "c9s"
+            image_name: "nginx-124-c9s"
 
     steps:
       - name: Build and push to quay.io registry
