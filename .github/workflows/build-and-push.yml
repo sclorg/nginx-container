@@ -13,45 +13,56 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "1.20/Dockerfile.c9s"
+          - version: "1.20"
+            tag: "c9s"
+            dockerfile: "Dockerfile.c9s"
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "c9s"
             image_name: "nginx-120-c9s"
-          - dockerfile: "1.22-micro/Dockerfile.c9s"
+
+          - version: "1.22-micro"
+            tag: "c9s"
+            dockerfile: "Dockerfile.c9s"
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-            tag: "c9s"
             image_name: "nginx-122-micro-c9s"
-          - dockerfile: "1.24/Dockerfile.fedora"
+
+          - version: "1.24"
+            tag: "fedora"
+            dockerfile: "Dockerfile.fedora"
             registry_namespace: "fedora"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-            tag: "fedora"
             image_name: "nginx-124"
-          - dockerfile: "1.24/Dockerfile.c8s"
-            registry_namespace: "sclorg"
-            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+
+          - version: "1.24"
             tag: "c8s"
-            image_name: "nginx-124-c8s"
-          - dockerfile: "1.24/Dockerfile.c9s"
+            dockerfile: "Dockerfile.c8s"
             registry_namespace: "sclorg"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            image_name: "nginx-124-c8s"
+
+          - version: "1.24"
             tag: "c9s"
+            dockerfile: "Dockerfile.c9s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             image_name: "nginx-124-c9s"
 
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v4
+        uses: sclorg/build-and-push-action@main
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
-          dockerfile: ${{ matrix.dockerfile }}
+          dockerfile: ${{ matrix.version }}/${{ matrix.dockerfile }}
           tag: ${{ matrix.tag }}
           image_name: ${{ matrix.image_name }}
+          readme: "${{ matrix.version }}/README.md"
+          quay_application_token: ${{ secrets.QUAY_IMAGE_SCLORG_UPDATE_DESC }}
