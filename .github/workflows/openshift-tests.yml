@@ -2,6 +2,11 @@ on:
   issue_comment:
     types:
       - created
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   openshift-tests:
     name: "${{ matrix.test_case }} tests: ${{ matrix.version }} - ${{ matrix.os_test }}"
