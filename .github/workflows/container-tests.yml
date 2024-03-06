@@ -4,7 +4,7 @@ on:
       - created
 
 concurrency:
-  group: ${{ github.head_ref }}
+  group: container_tests-${{ github.event.issue.number }}
   cancel-in-progress: true
 
 jobs:
