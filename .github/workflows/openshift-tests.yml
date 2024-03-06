@@ -3,14 +3,13 @@ on:
     types:
       - created
 
-concurrency:
-  group: ocp_tests-${{ github.event.issue.number }}
-  cancel-in-progress: true
-
 jobs:
   openshift-tests:
     name: "${{ matrix.test_case }} tests: ${{ matrix.version }} - ${{ matrix.os_test }}"
     runs-on: ubuntu-20.04
+    concurrency:
+      group: ocp-${{ github.event.issue.number }}-${{ matrix.version }}-${{ matrix.os_test }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
