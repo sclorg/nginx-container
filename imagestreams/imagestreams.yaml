@@ -1,0 +1,46 @@
+---
+# configuration file for https://github.com/sclorg/ci-scripts/tree/master/ocp-stream-generator
+
+- name: nginx
+  pretty_name: Nginx HTTP server and a reverse proxy
+  sample_repo: https://github.com/sclorg/nginx-ex.git
+  category: builder
+  description: >
+    Build and serve static content via Nginx HTTP Server
+    and a reverse proxy (nginx) on DISTRO_NAME.
+    For more information about using this builder image,
+    including OpenShift considerations, see
+    https://github.com/sclorg/nginx-container/blob/master/APP_VERSION/README.md.
+  imagestream_files:
+  - filename: nginx-centos.json
+    latest: "1.22-ubi8"
+    distros:
+      - name: UBI 7
+        app_versions: ["1.20"]
+
+      - name: UBI 8
+        app_versions: ["1.22"]
+
+      - name: UBI 9
+        app_versions: ["1.20", "1.22"]
+
+  - filename: nginx-rhel.json
+    latest: "1.22-ubi8"
+    distros:
+      - name: UBI 7
+        app_versions: ["1.20"]
+
+      - name: UBI 8
+        app_versions: ["1.22"]
+
+      - name: UBI 9
+        app_versions: ["1.20", "1.22"]
+
+  - filename: nginx-rhel-aarch64.json
+    latest: "1.22-ubi8"
+    distros:
+      - name: UBI 8
+        app_versions: ["1.22"]
+
+      - name: UBI 9
+        app_versions: ["1.20", "1.22"]
