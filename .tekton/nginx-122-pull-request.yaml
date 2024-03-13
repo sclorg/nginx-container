@@ -20,7 +20,7 @@ metadata:
 spec:
   params:
   - name: dockerfile
-    value: Dockerfile
+    value: Dockerfile.rhel8
   - name: git-url
     value: '{{source_url}}'
   - name: image-expires-after
