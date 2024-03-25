@@ -20,6 +20,15 @@ function test_nginx_integration() {
 
 # Check the imagestream
 function test_nginx_imagestream() {
+  # Check if the current version is already GA
+  # This directory is cloned from TMT plan repo 'sclorg-tmt-plans'
+  local devel_file="/root/sclorg-tmt-plans/devel_images"
+  if [ -f "${devel_file}" ]; then
+    if grep -q "${OS}=nginx-container=${VERSION}" "$devel_file" ; then
+      echo "This version is currently developed, so skipping this test."
+      return
+    fi
+  fi
   ct_os_test_image_stream_s2i "${THISDIR}/imagestreams/nginx-${OS%[0-9]*}.json" "${IMAGE_NAME}" \
                               "https://github.com/sclorg/nginx-container.git" \
                               "examples/${VERSION}/test-app" \
