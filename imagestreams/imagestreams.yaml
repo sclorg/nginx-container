@@ -5,7 +5,7 @@
   pretty_name: Nginx HTTP server and a reverse proxy
   sample_repo: https://github.com/sclorg/nginx-ex.git
   category: builder
-  description: >
+  description: >-
     Build and serve static content via Nginx HTTP Server
     and a reverse proxy (nginx) on DISTRO_NAME.
     For more information about using this builder image,
