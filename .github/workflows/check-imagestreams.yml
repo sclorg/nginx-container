@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 jobs:
   check:
@@ -14,41 +15,9 @@ jobs:
     runs-on: ubuntu-20.04
     if: |
       github.event.issue.pull_request
-      && (contains(github.event.comment.body, '[test]') || contains(github.event.comment.body, '[test-all]'))
+      && (contains(github.event.comment.body, '[test-openshift]') || contains(github.event.comment.body, '[test-all]'))
       && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Check imagestream files
-        id: check
-        shell: bash
-        run: |
-          sudo apt -y update && sudo apt install -y python3-yaml
-          git clone https://github.com/sclorg/ci-scripts.git ci-scripts
-          sha=$(git rev-parse HEAD)
-          result="success"
-          python ci-scripts/ocp-stream-generator/ocp-stream-generator/stream_generator.py
-          git diff --exit-code -- imagestreams || result="failure"
-          echo "result=$result" >> "$GITHUB_OUTPUT"
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
-      - name: Set final commit status
-        uses: myrotvorets/set-commit-status-action@v2.0.0
+      - uses: sclorg/ci-scripts/ocp-stream-generator@master
         with:
-          status: ${{ steps.check.outputs.result }}
-          context: "Imagestream files check"
-          sha: ${{ steps.check.outputs.sha }}
-
-      - name: Exit on ERR
-        shell: bash
-        run: |
-          _result=${{ steps.check.outputs.result }}
-          if [ "$_result" == failure ]; then
-            git show -s -- imagestreams
-            echo "::error::Imagestream files are not regenerated properly."
-            echo "::warning::Please use 'sclorg/ci-scripts/ocp-stream-generator'"
-            echo "::warning::to regenerate them."
-            exit 1
-          fi
-...
+          ref: "refs/pull/${{ github.event.issue.number }}/head"
