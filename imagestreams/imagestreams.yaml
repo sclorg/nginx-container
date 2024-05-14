@@ -13,7 +13,7 @@
     https://github.com/sclorg/nginx-container/blob/master/APP_VERSION/README.md.
   imagestream_files:
   - filename: nginx-centos.json
-    latest: "1.22-ubi8"
+    latest: "1.24-ubi9"
     distros:
       - name: UBI 7
         app_versions: ["1.20"]
@@ -22,10 +22,10 @@
         app_versions: ["1.22"]
 
       - name: UBI 9
-        app_versions: ["1.20", "1.22"]
+        app_versions: ["1.20", "1.22", "1.24"]
 
   - filename: nginx-rhel.json
-    latest: "1.22-ubi8"
+    latest: "1.24-ubi9"
     distros:
       - name: UBI 7
         app_versions: ["1.20"]
@@ -34,13 +34,13 @@
         app_versions: ["1.22"]
 
       - name: UBI 9
-        app_versions: ["1.20", "1.22"]
+        app_versions: ["1.20", "1.22", "1.24"]
 
   - filename: nginx-rhel-aarch64.json
-    latest: "1.22-ubi8"
+    latest: "1.24-ubi9"
     distros:
       - name: UBI 8
         app_versions: ["1.22"]
 
       - name: UBI 9
-        app_versions: ["1.20", "1.22"]
+        app_versions: ["1.20", "1.22", "1.24"]
