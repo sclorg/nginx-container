@@ -5,12 +5,10 @@ Nginx container images
 
 Images available on Quay are:
 * CentOS 7 [nginx-1.20](https://quay.io/repository/centos7/nginx-120-centos7)
-* CentOS Stream 8 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c8s)
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 * Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
 * Fedora [nginx-1.24](https://quay.io/repository/fedora/nginx-124)
-* Micro CentOS Stream 8 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c8s)
 * Micro CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
 * Micro Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
 
@@ -39,7 +37,6 @@ RHEL versions currently supported are:
 
 CentOS versions currently supported are:
 * CentOS7
-* CentOS Stream 8
 * CentOS Stream 9
 
 
