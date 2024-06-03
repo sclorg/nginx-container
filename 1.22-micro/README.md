@@ -195,6 +195,6 @@ See also
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-for RHEL8 it's `Dockerfile.rhel8`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
+for RHEL8 it's `Dockerfile.rhel8`,
 Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
 
