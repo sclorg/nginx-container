@@ -1,0 +1,1 @@
+../../test/test_nginx_imagestreams.py
