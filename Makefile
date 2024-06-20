@@ -1,6 +1,6 @@
 # Variables are documented in common/build.sh.
 BASE_IMAGE_NAME = nginx
-VERSIONS = 1.20 1.22 1.22-micro 1.24
+VERSIONS = 1.20 1.22 1.22-micro 1.24 1.26
 OPENSHIFT_NAMESPACES = 
 DOCKER_BUILD_CONTEXT = ..
 
