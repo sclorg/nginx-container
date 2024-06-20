@@ -1,6 +1,6 @@
-FROM quay.io/fedora/s2i-core:38
+FROM quay.io/fedora/s2i-core:40
 
-# nginx 1.24 image.
+# nginx 1.26 image.
 #
 # Volumes:
 #  * /var/log/nginx/ - Storage for logs
@@ -9,8 +9,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.24 \
-    NGINX_SHORT_VER=124 \
+    NGINX_VERSION=1.26 \
+    NGINX_SHORT_VER=126 \
     VERSION=0 \
     ARCH=x86_64
 

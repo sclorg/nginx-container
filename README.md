@@ -4,11 +4,11 @@ Nginx container images
 [![Build and push container images to quay.io registry](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [nginx-1.20](https://quay.io/repository/centos7/nginx-120-centos7)
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 * Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
 * Fedora [nginx-1.24](https://quay.io/repository/fedora/nginx-124)
+* Fedora [nginx-1.26](https://quay.io/repository/fedora/nginx-126)
 * Micro CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
 * Micro Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
 
@@ -29,6 +29,7 @@ Nginx versions currently provided are:
 * [nginx-1.22](1.22)
 * [nginx-1.22 micro](1.22-micro)
 * [nginx-1.24](1.24)
+* [nginx-1.26](1.26)
 
 RHEL versions currently supported are:
 * RHEL7
@@ -36,7 +37,6 @@ RHEL versions currently supported are:
 * RHEL9
 
 CentOS versions currently supported are:
-* CentOS7
 * CentOS Stream 9
 
 
@@ -63,12 +63,12 @@ Choose either the CentOS7 or RHEL7 based image:
     $ make build TARGET=rhel7 VERSIONS=1.20
     ```
 
-*  **CentOS7 based image**
+*  **CentOS Stream based image**
 
     This image is available on DockerHub. To download it run:
 
     ```
-    $ podman pull quay.io/centos7/nginx-120-centos7
+    $ podman pull quay.io/sclorg/nginx-124-c9s
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -77,10 +77,10 @@ Choose either the CentOS7 or RHEL7 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=centos7 VERSIONS=1.20
+    $ make build TARGET=c9s VERSIONS=1.24
     ```
 
-For using other versions of Nginx, just replace the `1.20` value by particular version
+For using other versions of Nginx, just replace the `1.24` value by particular version
 in the commands above.
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -101,6 +101,9 @@ see [usage documentation](1.22).
 
 For information about usage of Dockerfile for nginx 1.24,
 see [usage documentation](1.24).
+
+For information about usage of Dockerfile for nginx 1.26,
+see [usage documentation](1.26).
 
 Build
 -----
@@ -138,10 +141,10 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=centos7 VERSIONS=1.20
+    $ make test TARGET=c9s VERSIONS=1.24
     ```
 
-For using other versions of Nginx, just replace the `1.20` value by particular version
+For using other versions of Nginx, just replace the `1.24` value by particular version
 in the commands above.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed

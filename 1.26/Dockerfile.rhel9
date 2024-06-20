@@ -4,8 +4,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.24 \
-    NGINX_SHORT_VER=124 \
+    NGINX_VERSION=1.26 \
+    NGINX_SHORT_VER=126 \
     VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
