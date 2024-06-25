@@ -10,25 +10,6 @@
   "spec": {
     "tags": [
       {
-        "name": "1.20-ubi7",
-        "annotations": {
-          "openshift.io/display-name": "Nginx HTTP server and a reverse proxy 1.20 (UBI 7)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and serve static content via Nginx HTTP Server and a reverse proxy (nginx) on UBI 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/nginx-container/blob/master/1.20/README.md.",
-          "iconClass": "icon-nginx",
-          "tags": "builder,nginx",
-          "version": "1.20",
-          "sampleRepo": "https://github.com/sclorg/nginx-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.access.redhat.com/ubi7/nginx-120:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "1.22-ubi8",
         "annotations": {
           "openshift.io/display-name": "Nginx HTTP server and a reverse proxy 1.22 (UBI 8)",

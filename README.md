@@ -62,13 +62,7 @@ Choose either the CentOS Stream 9 or RHEL8 based image:
     $ make build TARGET=rhel8 VERSIONS=1.24
     ```
 
-<<<<<<< HEAD
 *  **CentOS Stream based image**
-||||||| parent of 8fc0bd0 (Update README's for using RHEL8 and CentOS Stream 9.)
-*  **CentOS7 based image**
-=======
-*  **CentOS Stream 9 based image**
->>>>>>> 8fc0bd0 (Update README's for using RHEL8 and CentOS Stream 9.)
 
     This image is available on DockerHub. To download it run:
 
@@ -132,7 +126,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
 
 *  **RHEL based image**
 
-    To test a RHEL7 based Nginx image, you need to run the test on a properly
+    To test a RHEL8 based Nginx image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
@@ -141,7 +135,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     $ make test TARGET=rhel8 VERSIONS=1.24
     ```
 
-*  **CentOS based image**
+*  **CentOS Stream based image**
 
     ```
     $ cd nginx-container
