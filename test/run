@@ -25,11 +25,6 @@ TEST_LIST_HOOK_APP="test_pre_init_script"
 TEST_LIST_PERL_APP="test_perl_directive"
 TEST_LIST_MISC=run_dockerfiles_test
 
-# These tests only make sense for rhscl
-if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-  TEST_LIST_MISC="$TEST_LIST_MISC test_scl_enable"
-fi
-
 
 source "$test_dir/test-lib.sh"
 
@@ -382,20 +377,6 @@ function build_image() {
   prepare "${test_name}"
   run_s2i_build "${test_name}"
   check_result $?
-}
-
-test_scl_enable() {
-  echo "Testing nginx availability in Dockerfile"
-  ct_binary_found_from_df nginx
-  check_result $? || return 1
-
-  echo "Testing variable presence during \`docker exec\`"
-  ct_check_exec_env_vars
-  check_result $? || return 1
-
-  echo "Checking if all scl variables are defined in Dockerfile"
-  ct_check_scl_enable_vars
-  check_result $? || return 1
 }
 
 function run_dockerfiles_test() {
