@@ -32,38 +32,43 @@ Nginx versions currently provided are:
 * [nginx-1.26](1.26)
 
 RHEL versions currently supported are:
-* RHEL7
 * RHEL8
 * RHEL9
 
-CentOS versions currently supported are:
+CentOS Stream versions currently supported are:
 * CentOS Stream 9
 
 
 Installation
 ----------------------
-Choose either the CentOS7 or RHEL7 based image:
+Choose either the CentOS Stream 9 or RHEL8 based image:
 
-*  **RHEL7 based image**
+*  **RHEL8 based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/nginx-120-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/nginx-124).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/nginx-120-rhel7
+    $ podman pull registry.access.redhat.com/rhel8/nginx-124
     ```
 
-    To build a RHEL7 based Nginx image, you need to run Docker build on a properly
+    To build a RHEL8 based Nginx image, you need to run Docker build on a properly
     subscribed RHEL machine.
 
     ```
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel7 VERSIONS=1.20
+    $ make build TARGET=rhel8 VERSIONS=1.24
     ```
 
+<<<<<<< HEAD
 *  **CentOS Stream based image**
+||||||| parent of 8fc0bd0 (Update README's for using RHEL8 and CentOS Stream 9.)
+*  **CentOS7 based image**
+=======
+*  **CentOS Stream 9 based image**
+>>>>>>> 8fc0bd0 (Update README's for using RHEL8 and CentOS Stream 9.)
 
     This image is available on DockerHub. To download it run:
 
@@ -133,7 +138,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel8 VERSIONS=1.22
+    $ make test TARGET=rhel8 VERSIONS=1.24
     ```
 
 *  **CentOS based image**
