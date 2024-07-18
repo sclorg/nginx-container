@@ -30,32 +30,14 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # required for ability to merge Pull Request
+      # required for merging PRs
       contents: write
-      # required for setting labels
+      # required for PR comments and setting labels
       pull-requests: write
 
     steps:
-      - id: pull-request-validator
-        name: Pull Request Validator
-        uses: redhat-plumbers-in-action/pull-request-validator@v2
+      - name: Auto Merge wrapper
+        uses: sclorg/auto-merge-wrapper@v1
         with:
           pr-metadata: ${{ needs.download-metadata.outputs.pr-metadata }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - id: auto-merge
-        name: Auto Merge
-        uses: redhat-plumbers-in-action/auto-merge@v2
-        with:
-          pr-metadata: ${{ needs.download-metadata.outputs.pr-metadata }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - if: ${{ !cancelled() }}
-        name: Show results in PR comment
-        uses: redhat-plumbers-in-action/issue-commentator@v1
-        with:
-          issue: ${{ fromJSON(needs.download-metadata.outputs.pr-metadata).number }}
-          message: |
-            ${{ steps.pull-request-validator.outputs.status && steps.pull-request-validator.outputs.status || '' }}
-            ${{ steps.auto-merge.outputs.status && steps.auto-merge.outputs.status || '' }}
           token: ${{ secrets.GITHUB_TOKEN }}
