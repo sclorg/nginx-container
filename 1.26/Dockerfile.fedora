@@ -1,9 +1,5 @@
 FROM quay.io/fedora/s2i-core:40
 
-# nginx 1.26 image.
-#
-# Volumes:
-#  * /var/log/nginx/ - Storage for logs
 
 EXPOSE 8080
 EXPOSE 8443
@@ -27,8 +23,8 @@ LABEL summary="${SUMMARY}" \
       io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,${NAME},${NAME}${NGINX_SHORT_VER}" \
-      com.redhat.component="${NAME}" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}" \
       name="fedora/${NAME}-${NGINX_SHORT_VER}" \
       version="${VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
