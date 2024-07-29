@@ -5,6 +5,8 @@ Nginx container images
 
 Images available on Quay are:
 * CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
+* CentOS Stream 9 [nginx-1.24](https://quay.io/repository/sclorg/nginx-124-c9s)
+* CentOS Stream 10 [nginx-1.26](https://quay.io/repository/sclorg/nginx-126-c10s)
 * Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
 * Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
 * Fedora [nginx-1.24](https://quay.io/repository/fedora/nginx-124)
@@ -37,6 +39,7 @@ RHEL versions currently supported are:
 
 CentOS Stream versions currently supported are:
 * CentOS Stream 9
+* CentOS Stream 10
 
 
 Installation
