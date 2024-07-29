@@ -53,6 +53,14 @@ jobs:
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
             image_name: "nginx-124-c9s"
 
+          - version: "1.26"
+            tag: "c10s"
+            dockerfile: "Dockerfile.c10s"
+            registry_namespace: "sclorg"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+            image_name: "nginx-126-c10s"
+
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@main
