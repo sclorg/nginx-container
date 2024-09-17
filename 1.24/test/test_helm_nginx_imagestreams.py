@@ -1,0 +1,1 @@
+../../test/test_helm_nginx_imagestreams.py
