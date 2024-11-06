@@ -1,1 +1,0 @@
-../../test/test_helm_nginx_template.py
