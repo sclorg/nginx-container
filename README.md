@@ -36,6 +36,7 @@ Nginx versions currently provided are:
 RHEL versions currently supported are:
 * RHEL8
 * RHEL9
+* RHEL10
 
 CentOS Stream versions currently supported are:
 * CentOS Stream 9
