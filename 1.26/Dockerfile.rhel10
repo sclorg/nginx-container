@@ -1,4 +1,4 @@
-FROM registry.stage.redhat.io/ubi10/s2i-core
+FROM ubi10/s2i-core
 
 EXPOSE 8080
 EXPOSE 8443
