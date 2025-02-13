@@ -14,6 +14,11 @@ IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("OS")
 VERSION = os.getenv("VERSION")
 
+TAGS = {
+    "rhel8": "-ubi8",
+    "rhel9": "-ubi9"
+}
+TAG = TAGS.get(OS, None)
 
 # bash test=test_nginx_imagestream
 class TestNginxImagestreamS2I:
