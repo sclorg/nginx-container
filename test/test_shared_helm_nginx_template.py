@@ -29,9 +29,9 @@ TAG = TAGS.get(OS, None)
 class TestHelmNginxTemplate:
 
     def setup_method(self):
-        package_name = "nginx-template"
+        package_name = "redhat-nginx-template"
         path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
+        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -41,15 +41,15 @@ class TestHelmNginxTemplate:
         self.hc_api.delete_project()
 
     def test_curl_connection(self):
-        if self.hc_api.oc_api.shared_cluster:
+        if self.hc_api.shared_cluster:
             pytest.skip("Do NOT test on shared cluster")
         new_version = VERSION
         if "micro" in VERSION:
             new_version = VERSION.replace("-micro", "")
-        self.hc_api.package_name = "nginx-imagestreams"
+        self.hc_api.package_name = "redhat-nginx-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "nginx-template"
+        self.hc_api.package_name = "redhat-nginx-template"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
@@ -65,13 +65,13 @@ class TestHelmNginxTemplate:
         )
 
     def test_helm_connection(self):
-        self.hc_api.package_name = "nginx-imagestreams"
+        self.hc_api.package_name = "redhat-nginx-imagestreams"
         new_version = VERSION
         if "micro" in VERSION:
             new_version = VERSION.replace("-micro", "")
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "nginx-template"
+        self.hc_api.package_name = "redhat-nginx-template"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={

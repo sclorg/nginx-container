@@ -18,7 +18,7 @@ test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 class TestHelmRHELNginxImageStreams:
 
     def setup_method(self):
-        package_name = "nginx-imagestreams"
+        package_name = "redhat-nginx-imagestreams"
         path = test_dir
         self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
         self.hc_api.clone_helm_chart_repo(
@@ -30,17 +30,17 @@ class TestHelmRHELNginxImageStreams:
         self.hc_api.delete_project()
 
     @pytest.mark.parametrize(
-        "version,registry",
+        "version,registry,expected",
         [
-            ("1.24-ubi9", "registry.redhat.io/ubi9/nginx-124:latest"),
-            ("1.24-ubi8", "registry.redhat.io/ubi8/nginx-124:latest"),
-            ("1.22-ubi9", "registry.redhat.io/ubi9/nginx-122:latest"),
-            ("1.22-ubi8", "registry.redhat.io/ubi8/nginx-122:latest"),
-            ("1.20-ubi9", "registry.redhat.io/ubi9/nginx-120:latest"),
-            ("1.20-ubi8", "registry.redhat.io/ubi8/nginx-120:latest"),
+            ("1.24-ubi9", "registry.redhat.io/ubi9/nginx-124:latest", True),
+            ("1.24-ubi8", "registry.redhat.io/ubi8/nginx-124:latest", True),
+            ("1.22-ubi9", "registry.redhat.io/ubi9/nginx-122:latest", True),
+            ("1.22-ubi8", "registry.redhat.io/ubi8/nginx-122:latest", True),
+            ("1.20-ubi9", "registry.redhat.io/ubi9/nginx-120:latest", True),
+            ("1.20-ubi8", "registry.redhat.io/ubi8/nginx-120:latest", False),
         ],
     )
-    def test_package_imagestream(self, version, registry):
+    def test_package_imagestream(self, version, registry, expected):
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        assert self.hc_api.check_imagestreams(version=version, registry=registry)
+        assert self.hc_api.check_imagestreams(version=version, registry=registry) == expected
