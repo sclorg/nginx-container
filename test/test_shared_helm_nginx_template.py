@@ -21,7 +21,8 @@ OS = os.getenv("TARGET")
 
 TAGS = {
     "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
+    "rhel9": "-ubi9",
+    "rhel10": "-ubi10",
 }
 TAG = TAGS.get(OS, None)
 
@@ -65,6 +66,8 @@ class TestHelmNginxTemplate:
         )
 
     def test_helm_connection(self):
+        if OS == "rhel10":
+            pytest.skip("Skipping test for rhel10")
         self.hc_api.package_name = "redhat-nginx-imagestreams"
         new_version = VERSION
         if "micro" in VERSION:

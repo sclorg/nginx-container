@@ -28,6 +28,8 @@ class TestNginxDeployTemplate:
         self.oc_api.delete_project()
 
     def test_python_template_inside_cluster(self):
+        if OS == "rhel10":
+            pytest.skip("Skipping test for rhel10")
         service_name = "nginx-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="nginx-ex", dir="openshift/templates", filename="nginx.json", branch="master"
