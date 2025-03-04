@@ -19,7 +19,7 @@ class TestNginxLocalEx:
 
     def setup_method(self):
         self.template_name = get_service_image(IMAGE_NAME)
-        self.oc_api = OpenShiftAPI(pod_name_prefix=self.template_name, version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=self.template_name, version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
