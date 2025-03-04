@@ -16,7 +16,8 @@ VERSION = os.getenv("VERSION")
 
 TAGS = {
     "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
+    "rhel9": "-ubi9",
+    "rhel10": "-ubi10"
 }
 TAG = TAGS.get(OS, None)
 
@@ -31,6 +32,8 @@ class TestNginxImagestreamS2I:
         self.oc_api.delete_project()
 
     def test_inside_cluster(self):
+        if OS == "rhel10":
+            pytest.skip("Skipping test for rhel10")
         os_name = ''.join(i for i in OS if not i.isdigit())
         new_version = VERSION
         if "-minimal" in VERSION:
