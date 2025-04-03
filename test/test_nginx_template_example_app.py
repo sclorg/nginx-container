@@ -22,12 +22,12 @@ OS = os.getenv("TARGET")
 class TestNginxDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="nginx-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="nginx-testing", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
-    def test_python_template_inside_cluster(self):
+    def test_nginx_template_inside_cluster(self):
         if OS == "rhel10":
             pytest.skip("Skipping test for rhel10")
         service_name = "nginx-testing"
@@ -44,7 +44,7 @@ class TestNginxDeployTemplate:
                 f"NAME={service_name}"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=300)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Welcome to your static nginx application on OpenShift"
         )
