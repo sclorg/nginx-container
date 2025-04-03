@@ -20,18 +20,18 @@ class TestNginxLocalEx:
 
     def setup_method(self):
         self.template_name = get_service_image(IMAGE_NAME)
-        self.oc_api = OpenShiftAPI(pod_name_prefix=self.template_name, version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=self.template_name, version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
-    def test_python_ex_template_inside_cluster(self):
+    def test_nginx_ex_template_inside_cluster(self):
         assert self.oc_api.deploy_s2i_app(
             image_name=IMAGE_NAME, app=f"https://github.com/sclorg/nginx-ex.git",
             context=".",
             service_name=self.template_name
         )
-        assert self.oc_api.template_deployed(name_in_template=self.template_name)
+        assert self.oc_api.is_s2i_pod_running(pod_name_prefix=self.template_name)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=self.template_name, expected_output="Welcome to your static nginx application on OpenShift"
         )
