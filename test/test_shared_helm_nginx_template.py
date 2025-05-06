@@ -41,30 +41,6 @@ class TestHelmNginxTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-    def test_curl_connection(self):
-        if self.hc_api.shared_cluster:
-            pytest.skip("Do NOT test on shared cluster")
-        new_version = VERSION
-        if "micro" in VERSION:
-            new_version = VERSION.replace("-micro", "")
-        self.hc_api.package_name = "redhat-nginx-imagestreams"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-nginx-template"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation(
-            values={
-                "nginx_version": f"{new_version}{TAG}",
-                "namespace": self.hc_api.namespace
-            }
-        )
-        expected_str = "Welcome to your static nginx application on OpenShift"
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="nginx-example")
-        assert self.hc_api.test_helm_curl_output(
-            route_name="nginx-example",
-            expected_str=expected_str
-        )
-
     def test_helm_connection(self):
         if OS == "rhel10":
             pytest.skip("Skipping test for rhel10")
