@@ -8,6 +8,8 @@ from pathlib import Path
 from container_ci_suite.helm import HelmChartsAPI
 from container_ci_suite.utils import check_variables
 
+from constants import TAGS
+
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
     sys.exit(1)
@@ -19,12 +21,7 @@ VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10",
-}
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 
 
 class TestHelmNginxTemplate:
@@ -42,8 +39,6 @@ class TestHelmNginxTemplate:
         self.hc_api.delete_project()
 
     def test_helm_connection(self):
-        if OS == "rhel10":
-            pytest.skip("Skipping test for rhel10")
         self.hc_api.package_name = "redhat-nginx-imagestreams"
         new_version = VERSION
         if "micro" in VERSION:
