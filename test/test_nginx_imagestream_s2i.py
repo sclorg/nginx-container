@@ -5,21 +5,17 @@ import pytest
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import get_service_image, check_variables
 
+from constants import BRANCH_TO_MASTER, TAGS
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
     sys.exit(1)
 
-BRANCH_TO_TEST = "master"
+BRANCH_TO_TEST = BRANCH_TO_MASTER
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("OS")
 VERSION = os.getenv("VERSION")
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10"
-}
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 
 # bash test=test_nginx_imagestream
 class TestNginxImagestreamS2I:
@@ -32,8 +28,6 @@ class TestNginxImagestreamS2I:
         self.oc_api.delete_project()
 
     def test_inside_cluster(self):
-        if OS == "rhel10":
-            pytest.skip("Skipping test for rhel10")
         os_name = ''.join(i for i in OS if not i.isdigit())
         new_version = VERSION
         if "-minimal" in VERSION:
