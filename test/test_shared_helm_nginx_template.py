@@ -40,9 +40,7 @@ class TestHelmNginxTemplate:
 
     def test_helm_connection(self):
         self.hc_api.package_name = "redhat-nginx-imagestreams"
-        new_version = VERSION
-        if "micro" in VERSION:
-            new_version = VERSION.replace("-micro", "")
+        new_version = VERSION.replace("-micro", "")
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
         self.hc_api.package_name = "redhat-nginx-template"
