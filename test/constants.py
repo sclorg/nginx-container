@@ -3,5 +3,3 @@ TAGS = {
     "rhel9": "-ubi9",
     "rhel10": "-ubi10",
 }
-
-BRANCH_TO_MASTER = "master"
