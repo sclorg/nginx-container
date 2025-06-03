@@ -68,6 +68,10 @@ function test_latest_imagestreams() {
     echo "Do not check 'micro' imagestreams. Only main versions."
     return 0
   fi
+    if [[ "${OS}" == "rhel8" ]]; then
+    echo "Do not check the latest version in imagestreams for RHEL8. It does not contain the latest version."
+    return 0
+  fi
   echo "Testing the latest version in imagestreams"
   pushd "${THISDIR}/../.." >/dev/null || return 1
   ct_check_latest_imagestreams
