@@ -53,7 +53,7 @@ Choose either the CentOS Stream 9 or RHEL8 based image:
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhel8/nginx-124
+    $ podman pull registry.access.redhat.com/rhel9/nginx-124
     ```
 
     To build a RHEL8 based Nginx image, you need to run Docker build on a properly
@@ -63,7 +63,7 @@ Choose either the CentOS Stream 9 or RHEL8 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel8 VERSIONS=1.24
+    $ make build TARGET=rhel9 VERSIONS=1.24
     ```
 
 *  **CentOS Stream based image**
@@ -115,7 +115,7 @@ Images can be built using `make` command.
 ```
 $ cd nginx-container
 $ git submodule update --init
-$ make build TARGET=rhel8 VERSIONS=1.22
+$ make build TARGET=rhel9 VERSIONS=1.24
 ```
 
 For more information about make rules see [README](https://github.com/sclorg/container-common-scripts/blob/master/README.md).
@@ -136,7 +136,7 @@ Users can choose between testing Nginx based on a RHEL or CentOS image.
     ```
     $ cd nginx-container
     $ git submodule update --init
-    $ make test TARGET=rhel8 VERSIONS=1.24
+    $ make test TARGET=rhel9 VERSIONS=1.24
     ```
 
 *  **CentOS Stream based image**
