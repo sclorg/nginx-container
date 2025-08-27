@@ -22,11 +22,11 @@ Nginx server image can be extended using Openshift's `Source` build feature.
 
 Usage in OpenShift
 ------------------
-In this example, we assume that you are using the `ubi8/nginx-122` image, available through the `nginx:1.22` imagestream tag in Openshift.
-To build a simple [test-app](https://github.com/sclorg/nginx-container/tree/master/examples/1.22/test-app) application in Openshift:
+In this example, we assume that you are using the `ubi9/nginx-124` image, available through the `nginx:1.24` imagestream tag in Openshift.
+To build a simple [test-app](https://github.com/sclorg/nginx-container/tree/master/examples/1.24/test-app) application in Openshift:
 
 ```
-oc new-app nginx:1.22~https://github.com/sclorg/nginx-container.git --context-dir=1.22/test/test-app/
+oc new-app nginx:1.24~https://github.com/sclorg/nginx-container.git --context-dir=1.24/test/test-app/
 ```
 
 To access the application:
@@ -83,7 +83,7 @@ To use the Nginx image in a Dockerfile, follow these steps:
 
 #### 1. Pull a base builder image to build on
 
-podman pull ubi8/nginx-122
+podman pull ubi9/nginx-124
 
 #### 2. Pull an application code
 
@@ -91,7 +91,7 @@ An example application available at https://github.com/sclorg/nginx-container.gi
 
 ```
 git clone https://github.com/sclorg/nginx-container.git nginx-container
-cd nginx-container/examples/1.22/
+cd nginx-container/examples/1.24/
 ```
 
 #### 3. Prepare an application inside a container
@@ -107,7 +107,7 @@ For all these three parts, you can either set up all manually and use the `nginx
 ##### 3.1. To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM registry.access.redhat.com/ubi8/nginx-122
+FROM registry.access.redhat.com/ubi9/nginx-124
 
 # Add application sources
 ADD test-app/nginx.conf "${NGINX_CONF_PATH}"
@@ -122,7 +122,7 @@ CMD nginx -g "daemon off;"
 ##### 3.2. To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM registry.access.redhat.com/ubi8/nginx-122
+FROM registry.access.redhat.com/ubi9/nginx-124
 
 # Add application sources to a directory where the assemble script expects them
 # and set permissions so that the container runs without root access
@@ -165,7 +165,7 @@ If you want to run the image directly and mount the static pages available in th
 as a container volume, execute the following command:
 
 ```
-$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z ubi8/nginx-122 nginx -g "daemon off;"
+$ podman run -d --name nginx -p 8080:8080 -v /wwwdata:/opt/app-root/src:Z ubi9/nginx-124 nginx -g "daemon off;"
 ```
 
 This creates a container named `nginx` running the Nginx server, serving data from
@@ -199,5 +199,5 @@ See also
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-for RHEL8 it's `Dockerfile.rhel8`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
+for RHEL8 it's `Dockerfile.rhel8`, for RHEL9 it's `Dockerfile.rhel9`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
 
