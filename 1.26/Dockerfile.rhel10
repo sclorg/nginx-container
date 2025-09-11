@@ -24,7 +24,6 @@ LABEL summary="${SUMMARY}" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
       name="ubi10/nginx-${NGINX_SHORT_VER}" \
-      version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
