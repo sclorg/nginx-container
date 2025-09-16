@@ -66,6 +66,7 @@ def example_perl_test(request):
 class TestNginxExampleAppContainer:
 
     def test_run_app_test(self, example_app_test):
+        version = VERSION.replace("-micro", "")
         cid_file = example_app_test.app_name
         assert example_app_test.create_container(cid_file=cid_file, container_args="--user 10001")
         assert ContainerImage.wait_for_cid(cid_file=cid_file)
@@ -79,7 +80,7 @@ class TestNginxExampleAppContainer:
         assert not ContainerTestLibUtils.check_regexp_output(regexp_to_check="DNS_SERVER", logs_to_check=command)
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {example_app_test.image_name} /bin/bash -c 'nginx -v'"
-        ).startswith(f"nginx version: nginx/{VERSION}")
+        ).startswith(f"nginx version: nginx/{version}")
         assert example_app_test.test_response(
             url=f"http://{cip}", expected_output="NGINX is working"
         )
@@ -96,8 +97,9 @@ class TestNginxExampleAppContainer:
 class TestNginxExamplePerlAppContainer:
 
     def test_run_app_test(self, example_perl_test):
+        if VERSION.endswith("-micro"):
+            pytest.skip("Run the chosen tests (not for micro variant which lacks perl)")
         cid_file = example_perl_test.app_name
-        print(cid_file)
         example_perl_test.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file}")
         assert example_perl_test.create_container(cid_file=cid_file, container_args="--user 10001")
         cid = example_perl_test.get_cid(cid_name=cid_file)

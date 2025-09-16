@@ -43,6 +43,7 @@ class TestNginxApplicationContainer:
 
     # test_application
     def test_application(self, app):
+        version = VERSION.replace("-micro", "")
         cid_file_name = "test-app"
         app.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
         assert app.create_container(
@@ -52,7 +53,7 @@ class TestNginxApplicationContainer:
         cip = app.get_cip(cid_name=cid_file_name)
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {app.image_name} /bin/bash -c 'nginx -v'"
-        ).startswith(f"nginx version: nginx/{VERSION}")
+        ).startswith(f"nginx version: nginx/{version}")
         assert app.test_response(
             url=f"http://{cip}", expected_output="NGINX is working"
         )
@@ -72,6 +73,7 @@ class TestNginxApplicationContainer:
 
     # test_application_user
     def test_application_user(self, app):
+        version = VERSION.replace("-micro", "")
         cid_file_name = "test-app"
         app.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
         assert app.create_container(
@@ -81,7 +83,7 @@ class TestNginxApplicationContainer:
         cip = app.get_cip(cid_name=cid_file_name)
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {app.image_name} /bin/bash -c 'nginx -v'"
-        ).startswith(f"nginx version: nginx/{VERSION}")
+        ).startswith(f"nginx version: nginx/{version}")
         assert app.test_response(
             url=f"http://{cip}", expected_output="NGINX is working"
         )

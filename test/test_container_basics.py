@@ -19,6 +19,7 @@ VERSION = os.getenv("VERSION", None)
 IMAGE_NAME = os.getenv("IMAGE_NAME", None)
 OS = os.getenv("TARGET", None)
 
+
 image_name = IMAGE_NAME.split(":")[0]
 image_tag = IMAGE_NAME.split(":")[1]
 test_dir = os.path.join(os.getcwd())
@@ -49,17 +50,11 @@ class TestNginxContainer:
             ) == 0
 
 
-        # test_scl_usage
-        @pytest.mark.parametrize(
-            "command,expected",
-            [
-                ("nginx -v", f"nginx version: nginx/{VERSION}"),
-            ]
-        )
-        def test_scl_usage(self, command, expected):
+        def test_scl_usage(self):
+            version = VERSION.replace("-micro", "")
             assert PodmanCLIWrapper.podman_run_command(
-                f"--rm {IMAGE_NAME} /bin/bash -c '{command}'"
-            ).startswith(expected)
+                f"--rm {IMAGE_NAME} /bin/bash -c 'nginx -v'"
+            ).startswith(f"nginx version: nginx/{version}")
 
         @pytest.mark.parametrize(
             "dockerfile",
