@@ -5,31 +5,22 @@ import pytest
 from pathlib import Path
 from container_ci_suite.container_lib import ContainerTestLib
 from container_ci_suite.engines.podman_wrapper import PodmanCLIWrapper
-from container_ci_suite.utils import check_variables, ContainerTestLibUtils
+from container_ci_suite.utils import check_variables
 from container_ci_suite.dockerfile_processor import DockerfileProcessor
-from container_ci_suite.git import Git
+
 
 TEST_DIR = Path(os.path.abspath(os.path.dirname(__file__)))
-
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
     sys.exit(1)
-
-VERSION = os.getenv("VERSION", None)
-IMAGE_NAME = os.getenv("IMAGE_NAME", None)
-OS = os.getenv("TARGET", None)
-
-
-image_name = IMAGE_NAME.split(":")[0]
-image_tag = IMAGE_NAME.split(":")[1]
-test_dir = os.path.join(os.getcwd())
-print(f"Test dir is: {TEST_DIR}")
+VERSION = os.getenv("VERSION")
+IMAGE_NAME = os.getenv("IMAGE_NAME")
+OS = os.getenv("TARGET").lower()
 
 
 @pytest.fixture(scope="module")
 def app(request):
     app = ContainerTestLib(image_name=IMAGE_NAME, s2i_image=True)
-    # app_name = os.path.basename(request.param)
     yield app
     app.clean_containers()
     app.clean_app_images()
@@ -39,7 +30,6 @@ class TestNginxContainer:
         # test_s2i_usage
         def test_run_s2i_usage(self, app):
             output = app.s2i_usage()
-            print(f"S2i_USAGE output: '{output}'")
             assert output != ""
 
         # # test_docker_run_usage
