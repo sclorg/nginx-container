@@ -25,7 +25,6 @@ TEST_LIST_HOOK_APP="test_pre_init_script"
 TEST_LIST_PERL_APP="test_perl_directive"
 TEST_LIST_MISC=run_dockerfiles_test
 
-
 source "$test_dir/test-lib.sh"
 
 # TODO: This should be part of the image metadata
@@ -421,7 +420,7 @@ TEST_SET=${TEST_LIST_HOOK_APP} ct_run_tests_from_testset "start-hook-test-app"
 # Run the chosen tests (not for micro variant which lacks perl)
 if ! [[ "${IMAGE_NAME}" =~ .*micro.* ]] ; then
   build_image "perl-test-app"
-  TEST_LIST=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
+  TEST_SET=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
 fi
 
 
