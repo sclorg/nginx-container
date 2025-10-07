@@ -15,6 +15,11 @@ start_hook_test_app = TEST_DIR / "start-hook-test-app"
 
 
 def build_s2i_app(app_path: Path) -> ContainerTestLib:
+    """
+    Build S2I Container based on the app_path input
+    :param: app_path: path to example directory
+    :return new instance of ContainerTestLib
+    """
     container_lib = ContainerTestLib(IMAGE_NAME)
     app_name = app_path.name
     s2i_app = container_lib.build_as_df(
@@ -38,7 +43,9 @@ class TestNginxExampleAppContainer:
     def test_run_app_test(self, example_app_test):
         version = VERSION.replace("-micro", "")
         cid_file_name = example_app_test.app_name
+        # Create container with --user 10001
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user 10001")
+        # Wait till container does not start
         assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
         cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
         assert cid
@@ -47,7 +54,9 @@ class TestNginxExampleAppContainer:
         command = PodmanCLIWrapper.podman_get_file_content(
             cid_file_name=cid, filename="/opt/app-root/etc/nginx.d/default.conf"
         )
+        # Checks if nginx configuration contains resolver
         assert re.search("resolver", command)
+        # Checks if nginx configuration DO NOT container "DNS_SERVER"
         assert not re.search("DNS_SERVER", command)
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {example_app_test.image_name} /bin/bash -c 'nginx -v'"
@@ -83,6 +92,7 @@ class TestNginxExamplePerlAppContainer:
         assert cid
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
         assert cip
+        # Checks if returns header of Perl version
         perl_version = PodmanCLIWrapper.podman_exec_shell_command(cid_file_name=cid, cmd="perl -e 'print \"$^V\"'")
         assert self.s2i_app.test_response(
             url=f"http://{cip}", port=8080,
@@ -92,6 +102,7 @@ class TestNginxExamplePerlAppContainer:
             url=f"http://{cip}", port=8080, page="/perl", expected_output="Perl location handler is working"
         )
 
+
 class TestNginxLogContainer:
 
     def setup_method(self):
@@ -100,7 +111,6 @@ class TestNginxLogContainer:
     def teardown_method(self):
         self.s2i_app.cleanup()
 
-    # test_log_output
     def test_log_output(self, s2i_log_test):
         cid_file_name = "test-app"
         s2i_log_test.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
@@ -115,14 +125,15 @@ class TestNginxLogContainer:
             url=f"http://{cip}", port=8080, expected_output="NGINX is working"
         )
         assert '"GET / HTTP/1.1" 200' in s2i_log_test.get_logs(cid_file_name=cid_file_name)
+        # Check if /nothing-at-all is really no accessible
         assert self.s2i_app.test_response(
             url=f"http://{cip}", port=8080, page="/nothing-at-all", expected_code=404
         )
         logs = self.s2i_app.get_logs(cid_file_name=cid_file_name)
         assert logs
+        # Checks logs container 'failed' and 'No such file or directory'
         assert re.search("open.*failed.*No such file or directory", logs)
 
-    # test_log_volume_output
     def test_log_volume_output(self, s2i_log_test):
         cid_file_name = "test-app"
         s2i_log_test.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
@@ -138,9 +149,11 @@ class TestNginxLogContainer:
             cid_file_name=cid,
             filename="/var/log/nginx/access.log"
         )
+        # Check if /nothing-at-all is really no accessible
         assert self.s2i_app.test_response(
             url=f"http://{cip}", port=8080, page="/nothing-at-all", expected_code=404
         )
+        # Check if /nothing-at-all is really mentioned in 'access.log'
         assert '"GET /nothing-at-all HTTP/1.1" 404' in PodmanCLIWrapper.podman_get_file_content(
             cid_file_name=cid,
             filename="/var/log/nginx/access.log"
@@ -149,5 +162,5 @@ class TestNginxLogContainer:
             cid_file_name=cid,
             filename="/var/log/nginx/error.log"
         )
+        # Checks logs container 'failed' and 'No such file or directory'
         assert re.search("open.*failed.*No such file or directory", logs_to_check)
-

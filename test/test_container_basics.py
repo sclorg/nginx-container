@@ -16,16 +16,25 @@ class TestNginxContainer:
         self.app.cleanup()
 
     def test_run_s2i_usage(self, app):
+        """
+        Test if s2i usage works
+        """
         output = app.s2i_usage()
         assert output != ""
 
     def test_docker_run_usage(self):
+        """
+        Test if container is runnable
+        """
         assert PodmanCLIWrapper.call_podman_command(
             cmd=f"run --rm {IMAGE_NAME} &>/dev/null",
             return_output=False
         ) == 0
 
     def test_scl_usage(self):
+        """
+        Test if nginx -v returns proper output
+        """
         version = VERSION.replace("-micro", "")
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {IMAGE_NAME} /bin/bash -c 'nginx -v'"
@@ -39,6 +48,10 @@ class TestNginxContainer:
         ]
     )
     def test_dockerfiles(self, app, dockerfile):
+        """
+        Test if building nginx-container based on
+        examples/Dockerfile works
+        """
         version = VERSION.replace("-micro", "")
         dp = DockerfileProcessor(dockerfile_path=f"{TEST_DIR}/examples/{dockerfile}")
         dp.update_env_in_dockerfile(version=version, what_to_replace="ENV NGINX_VERSION")
@@ -52,5 +65,4 @@ class TestNginxContainer:
         assert app.test_app_dockerfile()
         cip = app.get_cip()
         assert cip
-        assert app.test_response(url=cip, expected_code=200,
-                                 expected_output="NGINX is working")
+        assert app.test_response(url=cip, expected_output="NGINX is working")

@@ -36,8 +36,11 @@ class TestNginxApplicationContainer:
             "--user 12345"
         ]
     )
-    # test_application
     def test_application(self, container_arg):
+        """
+        Test if container works under specific user
+        and not only with user --user 10001
+        """
         version = VERSION.replace("-micro", "")
         cid_file_name = "test-app"
         assert self.app.create_container(
@@ -46,20 +49,25 @@ class TestNginxApplicationContainer:
         )
         cip = self.app.get_cip(cid_file_name=cid_file_name)
         assert cip
+        # nginx -v returns proper version
         assert PodmanCLIWrapper.podman_run_command(
             f"--rm {self.app.image_name} /bin/bash -c 'nginx -v'"
         ).startswith(f"nginx version: nginx/{version}")
+        # Response code from HTTP url is 200 and contains proper output
         assert self.app.test_response(
             url=f"http://{cip}", expected_output="NGINX is working"
         )
+        # Response code from HTTP url is 200 and contains proper output
         assert self.app.test_response(
             url=f"http://{cip}", expected_output="NGINX2 is working",
             host="localhost2"
         )
+        # Response code from HTTP url is 200 and contains proper output
         assert self.app.test_response(
             url=f"http://{cip}", expected_output="NGINX2 is working",
             page="/aliased/index2.html"
         )
+        # Response code from HTTP url is 404 and nginx-cfg/default.conf is not accessible
         assert self.app.test_response(
             url=f"http://{cip}", expected_code=404,
             page="/nginx-cfg/default.conf"
