@@ -15,11 +15,11 @@ class TestNginxContainer:
     def teardown_method(self):
         self.app.cleanup()
 
-    def test_run_s2i_usage(self, app):
+    def test_run_s2i_usage(self):
         """
         Test if s2i usage works
         """
-        output = app.s2i_usage()
+        output = self.app.s2i_usage()
         assert output != ""
 
     def test_docker_run_usage(self):
@@ -47,7 +47,7 @@ class TestNginxContainer:
             "Dockerfile.s2i"
         ]
     )
-    def test_dockerfiles(self, app, dockerfile):
+    def test_dockerfiles(self, dockerfile):
         """
         Test if building nginx-container based on
         examples/Dockerfile works
@@ -58,11 +58,11 @@ class TestNginxContainer:
         dp.update_variable_in_dockerfile(version=version, variable="NGINX_VERSION")
         new_docker_file = dp.create_temp_dockerfile()
 
-        assert app.build_test_container(
+        assert self.app.build_test_container(
             dockerfile=new_docker_file, app_url="https://github.com/sclorg/nginx-container.git",
             app_dir="nginx-container"
         )
-        assert app.test_app_dockerfile()
-        cip = app.get_cip()
+        assert self.app.test_app_dockerfile()
+        cip = self.app.get_cip()
         assert cip
-        assert app.test_response(url=cip, expected_output="NGINX is working")
+        assert self.app.test_response(url=cip, expected_output="NGINX is working")

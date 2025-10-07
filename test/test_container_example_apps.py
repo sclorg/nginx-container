@@ -40,9 +40,9 @@ class TestNginxExampleAppContainer:
     def teardown_method(self):
         self.s2i_app.cleanup()
 
-    def test_run_app_test(self, example_app_test):
+    def test_run_app_test(self):
         version = VERSION.replace("-micro", "")
-        cid_file_name = example_app_test.app_name
+        cid_file_name = self.s2i_app.app_name
         # Create container with --user 10001
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user 10001")
         # Wait till container does not start
@@ -59,7 +59,7 @@ class TestNginxExampleAppContainer:
         # Checks if nginx configuration DO NOT container "DNS_SERVER"
         assert not re.search("DNS_SERVER", command)
         assert PodmanCLIWrapper.podman_run_command(
-            f"--rm {example_app_test.image_name} /bin/bash -c 'nginx -v'"
+            f"--rm {self.s2i_app.image_name} /bin/bash -c 'nginx -v'"
         ).startswith(f"nginx version: nginx/{version}")
         assert self.s2i_app.test_response(
             url=f"http://{cip}", expected_output="NGINX is working"
@@ -111,9 +111,9 @@ class TestNginxLogContainer:
     def teardown_method(self):
         self.s2i_app.cleanup()
 
-    def test_log_output(self, s2i_log_test):
+    def test_log_output(self):
         cid_file_name = "test-app"
-        s2i_log_test.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
+        self.s2i_app.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
         assert self.s2i_app.create_container(
             cid_file_name=cid_file_name,
             container_args="--user 10001"
@@ -124,7 +124,7 @@ class TestNginxLogContainer:
         assert self.s2i_app.test_response(
             url=f"http://{cip}", port=8080, expected_output="NGINX is working"
         )
-        assert '"GET / HTTP/1.1" 200' in s2i_log_test.get_logs(cid_file_name=cid_file_name)
+        assert '"GET / HTTP/1.1" 200' in self.s2i_app.get_logs(cid_file_name=cid_file_name)
         # Check if /nothing-at-all is really no accessible
         assert self.s2i_app.test_response(
             url=f"http://{cip}", port=8080, page="/nothing-at-all", expected_code=404
@@ -134,9 +134,9 @@ class TestNginxLogContainer:
         # Checks logs container 'failed' and 'No such file or directory'
         assert re.search("open.*failed.*No such file or directory", logs)
 
-    def test_log_volume_output(self, s2i_log_test):
+    def test_log_volume_output(self):
         cid_file_name = "test-app"
-        s2i_log_test.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
+        self.s2i_app.set_new_image(image_name=f"{IMAGE_NAME}-{cid_file_name}")
         assert self.s2i_app.create_container(
             cid_file_name=cid_file_name,
             container_args="-e NGINX_LOG_TO_VOLUME=y --user 10001"
