@@ -41,4 +41,3 @@ export CT_OCP4_TEST=true
 TEST_SUMMARY=''
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "openshift-remote-cluster"
 # vim: set tabstop=2:shiftwidth=2:expandtab:
-
