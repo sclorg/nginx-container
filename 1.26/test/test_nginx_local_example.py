@@ -1,1 +1,0 @@
-../../test/test_nginx_local_example.py
