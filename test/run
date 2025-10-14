@@ -421,7 +421,7 @@ TEST_SET=${TEST_LIST_HOOK_APP} ct_run_tests_from_testset "start-hook-test-app"
 # Run the chosen tests (not for micro variant which lacks perl)
 if ! [[ "${IMAGE_NAME}" =~ .*micro.* ]] ; then
   build_image "perl-test-app"
-  TEST_LIST=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
+  TEST_SET=${TEST_LIST_PERL_APP} ct_run_tests_from_testset "perl-test-app"
 fi
 
 
