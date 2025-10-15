@@ -3,7 +3,7 @@ from container_ci_suite.utils import get_service_image
 
 from conftest import VARS
 
-# bash test=test_nginx_imagestream
+
 class TestNginxImagestreamS2I:
 
     def setup_method(self):
@@ -16,6 +16,11 @@ class TestNginxImagestreamS2I:
         self.oc_api.delete_project()
 
     def test_inside_cluster(self):
+        """
+        Test checks if example nginx container
+        works with imagestreams
+        The example application is in directory `examples/<VERSION>/test-app
+        """
         os_name = ''.join(i for i in VARS.OS if not i.isdigit())
         assert self.oc_api.deploy_imagestream_s2i(
             imagestream_file=f"imagestreams/nginx-{os_name}.json",

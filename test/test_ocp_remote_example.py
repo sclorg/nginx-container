@@ -4,8 +4,6 @@ from container_ci_suite.utils import get_service_image
 from conftest import VARS
 
 
-# Replacement with
-# test_nginx_remote_example
 class TestNginxLocalEx:
 
     def setup_method(self):
@@ -18,8 +16,13 @@ class TestNginxLocalEx:
         self.oc_api.delete_project()
 
     def test_nginx_ex_template_inside_cluster(self):
+        """
+        Test checks if example GitHub application `nginx-ex`
+        works with properly
+        The response checks expected message
+        """
         assert self.oc_api.deploy_s2i_app(
-            image_name=VARS.IMAGE_NAME, app=f"https://github.com/sclorg/nginx-ex.git",
+            image_name=VARS.IMAGE_NAME, app="https://github.com/sclorg/nginx-ex.git",
             context=".",
             service_name=self.template_name
         )

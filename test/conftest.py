@@ -33,6 +33,7 @@ TAGS = {
     "rhel10": "-ubi10",
 }
 
+
 def skip_clear_env_tests():
     if VARS.OS == "rhel8" and VERSION == "8.2":
         skip(f"Skipping clear env tests for {VARS.VERSION} on {VARS.OS}.")

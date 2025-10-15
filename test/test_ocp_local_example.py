@@ -4,7 +4,6 @@ from container_ci_suite.utils import get_service_image
 from conftest import VARS
 
 
-# Replacement with 'test_python_s2i_app_ex_standalone'
 class TestNginxLocalEx:
 
     def setup_method(self):
@@ -17,6 +16,11 @@ class TestNginxLocalEx:
         self.oc_api.delete_project()
 
     def test_nginx_ex_template_inside_cluster(self):
+        """
+        Test checks if example nginx container
+        works with local test-app
+        The example application is in directory `examples/<VERSION>/test-app
+        """
         assert self.oc_api.deploy_s2i_app(
             image_name=VARS.IMAGE_NAME, app="test-app",
             context=".",

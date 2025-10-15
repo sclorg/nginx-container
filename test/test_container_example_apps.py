@@ -112,6 +112,10 @@ class TestNginxLogContainer:
         self.s2i_app.cleanup()
 
     def test_log_output(self):
+        """
+        Test checks if logging container works properly
+        and logs contain proper output
+        """
         cid_file_name = "test-app"
         self.s2i_app.set_new_image(image_name=f"{VARS.IMAGE_NAME}-{cid_file_name}")
         assert self.s2i_app.create_container(
@@ -135,6 +139,12 @@ class TestNginxLogContainer:
         assert re.search("open.*failed.*No such file or directory", logs)
 
     def test_log_volume_output(self):
+        """
+        Test checks if logging container works properly
+        and logs contain proper output.
+        The logs are mounted from host and so we check
+        the logs in host directly
+        """
         cid_file_name = "test-app"
         self.s2i_app.set_new_image(image_name=f"{VARS.IMAGE_NAME}-{cid_file_name}")
         assert self.s2i_app.create_container(
