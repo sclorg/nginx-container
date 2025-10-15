@@ -19,6 +19,10 @@ class TestHelmNginxTemplate:
         self.hc_api.delete_project()
 
     def test_helm_connection(self):
+        """
+        Test checks if Helm imagestream and Helm nginx template application
+        works properly and response is as expected.
+        """
         self.hc_api.package_name = "redhat-nginx-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

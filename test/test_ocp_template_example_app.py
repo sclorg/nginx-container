@@ -2,8 +2,6 @@ from container_ci_suite.openshift import OpenShiftAPI
 from conftest import VARS
 
 
-# bash test_nginx_template_from_example_app
-# Replacement with 'test_python_s2i_templates'
 class TestNginxDeployTemplate:
 
     def setup_method(self):
@@ -13,6 +11,10 @@ class TestNginxDeployTemplate:
         self.oc_api.delete_project()
 
     def test_nginx_template_inside_cluster(self):
+        """
+        Test checks if Helm imagestream and Helm perl dancer application
+        works properly and response is as expected.
+        """
         service_name = "nginx-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="nginx-ex", dir="openshift/templates", filename="nginx.json", branch="master"
@@ -22,7 +24,7 @@ class TestNginxDeployTemplate:
             template=template_url,
             name_in_template="nginx",
             openshift_args=[
-                f"SOURCE_REPOSITORY_REF=master",
+                "SOURCE_REPOSITORY_REF=master",
                 f"NGINX_VERSION={VARS.VERSION}",
                 f"NAME={service_name}"
             ]
