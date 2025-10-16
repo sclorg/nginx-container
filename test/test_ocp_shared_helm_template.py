@@ -1,6 +1,6 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import VARS, TAGS
+from conftest import VARS
 
 
 class TestHelmNginxTemplate:
@@ -30,7 +30,7 @@ class TestHelmNginxTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "nginx_version": f"{VARS.VERSION_NO_MICRO}{TAGS.get(VARS.OS)}",
+                "nginx_version": f"{VARS.VERSION_NO_MICRO}{VARS.TAG}",
                 "namespace": self.hc_api.namespace
             }
         )
