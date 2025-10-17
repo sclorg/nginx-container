@@ -50,13 +50,13 @@ class TestNginxExampleAppContainer:
         assert cid
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
         assert cip
-        command = PodmanCLIWrapper.podman_get_file_content(
+        nginx_config = PodmanCLIWrapper.podman_get_file_content(
             cid_file_name=cid, filename="/opt/app-root/etc/nginx.d/default.conf"
         )
         # Checks if nginx configuration contains resolver
-        assert re.search("resolver", command)
+        assert re.search("resolver", nginx_config)
         # Checks if nginx configuration DO NOT container "DNS_SERVER"
-        assert not re.search("DNS_SERVER", command)
+        assert not re.search("DNS_SERVER", nginx_config)
         assert f"nginx/{VARS.VERSION_NO_MICRO}" in PodmanCLIWrapper.podman_run_command_and_remove(
             cid_file_name=VARS.IMAGE_NAME,
             cmd="nginx -v"
@@ -84,7 +84,7 @@ class TestNginxExamplePerlAppContainer:
 
     def test_run_app_test(self):
         if VARS.VERSION.endswith("-micro"):
-            pytest.skip("Run the chosen tests (not for micro variant which lacks perl)")
+            pytest.skip("Micro image variant lacks Perl.")
         cid_file_name = self.s2i_app.app_name
         self.s2i_app.set_new_image(image_name=f"{VARS.IMAGE_NAME}-{cid_file_name}")
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args="--user 10001")
@@ -134,7 +134,6 @@ class TestNginxLogContainer:
             url=f"http://{cip}", port=8080, page="/nothing-at-all", expected_code=404
         )
         logs = self.s2i_app.get_logs(cid_file_name=cid_file_name)
-        assert logs
         # Checks logs container 'failed' and 'No such file or directory'
         assert re.search("open.*failed.*No such file or directory", logs)
 

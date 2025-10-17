@@ -8,8 +8,6 @@
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
-git show -s
-
 PYTHON_VERSION="3.12"
 if [[ ! -f "/usr/bin/python$PYTHON_VERSION" ]]; then
   PYTHON_VERSION="3.13"
