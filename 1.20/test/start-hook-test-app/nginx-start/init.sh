@@ -1,6 +1,6 @@
 setup_dns_env_var() {
 	if [ -z "$DNS_SERVER" ]; then
-	    export DNS_SERVER=`cat /etc/resolv.conf | grep "nameserver " | awk '{print $2}' | tr '\n' ' '`
+	    export DNS_SERVER=`cat /etc/resolv.conf | grep "nameserver " | cut -d " " -f 2 | tr '\n' ' '`
 	    echo "Using system dns server ${DNS_SERVER}"
 	else
 	    echo "Using user defined dns server: ${DNS_SERVER}"
