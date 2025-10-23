@@ -3,9 +3,9 @@ FROM quay.io/centos/centos:stream9 AS build
 RUN mkdir -p /mnt/rootfs
 # this is an alternative build of some packages with even smaller footprint on RPM level
 # ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
-#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst bind-utils" && \
+#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst " && \
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
-    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs gettext bind-utils" && \
+    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs gettext " && \
     dnf --installroot /mnt/rootfs --releasever 9 --setopt install_weak_deps=false --nodocs module enable nginx:1.22 -y && \
     dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever 9 --setopt install_weak_deps=false --nodocs -y && \
     dnf -y --installroot /mnt/rootfs clean all && \
