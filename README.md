@@ -3,18 +3,6 @@ Nginx container images
 
 [![Build and push container images to quay.io registry](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/nginx-container/actions/workflows/build-and-push.yml)
 
-Images available on Quay are:
-* CentOS Stream 9 [nginx-1.20](https://quay.io/repository/sclorg/nginx-120-c9s)
-* CentOS Stream 9 [nginx-1.24](https://quay.io/repository/sclorg/nginx-124-c9s)
-* CentOS Stream 10 [nginx-1.26](https://quay.io/repository/sclorg/nginx-126-c10s)
-* Fedora [nginx-1.20](https://quay.io/repository/fedora/nginx-120)
-* Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122)
-* Fedora [nginx-1.24](https://quay.io/repository/fedora/nginx-124)
-* Fedora [nginx-1.26](https://quay.io/repository/fedora/nginx-126)
-* Micro CentOS Stream 9 [nginx-1.22](https://quay.io/repository/sclorg/nginx-122-micro-c9s)
-* Micro Fedora [nginx-1.22](https://quay.io/repository/fedora/nginx-122-micro)
-
-
 This repository contains Dockerfiles for Nginx images for OpenShift.
 Users can choose between RHEL, Fedora, CentOS and CentOS Stream based images.
 
@@ -26,21 +14,20 @@ For more information about concepts used in these container images, see the
 
 Versions
 --------
-Nginx versions currently provided are:
-* [nginx-1.20](1.20)
-* [nginx-1.22](1.22)
-* [nginx-1.22 micro](1.22-micro)
-* [nginx-1.24](1.24)
-* [nginx-1.26](1.26)
-
-RHEL versions currently supported are:
-* RHEL8
-* RHEL9
-* RHEL10
-
-CentOS Stream versions currently supported are:
-* CentOS Stream 9
-* CentOS Stream 10
+Currently supported versions are visible in the following table, expand an entry to see its container registry address.
+<!--
+Table start
+-->
+||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+|1.20|||||<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-120`</details>||
+|1.22||||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-122`</details>||
+|1.22-micro|<details><summary>✓</summary>`quay.io/sclorg/nginx-122-micro-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122-micro`</details>|||
+|1.24|<details><summary>✓</summary>`quay.io/sclorg/nginx-124-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-124`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-124`</details>||
+|1.26|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/nginx-126`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-126`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/nginx-126`</details>|
+<!--
+Table end
+-->
 
 
 Installation
