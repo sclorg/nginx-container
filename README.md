@@ -32,25 +32,25 @@ Table end
 
 Installation
 ----------------------
-Choose either the CentOS Stream 9 or RHEL8 based image:
+Choose either the CentOS Stream 10 or RHEL10 based image:
 
-*  **RHEL8 based image**
+*  **RHEL10 based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/nginx-124).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel10/nginx-126).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhel9/nginx-124
+    $ podman pull registry.access.redhat.com/rhel10/nginx-126
     ```
 
-    To build a RHEL8 based Nginx image, you need to run Docker build on a properly
+    To build a RHEL10 based Nginx image, you need to run Docker build on a properly
     subscribed RHEL machine.
 
     ```
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=rhel9 VERSIONS=1.24
+    $ make build TARGET=rhel10 VERSIONS=1.26
     ```
 
 *  **CentOS Stream based image**
@@ -58,7 +58,7 @@ Choose either the CentOS Stream 9 or RHEL8 based image:
     This image is available on DockerHub. To download it run:
 
     ```
-    $ podman pull quay.io/sclorg/nginx-124-c9s
+    $ podman pull quay.io/sclorg/nginx-126-c10s
     ```
 
     To build a CentOS based Nginx image from scratch, run:
@@ -67,10 +67,10 @@ Choose either the CentOS Stream 9 or RHEL8 based image:
     $ git clone --recursive https://github.com/sclorg/nginx-container.git
     $ cd nginx-container
     $ git submodule update --init
-    $ make build TARGET=c9s VERSIONS=1.24
+    $ make build TARGET=c10s VERSIONS=1.26
     ```
 
-For using other versions of Nginx, just replace the `1.24` value by particular version
+For using other versions of Nginx, just replace the `1.26` value by particular version
 in the commands above.
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
