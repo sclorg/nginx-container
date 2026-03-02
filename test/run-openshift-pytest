@@ -10,7 +10,7 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 
 git show -s
 
-if python3 -c 'import sys; sys.exit(0 if sys.version_info < (3,13) else 1)'; then
+if python3 -c 'import sys;sys.exit(int(sys.version_info < (3,13)))'; then
   PYTHON_VERSION="3.12"
 else
   PYTHON_VERSION="3"
