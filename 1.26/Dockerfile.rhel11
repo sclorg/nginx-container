@@ -3,8 +3,7 @@ FROM ubi10/ubi AS build
 RUN mkdir -p /mnt/rootfs
 # Minimized package set - install only essential packages without weak dependencies or documentation
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
-    INSTALL_PKGS="$MICRO_PKGS @nginx:1.26/common findutils hostname nss_wrapper-libs gettext " && \
-    dnf --installroot /mnt/rootfs --releasever 10 --setopt install_weak_deps=false --nodocs module enable nginx:1.26 -y && \
+    INSTALL_PKGS="$MICRO_PKGS nginx nginx-mod-stream nginx-mod-http-perl findutils hostname nss_wrapper-libs gettext " && \
     dnf --installroot /mnt/rootfs --releasever 10 --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y && \
     dnf -y --installroot /mnt/rootfs clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
