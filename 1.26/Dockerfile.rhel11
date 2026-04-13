@@ -1,0 +1,111 @@
+FROM ubi8/ubi AS build
+
+RUN mkdir -p /mnt/rootfs
+# with some planned changes in nginx, we can use nginx-core, envsubst and nss_wrapper-libs wihtout pulling in unnecessary dependencies
+# testing packages in the following repo, but using packages from the distro meanwhile
+# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/epel-8/hhorak-nginx-micro-epel-8.repo /etc/yum.repos.d/hhorak-nginx-micro-epel-8.repo
+RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
+    INSTALL_PKGS="$MICRO_PKGS @nginx:1.22/common findutils hostname nss_wrapper-libs gettext " && \
+    dnf --installroot /mnt/rootfs --releasever 8 --setopt install_weak_deps=false --nodocs module enable nginx:1.22 -y && \
+    dnf --installroot /mnt/rootfs --releasever 8 --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y && \
+    dnf -y --installroot /mnt/rootfs clean all && \
+    rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
+
+FROM scratch
+
+EXPOSE 8080
+EXPOSE 8443
+
+ENV NAME=nginx \
+    NGINX_VERSION=1.22 \
+    NGINX_SHORT_VER=122 \
+    VERSION=0
+
+ENV SUMMARY="Platform for running a micro nginx $NGINX_VERSION or building nginx-based application" \
+    DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
+protocols, with a strong focus on high concurrency, performance and low memory usage. The container \
+image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
+as a base image for other applications based on nginx $NGINX_VERSION web server. \
+Nginx server image can be extended using source-to-image tool. \
+This is a micro nginx container that does not include tools for installing RPMs, \
+therefore options for extending this image are limited." \
+# The following variables are usually available from parent s2i images \
+    STI_SCRIPTS_PATH=/usr/libexec/s2i \
+    APP_ROOT=/opt/app-root \
+    HOME=/opt/app-root/src \
+    PLATFORM="el8"
+
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.expose-services="8443:https" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="ubi8/${NAME}-${NGINX_SHORT_VER}-micro" \
+      version="1" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> ubi8/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
+
+COPY --from=build /mnt/rootfs/ /
+COPY --from=build /etc/yum.repos.d/ubi.repo /etc/
+
+ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
+    NGINX_CONF_PATH=/etc/nginx/nginx.conf \
+    NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
+    NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
+    NGINX_APP_ROOT=${APP_ROOT} \
+    NGINX_LOG_PATH=/var/log/nginx
+
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+COPY 1.22-micro/s2i/bin/ $STI_SCRIPTS_PATH
+
+# Copy extra files to the image.
+COPY 1.22-micro/root/ /
+
+COPY 1.22-micro/core-scripts/usr /usr
+
+WORKDIR ${HOME}
+
+# Fail early if there is a version we do not expect
+RUN nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION"
+
+# Changing ownership and user rights to support following use-cases:
+# 1) running container on OpenShift, whose default security model
+#    is to run the container under random UID, but GID=0
+# 2) for working root-less container with UID=1001, which does not have
+#    to have GID=0
+# 3) for default use-case, that is running container directly on operating system,
+#    with default UID and GID (1001:0)
+# Supported combinations of UID:GID are thus following:
+# UID=1001 && GID=0
+# UID=<any>&& GID=0
+# UID=1001 && GID=<any>
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
+    mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    mkdir -p ${NGINX_LOG_PATH} && \
+    chown -R 1001:0 ${NGINX_CONF_PATH} && \
+    chown -R 1001:0 ${NGINX_APP_ROOT} && \
+    chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
+    chmod    ug+rw  ${NGINX_CONF_PATH} && \
+    chmod -R ug+rwX ${NGINX_APP_ROOT} && \
+    chmod -R ug+rwX ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
+
+USER 1001
+
+STOPSIGNAL SIGQUIT
+
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/usr/share/nginx/html"]
+# VOLUME ["/var/log/nginx/"]
+
+CMD $STI_SCRIPTS_PATH/usage
