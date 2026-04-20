@@ -29,9 +29,11 @@ class TestNginxContainerSizes:
         Test the size of the Nginx container against the
         already published container images.
         """
+        if not VARS.OS.startswith("rhel"):
+            pytest.skip("Skipping container size comparison for non-RHEL OS.")
         published_image_name = get_public_image_name(
             os_name=get_previous_os_version(VARS.OS),
-            base_image_name="postgresql",
+            base_image_name="nginx",
             version=VARS.VERSION,
             stage_registry=True,
         )
