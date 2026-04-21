@@ -4,7 +4,7 @@ from container_ci_suite.container_lib import ContainerTestLib
 from container_ci_suite.compare_images import ContainerCompareClass
 from container_ci_suite.utils import get_public_image_name, get_previous_os_version
 
-from conftest import VARS
+from conftest import VARS, skip_if_version_not_minimal
 
 
 class TestNginxContainerSizes:
@@ -29,6 +29,7 @@ class TestNginxContainerSizes:
         Test the size of the Nginx container against the
         already published container images.
         """
+        skip_if_version_not_minimal()
         if not VARS.OS.startswith("rhel"):
             pytest.skip("Skipping container size comparison for non-RHEL OS.")
         published_image_name = get_public_image_name(

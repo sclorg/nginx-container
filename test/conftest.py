@@ -17,9 +17,16 @@ TAGS = {
 }
 
 Vars = namedtuple(
-    "Vars", [
-        "OS", "TAG", "VERSION", "IMAGE_NAME", "VERSION_NO_MICRO", "SHORT_VERSION", "TEST_DIR"
-    ]
+    "Vars",
+    [
+        "OS",
+        "TAG",
+        "VERSION",
+        "IMAGE_NAME",
+        "VERSION_NO_MICRO",
+        "SHORT_VERSION",
+        "TEST_DIR",
+    ],
 )
 OS = os.getenv("TARGET").lower()
 VERSION = os.getenv("VERSION")
@@ -37,5 +44,16 @@ VARS = Vars(
 
 
 def skip_clear_env_tests():
+    """
+    Skip the test if the OS is RHEL 8 and the version is 8.2.
+    """
     if VARS.OS == "rhel8" and VERSION == "8.2":
         skip(f"Skipping clear env tests for {VARS.VERSION} on {VARS.OS}.")
+
+
+def skip_if_version_not_minimal():
+    """
+    Skip the test if the version is not minimal.
+    """
+    if "minimal" not in VARS.VERSION:
+        skip("Skipping container size comparison for non-minimal version.")
