@@ -32,8 +32,11 @@ class TestNginxContainerSizes:
         skip_if_version_not_minimal()
         if not VARS.OS.startswith("rhel"):
             pytest.skip("Skipping container size comparison for non-RHEL OS.")
+        previous_os_version = get_previous_os_version(os_name=VARS.OS)
+        if previous_os_version in ["rhel7", "rhel8", "rhel9"]:
+            pytest.skip("Skipping container size comparison for RHEL 7, 8 and 9.")
         published_image_name = get_public_image_name(
-            os_name=get_previous_os_version(VARS.OS),
+            os_name=previous_os_version,
             base_image_name="nginx",
             version=VARS.VERSION,
             stage_registry=True,
