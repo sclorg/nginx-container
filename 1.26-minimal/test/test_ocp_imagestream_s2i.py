@@ -1,0 +1,1 @@
+../../test/test_ocp_imagestream_s2i.py
