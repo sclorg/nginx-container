@@ -1,9 +1,5 @@
 FROM quay.io/fedora/s2i-core:37
 
-# nginx 1.20 image.
-#
-# Volumes:
-#  * /var/log/nginx/ - Storage for logs
 
 EXPOSE 8080
 EXPOSE 8443
@@ -27,9 +23,9 @@ LABEL summary="${SUMMARY}" \
       io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,${NAME},${NAME}${NGINX_SHORT_VER}" \
-      com.redhat.component="${NAME}" \
-      name="fedora/${NAME}-${NGINX_SHORT_VER}" \
+      io.openshift.tags="builder,nginx,nginx120" \
+      com.redhat.component="nginx-120-container" \
+      name="fedora/nginx-120" \
       version="${VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
@@ -44,18 +40,17 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
 RUN dnf install -y gettext hostname && \
-    yum -y module enable nginx:$NGINX_VERSION && \
-    INSTALL_PKGS="nss_wrapper nginx nginx-mod-stream nginx-mod-http-perl" && \
+    INSTALL_PKGS="nss_wrapper-libs nginx nginx-mod-stream nginx-mod-http-perl" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION" && \
     dnf clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH
+COPY 1.20/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY $NGINX_VERSION/root/ /
+COPY 1.20/root/ /
 
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
@@ -90,10 +85,5 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
 USER 1001
 
 STOPSIGNAL SIGQUIT
-
-# Not using VOLUME statement since it's not working in OpenShift Online:
-# https://github.com/sclorg/httpd-container/issues/30
-# VOLUME ["/usr/share/nginx/html"]
-# VOLUME ["/var/log/nginx/"]
 
 CMD $STI_SCRIPTS_PATH/usage
