@@ -93,4 +93,4 @@ USER 1001
 
 STOPSIGNAL SIGQUIT
 
-CMD $STI_SCRIPTS_PATH/usage
+CMD ["/usr/libexec/s2i/usage"]
