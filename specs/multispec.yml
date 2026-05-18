@@ -85,21 +85,6 @@ specs:
       environment_setup: ""
       license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 
-    c8s:
-      distros:
-        - centos-stream-8-x86_64
-      s2i_base: quay.io/sclorg/s2i-core-c8s:c8s
-      org: "sclorg"
-      prod: "c8s"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
-      pkgs: "nginx nginx-all-modules"
-      pkg_manager: "yum"
-      environment_setup: >-4
-          yum -y module enable nginx:{{ spec.version }} && \
-      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
-
     c9s:
       distros:
         - centos-stream-9-x86_64
@@ -192,7 +177,6 @@ matrix:
         - fedora-38-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
-        - centos-stream-8-x86_64
         - centos-stream-9-x86_64
 
     - version: "1.26"
