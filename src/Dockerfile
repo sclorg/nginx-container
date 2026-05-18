@@ -42,8 +42,12 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_LOG_PATH=/var/log/nginx \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
+{% if spec.environment_setup %}
 RUN {{ spec.environment_setup }}
     INSTALL_PKGS="nss_wrapper-libs gettext hostname {{ spec.pkgs }}" && \
+{% else %}
+RUN INSTALL_PKGS="nss_wrapper-libs gettext hostname {{ spec.pkgs }}" && \
+{% endif %}
     {{ spec.pkg_manager }} install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION" && \
