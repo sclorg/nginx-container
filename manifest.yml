@@ -1,0 +1,70 @@
+# Manifest for image directories creation
+# every dest path will be prefixed by $DESTDIR/$version
+
+# Files containing distgen directives
+DISTGEN_RULES:
+  - src: src/README.md
+    dest: README.md
+
+# Files containing distgen directives, which are used for each
+# (distro, version) combination not excluded in multispec
+DISTGEN_MULTI_RULES:
+  - src: src/Dockerfile.fedora
+    dest: Dockerfile.fedora
+
+  - src: src/Dockerfile
+    dest: Dockerfile.rhel8
+
+  - src: src/Dockerfile
+    dest: Dockerfile.rhel9
+
+  - src: src/Dockerfile
+    dest: Dockerfile.rhel10
+
+  - src: src/Dockerfile
+    dest: Dockerfile.c8s
+
+  - src: src/Dockerfile
+    dest: Dockerfile.c9s
+
+  - src: src/Dockerfile
+    dest: Dockerfile.c10s
+
+
+# Files to copy
+COPY_RULES:
+  - src: src/s2i/bin/assemble
+    dest: s2i/bin/assemble
+    mode: "0755"
+
+  - src: src/s2i/bin/run
+    dest: s2i/bin/run
+    mode: "0755"
+
+  - src: src/s2i/bin/usage
+    dest: s2i/bin/usage
+    mode: "0755"
+
+  - src: src/root/opt/app-root/nginxconf.sed
+    dest: root/opt/app-root/nginxconf.sed
+
+  - src: src/root/opt/app-root/nginxconf-rhscl.sed
+    dest: root/opt/app-root/nginxconf-rhscl.sed
+
+  - src: src/root/opt/app-root/etc/generate_container_user
+    dest: root/opt/app-root/etc/generate_container_user
+    mode: "0755"
+
+  - src: src/root/opt/app-root/etc/passwd.template
+    dest: root/opt/app-root/etc/passwd.template
+
+  - src: src/root/usr/share/container-scripts/nginx/common.sh
+    dest: root/usr/share/container-scripts/nginx/common.sh
+
+
+# Symbolic links
+# This section is the last one on purpose because the generator.py
+# does not allow dead symlinks.
+SYMLINK_RULES:
+  - src: ../test
+    dest: test
