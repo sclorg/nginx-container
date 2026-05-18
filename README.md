@@ -80,6 +80,24 @@ on all provided versions of Nginx, which must be specified in  `VERSIONS` variab
 This variable must be set to a list with possible versions (subdirectories).**
 
 
+## Contributing Guidelines
+
+This repository utilizes [distgen](https://github.com/devexp-db/distgen/) for generating image source files. If you are interested in updating a Dockerfile, please modify the relevant sections in the `specs/multispec.yml` file and/or the `Dockerfile.template` (or other distgen files), and then execute `make generate`.
+
+Before you begin, ensure that you have `distgen` installed by running `dg --version`. If `distgen` is not installed on your system, follow the installation guide available at [distgen's GitHub repository](https://github.com/devexp-db/distgen/).
+Additionally, for testing purposes, install `go-md2man` from this repository [go-md2man](https://github.com/cpuguy83/go-md2man) or via `dnf install go-md2man`.
+
+To contribute, please follow these steps:
+
+1. Fork the repository
+2. Run `git submodule update --init` to download the `common` submodule containing the `common/common.mk` makefile.
+3. Implement a new feature or bug fix in the templates (found in the `src` directory) or update values in the `specs/multispec.yml` file.
+   - Note: If no changes are made to these directories, file regeneration is not necessary.
+4. Regenerate all files by executing `make generate`.
+5. Consider running CI tests, as described in the Test section below.
+6. Commit the files and generated files in two separated commits with a conventional commit message for each.
+7. Open a pull request for review!
+
 Usage
 -----
 
