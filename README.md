@@ -20,11 +20,11 @@ Table start
 -->
 ||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
 |:--|:--:|:--:|:--:|:--:|:--:|:--:|
-|1.20|||||<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-120`</details>||
-|1.22||||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-122`</details>||
-|1.22-micro|<details><summary>✓</summary>`quay.io/sclorg/nginx-122-micro-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122-micro`</details>|||
-|1.24|<details><summary>✓</summary>`quay.io/sclorg/nginx-124-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-124`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-124`</details>||
-|1.26|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/nginx-126`</details>||<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-126`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/nginx-126`</details>|
+|1.20|<details><summary>✓</summary>`quay.io/sclorg/nginx-120-c9s`</details>||<details><summary>✓</summary>`quay.io/fedora/nginx-120`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-120`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-120`</details>||
+|1.22|<details><summary>✓</summary>`quay.io/sclorg/nginx-122-c9s`</details>||<details><summary>✓</summary>`quay.io/fedora/nginx-122`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-122`</details>||
+|1.22-micro|<details><summary>✓</summary>`quay.io/sclorg/nginx-122-micro-c9s`</details>||<details><summary>✓</summary>`quay.io/fedora/nginx-122-micro`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-122-micro`</details>|||
+|1.24|<details><summary>✓</summary>`quay.io/sclorg/nginx-124-c9s`</details>||<details><summary>✓</summary>`quay.io/fedora/nginx-124`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-124`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-124`</details>||
+|1.26|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c9s`</details>|<details><summary>✓</summary>`quay.io/sclorg/nginx-126-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/nginx-126`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel8/nginx-126`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/nginx-126`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel10/nginx-126`</details>|
 <!--
 Table end
 -->
