@@ -28,8 +28,6 @@ TEST_LIST_MISC=run_dockerfiles_test
 
 source "$test_dir/test-lib.sh"
 
-# TODO: This should be part of the image metadata
-test_port=8080
 
 info() {
   echo -e "\n\e[1m[INFO] $@...\e[0m\n"
@@ -44,7 +42,14 @@ container_exists() {
 }
 
 container_ip() {
-  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
+  # local ip=$(docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file))
+  # echo ${ip:-localhost}
+  echo localhost
+}
+
+test_port() {
+  local port=$(docker inspect --format '{{ (index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort }}' $(cat $cid_file))
+  echo ${port:-8080}
 }
 
 run_s2i_build() {
@@ -72,8 +77,8 @@ prepare() {
 
 run_test_application() {
   run_args=${CONTAINER_ARGS:-}
-  info "Running docker run --user=10001 ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}"
-  docker run --user=10001 ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}
+  info "Running docker run --user=10001 -P  ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}"
+  docker run --user=10001 -P ${run_args} -d --cidfile=${cid_file} ${IMAGE_NAME}-${1}
 }
 
 cleanup_test_app() {
@@ -216,12 +221,12 @@ test_for_output() {
 
 test_connection() {
   cat $cid_file
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+  info "Testing the HTTP connection (http://$(container_ip):$(test_port))"
 
-  if test_for_output "http://$(container_ip):${test_port}/" "NGINX is working" &&
-     test_for_output "http://$(container_ip):${test_port}/" "NGINX2 is working" localhost2 &&
-     test_for_output "http://$(container_ip):${test_port}/aliased/index2.html" "NGINX2 is working"  &&
-     test_for_output "http://$(container_ip):${test_port}/nginx-cfg/default.conf" "404"; then
+  if test_for_output "http://$(container_ip):$(test_port)/" "NGINX is working" &&
+     test_for_output "http://$(container_ip):$(test_port)/" "NGINX2 is working" localhost2 &&
+     test_for_output "http://$(container_ip):$(test_port)/aliased/index2.html" "NGINX2 is working"  &&
+     test_for_output "http://$(container_ip):$(test_port)/nginx-cfg/default.conf" "404"; then
      return 0
   fi
 
@@ -230,11 +235,11 @@ test_connection() {
 
 test_connection_s2i() {
   cat $cid_file
-  info "Testing the HTTP connection (http://$(container_ip):${test_port})"
+  info "Testing the HTTP connection (http://$(container_ip):$(test_port))"
 
-  if test_for_output "http://$(container_ip):${test_port}/" "NGINX is working" &&
-     test_for_output "http://$(container_ip):${test_port}/" "NGINX2 is working" localhost2 &&
-     test_for_output "http://$(container_ip):${test_port}/nginx-cfg/default.conf" "404"; then
+  if test_for_output "http://$(container_ip):$(test_port)/" "NGINX is working" &&
+     test_for_output "http://$(container_ip):$(test_port)/" "NGINX2 is working" localhost2 &&
+     test_for_output "http://$(container_ip):$(test_port)/nginx-cfg/default.conf" "404"; then
      return 0
   fi
 
@@ -286,7 +291,7 @@ test_log_output() {
 
   info "Testing that GET / was logged as 200"
 
-  test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
+  test_for_output "http://$(container_ip):$(test_port)/" "NGINX is working"
   check_result $? || return 1
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' stdout
@@ -294,7 +299,7 @@ test_log_output() {
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
-  test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
+  test_for_output "http://$(container_ip):$(test_port)/nothing-at-all" "404"
   check_result $? || return 1
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' stdout
@@ -318,7 +323,7 @@ test_log_volume_output() {
 
   info "Testing that GET / was logged as 200"
 
-  test_for_output "http://$(container_ip):${test_port}/" "NGINX is working"
+  test_for_output "http://$(container_ip):$(test_port)/" "NGINX is working"
   check_result $? || return 1
 
   test_logs '"GET / HTTP/1.1" 200' 'Test that GET / is logged as 200' /var/log/nginx/access.log
@@ -326,7 +331,7 @@ test_log_volume_output() {
 
   info "Testing that GET /nothing-at-all was logged as 404"
 
-  test_for_output "http://$(container_ip):${test_port}/nothing-at-all" "404"
+  test_for_output "http://$(container_ip):$(test_port)/nothing-at-all" "404"
   check_result $? || return 1
 
   test_logs '"GET /nothing-at-all HTTP/1.1" 404' 'Test that bad GET is logged as 404' /var/log/nginx/access.log
@@ -350,11 +355,11 @@ test_perl_directive() {
   local perl_version=$(docker exec $(cat ${cid_file}) /bin/bash -c "perl -e 'print \"$^V\"'" 2>&1)
 
   info "Testing perl_set directive sets header with perl version"
-  test_for_output "http://$(container_ip):${test_port}/" "X-Perl-Version: ${perl_version}"
+  test_for_output "http://$(container_ip):$(test_port)/" "X-Perl-Version: ${perl_version}"
   check_result $? || return 1
 
   info "Testing perl directive runs perl location handler"
-  test_for_output "http://$(container_ip):${test_port}/perl" "Perl location handler is working"
+  test_for_output "http://$(container_ip):$(test_port)/perl" "Perl location handler is working"
   check_result $? || return 1
 
   cleanup_test_app
