@@ -21,9 +21,9 @@ LABEL summary="${SUMMARY}" \
       io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="{{ spec.openshift_tags }}" \
-      com.redhat.component="{{ spec.redhat_component }}" \
-      name="{{ spec.img_name }}" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}" \
 {% if spec.prod in ["rhel8", "rhel9", "c8s", "c9s"] %}
       version="1" \
 {% endif %}
@@ -32,7 +32,7 @@ LABEL summary="${SUMMARY}" \
 {% endif %}
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> {{ spec.img_name }}:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> {{ spec.org }}/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
@@ -54,10 +54,10 @@ RUN INSTALL_PKGS="nss_wrapper-libs gettext hostname {{ spec.pkgs }}" && \
     {{ spec.pkg_manager }} -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY {{ spec.version }}/s2i/bin/ $STI_SCRIPTS_PATH
+COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY {{ spec.version }}/root/ /
+COPY $NGINX_VERSION/root/ /
 
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
@@ -93,4 +93,4 @@ USER 1001
 
 STOPSIGNAL SIGQUIT
 
-CMD ["/usr/libexec/s2i/usage"]
+CMD $STI_SCRIPTS_PATH/usage

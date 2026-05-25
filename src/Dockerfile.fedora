@@ -23,9 +23,9 @@ LABEL summary="${SUMMARY}" \
       io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="{{ spec.openshift_tags }}" \
-      com.redhat.component="{{ spec.redhat_component }}" \
-      name="{{ spec.img_name }}" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}" \
       version="${VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
@@ -47,10 +47,10 @@ RUN {{ spec.pkg_manager }} install -y gettext hostname && \
     {{ spec.pkg_manager }} clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY {{ spec.version }}/s2i/bin/ $STI_SCRIPTS_PATH
+COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY {{ spec.version }}/root/ /
+COPY $NGINX_VERSION/root/ /
 
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
@@ -86,4 +86,4 @@ USER 1001
 
 STOPSIGNAL SIGQUIT
 
-CMD ["/usr/libexec/s2i/usage"]
+CMD $STI_SCRIPTS_PATH/usage

@@ -23,9 +23,9 @@ LABEL summary="${SUMMARY}" \
       io.k8s.display-name="Nginx ${NGINX_VERSION}" \
       io.openshift.expose-services="8080:http" \
       io.openshift.expose-services="8443:https" \
-      io.openshift.tags="builder,nginx,nginx120" \
-      com.redhat.component="nginx-120-container" \
-      name="fedora/nginx-120" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="fedora/${NAME}-${NGINX_SHORT_VER}" \
       version="${VERSION}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
@@ -47,10 +47,10 @@ RUN dnf install -y gettext hostname && \
     dnf clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY 1.20/s2i/bin/ $STI_SCRIPTS_PATH
+COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY 1.20/root/ /
+COPY $NGINX_VERSION/root/ /
 
 # Changing ownership and user rights to support following use-cases:
 # 1) running container on OpenShift, whose default security model
@@ -86,4 +86,4 @@ USER 1001
 
 STOPSIGNAL SIGQUIT
 
-CMD ["/usr/libexec/s2i/usage"]
+CMD $STI_SCRIPTS_PATH/usage

@@ -8,9 +8,9 @@ specs:
       s2i_base: quay.io/fedora/s2i-core:37
       org: "fedora"
       prod: "fedora"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
       pkg_manager: "dnf"
       environment_setup: ""
@@ -21,9 +21,9 @@ specs:
       s2i_base: quay.io/fedora/s2i-core:38
       org: "fedora"
       prod: "fedora"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
       pkg_manager: "dnf"
       environment_setup: ""
@@ -34,9 +34,9 @@ specs:
       s2i_base: quay.io/fedora/s2i-core:40
       org: "fedora"
       prod: "fedora"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
       pkg_manager: "dnf"
       environment_setup: ""
@@ -47,13 +47,13 @@ specs:
       s2i_base: ubi8/s2i-core:1
       org: "ubi8"
       prod: "rhel8"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-all-modules"
       pkg_manager: "yum"
       environment_setup: >-4
-          yum -y module enable nginx:{{ spec.version }} && \
+          yum -y module enable nginx:$NGINX_VERSION && \
       license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 
     rhel9:
@@ -62,13 +62,13 @@ specs:
       s2i_base: ubi9/s2i-core:1
       org: "ubi9"
       prod: "rhel9"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-all-modules"
       pkg_manager: "yum"
       environment_setup: >-4
-          yum -y module enable nginx:{{ spec.version }} && \
+          yum -y module enable nginx:$NGINX_VERSION && \
       license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 
     rhel10:
@@ -77,9 +77,9 @@ specs:
       s2i_base: ubi10/s2i-core
       org: "ubi10"
       prod: "rhel10"
-      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
-      redhat_component: "nginx-{{ spec.short }}-container"
-      img_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
       pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
       pkg_manager: "dnf"
       environment_setup: ""
@@ -97,7 +97,7 @@ specs:
       pkgs: "nginx nginx-all-modules"
       pkg_manager: "yum"
       environment_setup: >-4
-          yum -y module enable nginx:{{ spec.version }} && \
+          yum -y module enable nginx:$NGINX_VERSION && \
       license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
 
     c10s:
