@@ -2,32 +2,6 @@ version: 1
 
 specs:
   distroinfo:
-    fedora37:
-      distros:
-        - fedora-37-x86_64
-      s2i_base: quay.io/fedora/s2i-core:37
-      org: "fedora"
-      prod: "fedora"
-      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
-      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
-      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
-      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
-      pkg_manager: "dnf"
-      environment_setup: ""
-
-    fedora38:
-      distros:
-        - fedora-38-x86_64
-      s2i_base: quay.io/fedora/s2i-core:38
-      org: "fedora"
-      prod: "fedora"
-      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
-      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
-      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
-      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
-      pkg_manager: "dnf"
-      environment_setup: ""
-
     fedora40:
       distros:
         - fedora-40-x86_64
@@ -120,28 +94,24 @@ specs:
       short: "120"
       common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
       rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
-      latest_fedora: "f37"
 
     "1.22":
       version: "1.22"
       short: "122"
       common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
       rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
-      latest_fedora: "f37"
 
     "1.22-micro":
       version: "1.22"
       short: "122"
       suffix: "-micro"
       common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-micro-{{ spec.prod }}"
-      latest_fedora: "f37"
 
     "1.24":
       version: "1.24"
       short: "124"
       common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
       rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
-      latest_fedora: "f38"
 
     "1.26":
       version: "1.26"
@@ -154,27 +124,21 @@ matrix:
   include:
     - version: "1.20"
       distros:
-        - fedora-37-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
-        - centos-stream-9-x86_64
 
     - version: "1.22"
       distros:
-        - fedora-37-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
-        - centos-stream-9-x86_64
 
     - version: "1.22-micro"
       distros:
-        - fedora-37-x86_64
         - rhel-8-x86_64
         - centos-stream-9-x86_64
 
     - version: "1.24"
       distros:
-        - fedora-38-x86_64
         - rhel-8-x86_64
         - rhel-9-x86_64
         - centos-stream-9-x86_64
@@ -182,7 +146,6 @@ matrix:
     - version: "1.26"
       distros:
         - fedora-40-x86_64
-        - rhel-8-x86_64
         - rhel-9-x86_64
         - rhel-10-x86_64
         - centos-stream-9-x86_64
