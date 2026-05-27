@@ -125,7 +125,6 @@ matrix:
     - version: "1.20"
       distros:
         - rhel-8-x86_64
-        - rhel-9-x86_64
 
     - version: "1.22"
       distros:
