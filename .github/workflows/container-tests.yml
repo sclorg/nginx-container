@@ -4,10 +4,12 @@ on:
       - created
 
 jobs:
+  distgen-check:
+    uses: "sclorg/ci-actions/.github/workflows/distgen-check.yml@main"
   check-readme:
     uses: "sclorg/ci-actions/.github/workflows/check-readme.yml@main"
   container-tests:
-    needs: check-readme
+    needs: [check-readme, distgen-check]
     uses: "sclorg/ci-actions/.github/workflows/container-tests.yml@main"
     with:
       enabled-tests: '["container","container-pytest","openshift-pytest"]'
