@@ -125,6 +125,7 @@ matrix:
     - version: "1.20"
       distros:
         - rhel-8-x86_64
+        - rhel-9-x86_64
 
     - version: "1.22"
       distros:
@@ -149,3 +150,10 @@ matrix:
         - rhel-10-x86_64
         - centos-stream-9-x86_64
         - centos-stream-10-x86_64
+
+  combination_extras:
+    - version: "1.20"
+      distros:
+        - rhel-9-x86_64
+      data:
+        environment_setup: ""
