@@ -1,13 +1,23 @@
-FROM ubi8/ubi AS build
+FROM {{ spec.micro_build_base }} AS build
 
 RUN mkdir -p /mnt/rootfs
+{% if spec.prod == "rhel8" %}
 # with some planned changes in nginx, we can use nginx-core, envsubst and nss_wrapper-libs wihtout pulling in unnecessary dependencies
 # testing packages in the following repo, but using packages from the distro meanwhile
 # ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/epel-8/hhorak-nginx-micro-epel-8.repo /etc/yum.repos.d/hhorak-nginx-micro-epel-8.repo
+{% elif spec.prod == "c9s" %}
+# this is an alternative build of some packages with even smaller footprint on RPM level
+# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
+#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst " && \
+{% endif %}
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
-    INSTALL_PKGS="$MICRO_PKGS @nginx:1.22/common findutils hostname nss_wrapper-libs gettext " && \
-    dnf --installroot /mnt/rootfs --releasever 8 --setopt install_weak_deps=false --nodocs module enable nginx:1.22 -y && \
-    dnf --installroot /mnt/rootfs --releasever 8 --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y && \
+    INSTALL_PKGS="$MICRO_PKGS {{ spec.micro_pkgs }} " && \
+    dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs module enable nginx:{{ spec.version }} -y && \
+{% if spec.prod == "rhel8" %}
+    dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y && \
+{% else %}
+    dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs -y && \
+{% endif %}
     dnf -y --installroot /mnt/rootfs clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
@@ -17,8 +27,8 @@ EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.22 \
-    NGINX_SHORT_VER=122 \
+    NGINX_VERSION={{ spec.version }} \
+    NGINX_SHORT_VER={{ spec.short }} \
     VERSION=0
 
 ENV SUMMARY="Platform for running a micro nginx $NGINX_VERSION or building nginx-based application" \
@@ -33,7 +43,7 @@ therefore options for extending this image are limited." \
     STI_SCRIPTS_PATH=/usr/libexec/s2i \
     APP_ROOT=/opt/app-root \
     HOME=/opt/app-root/src \
-    PLATFORM="el8"
+    PLATFORM="{{ spec.micro_platform }}"
 
 LABEL summary="${SUMMARY}" \
       description="${DESCRIPTION}" \
@@ -43,15 +53,21 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="ubi8/${NAME}-${NGINX_SHORT_VER}-micro" \
+      name="{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}-micro" \
+{% if spec.prod in ["rhel8", "rhel9", "c8s", "c9s"] %}
       version="1" \
-      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+{% endif %}
+{% if spec.license_terms %}
+      com.redhat.license_terms="{{ spec.license_terms }}" \
+{% endif %}
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> ubi8/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> {{ spec.org }}/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
 
 COPY --from=build /mnt/rootfs/ /
+{% if spec.prod == "rhel8" %}
 COPY --from=build /etc/yum.repos.d/ubi.repo /etc/
+{% endif %}
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
@@ -61,12 +77,12 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_LOG_PATH=/var/log/nginx
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
-COPY 1.22-micro/s2i/bin/ $STI_SCRIPTS_PATH
+COPY {{ spec.version }}{{ spec.suffix }}/s2i/bin/ $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-COPY 1.22-micro/root/ /
+COPY {{ spec.version }}{{ spec.suffix }}/root/ /
 
-COPY 1.22-micro/core-scripts/usr /usr
+COPY {{ spec.version }}{{ spec.suffix }}/core-scripts/usr /usr
 
 WORKDIR ${HOME}
 

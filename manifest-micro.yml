@@ -1,0 +1,36 @@
+# Manifest for micro image directories creation
+# every dest path will be prefixed by $DESTDIR/$version
+
+# Files containing distgen directives
+DISTGEN_RULES:
+  - src: src/README.md
+    dest: README.md
+
+# Files containing distgen directives, which are used for each
+# (distro, version) combination not excluded in multispec
+DISTGEN_MULTI_RULES:
+  - src: src/Dockerfile.micro
+    dest: Dockerfile.rhel8
+
+  - src: src/Dockerfile.micro
+    dest: Dockerfile.c9s
+
+
+# Symbolic links
+# This section is the last one on purpose because the generator.py
+# does not allow dead symlinks.
+SYMLINK_RULES:
+  - src: ../1.22/root
+    dest: root
+    check_symlink: false
+
+  - src: ../1.22/s2i
+    dest: s2i
+    check_symlink: false
+
+  - src: ../common/shared-scripts/core
+    dest: core-scripts
+    check_symlink: false
+
+  - src: ../test
+    dest: test
