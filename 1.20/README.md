@@ -194,15 +194,12 @@ By default, nginx access logs are written to standard output and error logs are 
 
     podman logs <container>
 
-**If `NGINX_LOG_TO_VOLUME` variable is set, nginx logs into `/var/log/nginx/`.**
-
-
 See also
 --------
 Dockerfile and other sources for this container image are available on
 https://github.com/sclorg/nginx-container.
 In that repository you also can find another versions of Python environment Dockerfiles.
-Dockerfile for RHEL8 it's `Dockerfile.rhel8`,
-for RHEL9 it's `Dockerfile.rhel9`, Dockerfile for CentOS Stream 8 is called `Dockerfile.c8s`,
-Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+for RHEL8 it's `Dockerfile.rhel8`, Dockerfile for RHEL10 is called `Dockerfile.rhel10`,
+Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`,
+Dockerfile for CentOS Stream 10 is called `Dockerfile.c10s`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
 

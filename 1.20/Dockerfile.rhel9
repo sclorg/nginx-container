@@ -38,7 +38,7 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_LOG_PATH=/var/log/nginx \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
-RUN INSTALL_PKGS="nss_wrapper gettext hostname nginx nginx-all-modules" && \
+RUN INSTALL_PKGS="nss_wrapper-libs gettext hostname nginx nginx-all-modules" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION" && \
@@ -83,10 +83,5 @@ RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
 USER 1001
 
 STOPSIGNAL SIGQUIT
-
-# Not using VOLUME statement since it's not working in OpenShift Online:
-# https://github.com/sclorg/httpd-container/issues/30
-# VOLUME ["/usr/share/nginx/html"]
-# VOLUME ["/var/log/nginx/"]
 
 CMD $STI_SCRIPTS_PATH/usage

@@ -1,14 +1,12 @@
-FROM quay.io/fedora/s2i-core:40
-
+FROM {{ spec.s2i_base }}
 
 EXPOSE 8080
 EXPOSE 8443
 
 ENV NAME=nginx \
-    NGINX_VERSION=1.26 \
-    NGINX_SHORT_VER=126 \
-    VERSION=0 \
-    ARCH=x86_64
+    NGINX_VERSION={{ spec.version }} \
+    NGINX_SHORT_VER={{ spec.short }} \
+    VERSION=0
 
 ENV SUMMARY="Platform for running nginx $NGINX_VERSION or building nginx-based application" \
     DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
@@ -25,11 +23,16 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="fedora/${NAME}-${NGINX_SHORT_VER}" \
-      version="${VERSION}" \
+      name="{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}" \
+{% if spec.prod in ["rhel8", "rhel9", "c8s", "c9s"] %}
+      version="1" \
+{% endif %}
+{% if spec.license_terms %}
+      com.redhat.license_terms="{{ spec.license_terms }}" \
+{% endif %}
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> ${FGC}/nginx <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> {{ spec.org }}/${NAME}-${NGINX_SHORT_VER}:latest <APP-NAME>"
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_CONF_PATH=/etc/nginx/nginx.conf \
@@ -39,12 +42,16 @@ ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
     NGINX_LOG_PATH=/var/log/nginx \
     NGINX_PERL_MODULE_PATH=${APP_ROOT}/etc/perl
 
-RUN dnf install -y gettext hostname && \
-    INSTALL_PKGS="nss_wrapper-libs nginx nginx-mod-stream nginx-mod-http-perl" && \
-    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+{% if spec.environment_setup %}
+RUN {{ spec.environment_setup }}
+    INSTALL_PKGS="nss_wrapper-libs gettext hostname {{ spec.pkgs }}" && \
+{% else %}
+RUN INSTALL_PKGS="nss_wrapper-libs gettext hostname {{ spec.pkgs }}" && \
+{% endif %}
+    {{ spec.pkg_manager }} install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION" && \
-    dnf clean all
+    {{ spec.pkg_manager }} -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY $NGINX_VERSION/s2i/bin/ $STI_SCRIPTS_PATH

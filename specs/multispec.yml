@@ -1,0 +1,171 @@
+version: 1
+
+specs:
+  distroinfo:
+    fedora40:
+      distros:
+        - fedora-40-x86_64
+      s2i_base: quay.io/fedora/s2i-core:40
+      org: "fedora"
+      prod: "fedora"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
+      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
+      pkg_manager: "dnf"
+      environment_setup: ""
+
+    rhel8:
+      distros:
+        - rhel-8-x86_64
+      s2i_base: ubi8/s2i-core:1
+      org: "ubi8"
+      prod: "rhel8"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
+      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
+      pkg_manager: "yum"
+      environment_setup: >-4
+          yum -y module enable nginx:$NGINX_VERSION && \
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+      micro_build_base: "ubi8/ubi"
+      micro_releasever: "8"
+      micro_pkgs: "@nginx:{{ spec.version }}/common findutils hostname nss_wrapper-libs gettext"
+      micro_platform: "el8"
+
+    rhel9:
+      distros:
+        - rhel-9-x86_64
+      s2i_base: ubi9/s2i-core:1
+      org: "ubi9"
+      prod: "rhel9"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
+      pkgs: "nginx nginx-all-modules"
+      pkg_manager: "yum"
+      environment_setup: >-4
+          yum -y module enable nginx:$NGINX_VERSION && \
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+    rhel10:
+      distros:
+        - rhel-10-x86_64
+      s2i_base: ubi10/s2i-core
+      org: "ubi10"
+      prod: "rhel10"
+      openshift_tags: "builder,${NAME},${NAME}-${NGINX_SHORT_VER}"
+      redhat_component: "${NAME}-${NGINX_SHORT_VER}-container"
+      img_name: "{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}"
+      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
+      pkg_manager: "dnf"
+      environment_setup: ""
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+    c9s:
+      distros:
+        - centos-stream-9-x86_64
+      s2i_base: quay.io/sclorg/s2i-core-c9s:c9s
+      org: "sclorg"
+      prod: "c9s"
+      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
+      redhat_component: "nginx-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "nginx nginx-all-modules"
+      pkg_manager: "yum"
+      environment_setup: >-4
+          yum -y module enable nginx:$NGINX_VERSION && \
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+      micro_build_base: "quay.io/centos/centos:stream9"
+      micro_releasever: "9"
+      micro_pkgs: "nginx-core findutils hostname nss_wrapper-libs gettext"
+      micro_platform: "el9"
+
+    c10s:
+      distros:
+        - centos-stream-10-x86_64
+      s2i_base: quay.io/sclorg/s2i-core-c10s:c10s
+      org: "sclorg"
+      prod: "c10s"
+      openshift_tags: "builder,nginx,nginx{{ spec.short }}"
+      redhat_component: "nginx-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "nginx nginx-mod-stream nginx-mod-http-perl"
+      pkg_manager: "dnf"
+      environment_setup: ""
+      license_terms: "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI"
+
+  version:
+    "1.20":
+      version: "1.20"
+      short: "120"
+      suffix: ""
+      common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+
+    "1.22":
+      version: "1.22"
+      short: "122"
+      suffix: ""
+      common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+
+    "1.22-micro":
+      version: "1.22"
+      short: "122"
+      suffix: "-micro"
+      common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-micro-{{ spec.prod }}"
+
+    "1.24":
+      version: "1.24"
+      short: "124"
+      suffix: ""
+      common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+
+    "1.26":
+      version: "1.26"
+      short: "126"
+      suffix: ""
+      common_image_name: "{{ spec.org }}/nginx-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "{{ spec.org }}/nginx-{{ spec.short }}"
+      latest_fedora: "f40"
+
+matrix:
+  include:
+    - version: "1.20"
+      distros:
+        - rhel-8-x86_64
+        - rhel-9-x86_64
+
+    - version: "1.22"
+      distros:
+        - rhel-8-x86_64
+        - rhel-9-x86_64
+
+    - version: "1.22-micro"
+      distros:
+        - rhel-8-x86_64
+        - centos-stream-9-x86_64
+
+    - version: "1.24"
+      distros:
+        - rhel-8-x86_64
+        - rhel-9-x86_64
+        - centos-stream-9-x86_64
+
+    - version: "1.26"
+      distros:
+        - fedora-40-x86_64
+        - rhel-9-x86_64
+        - rhel-10-x86_64
+        - centos-stream-9-x86_64
+        - centos-stream-10-x86_64
+
+  combination_extras:
+    - version: "1.20"
+      distros:
+        - rhel-9-x86_64
+      data:
+        environment_setup: ""
