@@ -18,6 +18,7 @@ image provides a containerized packaging of the nginx 1.22 daemon. The image can
 as a base image for other applications based on nginx 1.22 web server.
 Nginx server image can be extended using Openshift's `Source` build feature.
 
+See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://access.redhat.com/support/policy/updates/rhel-app-streams-life-cycle) for information about support for this particular stream.
 
 Usage in OpenShift
 ------------------
