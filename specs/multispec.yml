@@ -33,6 +33,8 @@ specs:
       micro_releasever: "8"
       micro_pkgs: "@nginx:{{ spec.version }}/common findutils hostname nss_wrapper-libs gettext"
       micro_platform: "el8"
+      micro_install_cmd: "dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y"
+      micro_extra_copy: "COPY --from=build /etc/yum.repos.d/ubi.repo /etc/"
 
     rhel9:
       distros:
@@ -81,6 +83,8 @@ specs:
       micro_releasever: "9"
       micro_pkgs: "nginx-core findutils hostname nss_wrapper-libs gettext"
       micro_platform: "el9"
+      micro_install_cmd: "dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs -y"
+      micro_extra_copy: ""
 
     c10s:
       distros:

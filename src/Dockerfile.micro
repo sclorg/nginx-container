@@ -1,23 +1,10 @@
 FROM {{ spec.micro_build_base }} AS build
 
 RUN mkdir -p /mnt/rootfs
-{% if spec.prod == "rhel8" %}
-# with some planned changes in nginx, we can use nginx-core, envsubst and nss_wrapper-libs wihtout pulling in unnecessary dependencies
-# testing packages in the following repo, but using packages from the distro meanwhile
-# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/epel-8/hhorak-nginx-micro-epel-8.repo /etc/yum.repos.d/hhorak-nginx-micro-epel-8.repo
-{% elif spec.prod == "c9s" %}
-# this is an alternative build of some packages with even smaller footprint on RPM level
-# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
-#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst " && \
-{% endif %}
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
     INSTALL_PKGS="$MICRO_PKGS {{ spec.micro_pkgs }} " && \
     dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs module enable nginx:{{ spec.version }} -y && \
-{% if spec.prod == "rhel8" %}
-    dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs install $INSTALL_PKGS -y && \
-{% else %}
-    dnf install --installroot /mnt/rootfs $INSTALL_PKGS --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs -y && \
-{% endif %}
+    {{ spec.micro_install_cmd }} && \
     dnf -y --installroot /mnt/rootfs clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
@@ -65,8 +52,8 @@ LABEL summary="${SUMMARY}" \
       usage="s2i build <SOURCE-REPOSITORY> {{ spec.org }}/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
 
 COPY --from=build /mnt/rootfs/ /
-{% if spec.prod == "rhel8" %}
-COPY --from=build /etc/yum.repos.d/ubi.repo /etc/
+{% if spec.micro_extra_copy %}
+{{ spec.micro_extra_copy }}
 {% endif %}
 
 ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
