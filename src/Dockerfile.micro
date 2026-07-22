@@ -1,0 +1,114 @@
+FROM {{ spec.micro_build_base }} AS build
+
+RUN mkdir -p /mnt/rootfs
+RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
+    INSTALL_PKGS="$MICRO_PKGS {{ spec.micro_pkgs }} " && \
+    dnf --installroot /mnt/rootfs --releasever {{ spec.micro_releasever }} --setopt install_weak_deps=false --nodocs module enable nginx:{{ spec.version }} -y && \
+    {{ spec.micro_install_cmd }} && \
+    dnf -y --installroot /mnt/rootfs clean all && \
+    rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
+
+FROM scratch
+
+EXPOSE 8080
+EXPOSE 8443
+
+ENV NAME=nginx \
+    NGINX_VERSION={{ spec.version }} \
+    NGINX_SHORT_VER={{ spec.short }} \
+    VERSION=0
+
+ENV SUMMARY="Platform for running a micro nginx $NGINX_VERSION or building nginx-based application" \
+    DESCRIPTION="Nginx is a web server and a reverse proxy server for HTTP, SMTP, POP3 and IMAP \
+protocols, with a strong focus on high concurrency, performance and low memory usage. The container \
+image provides a containerized packaging of the nginx $NGINX_VERSION daemon. The image can be used \
+as a base image for other applications based on nginx $NGINX_VERSION web server. \
+Nginx server image can be extended using source-to-image tool. \
+This is a micro nginx container that does not include tools for installing RPMs, \
+therefore options for extending this image are limited." \
+# The following variables are usually available from parent s2i images \
+    STI_SCRIPTS_PATH=/usr/libexec/s2i \
+    APP_ROOT=/opt/app-root \
+    HOME=/opt/app-root/src \
+    PLATFORM="{{ spec.micro_platform }}"
+
+LABEL summary="${SUMMARY}" \
+      description="${DESCRIPTION}" \
+      io.k8s.description="${DESCRIPTION}" \
+      io.k8s.display-name="Nginx ${NGINX_VERSION}" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.expose-services="8443:https" \
+      io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
+      com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
+      name="{{ spec.org }}/${NAME}-${NGINX_SHORT_VER}-micro" \
+{% if spec.prod in ["rhel8", "rhel9", "c8s", "c9s"] %}
+      version="1" \
+{% endif %}
+{% if spec.license_terms %}
+      com.redhat.license_terms="{{ spec.license_terms }}" \
+{% endif %}
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/${NAME}-container" \
+      usage="s2i build <SOURCE-REPOSITORY> {{ spec.org }}/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
+
+COPY --from=build /mnt/rootfs/ /
+{% if spec.micro_extra_copy %}
+{{ spec.micro_extra_copy }}
+{% endif %}
+
+ENV NGINX_CONFIGURATION_PATH=${APP_ROOT}/etc/nginx.d \
+    NGINX_CONF_PATH=/etc/nginx/nginx.conf \
+    NGINX_DEFAULT_CONF_PATH=${APP_ROOT}/etc/nginx.default.d \
+    NGINX_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/nginx \
+    NGINX_APP_ROOT=${APP_ROOT} \
+    NGINX_LOG_PATH=/var/log/nginx
+
+# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
+COPY {{ spec.version }}{{ spec.suffix }}/s2i/bin/ $STI_SCRIPTS_PATH
+
+# Copy extra files to the image.
+COPY {{ spec.version }}{{ spec.suffix }}/root/ /
+
+COPY {{ spec.version }}{{ spec.suffix }}/core-scripts/usr /usr
+
+WORKDIR ${HOME}
+
+# Fail early if there is a version we do not expect
+RUN nginx -v 2>&1 | grep -qe "nginx/$NGINX_VERSION\." && echo "Found VERSION $NGINX_VERSION"
+
+# Changing ownership and user rights to support following use-cases:
+# 1) running container on OpenShift, whose default security model
+#    is to run the container under random UID, but GID=0
+# 2) for working root-less container with UID=1001, which does not have
+#    to have GID=0
+# 3) for default use-case, that is running container directly on operating system,
+#    with default UID and GID (1001:0)
+# Supported combinations of UID:GID are thus following:
+# UID=1001 && GID=0
+# UID=<any>&& GID=0
+# UID=1001 && GID=<any>
+RUN sed -i -f ${NGINX_APP_ROOT}/nginxconf.sed ${NGINX_CONF_PATH} && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/etc/nginx.default.d/ && \
+    mkdir -p ${NGINX_APP_ROOT}/src/nginx-start/ && \
+    mkdir -p ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    mkdir -p ${NGINX_LOG_PATH} && \
+    chown -R 1001:0 ${NGINX_CONF_PATH} && \
+    chown -R 1001:0 ${NGINX_APP_ROOT} && \
+    chown -R 1001:0 ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chown -R 1001:0 /var/lib/nginx /var/log/nginx /run && \
+    chmod    ug+rw  ${NGINX_CONF_PATH} && \
+    chmod -R ug+rwX ${NGINX_APP_ROOT} && \
+    chmod -R ug+rwX ${NGINX_CONTAINER_SCRIPTS_PATH}/nginx-start && \
+    chmod -R ug+rwX /var/lib/nginx /var/log/nginx /run
+
+USER 1001
+
+STOPSIGNAL SIGQUIT
+
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/usr/share/nginx/html"]
+# VOLUME ["/var/log/nginx/"]
+
+CMD $STI_SCRIPTS_PATH/usage

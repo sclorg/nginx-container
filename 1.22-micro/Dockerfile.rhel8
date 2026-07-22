@@ -1,9 +1,6 @@
 FROM ubi8/ubi AS build
 
 RUN mkdir -p /mnt/rootfs
-# with some planned changes in nginx, we can use nginx-core, envsubst and nss_wrapper-libs wihtout pulling in unnecessary dependencies
-# testing packages in the following repo, but using packages from the distro meanwhile
-# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/epel-8/hhorak-nginx-micro-epel-8.repo /etc/yum.repos.d/hhorak-nginx-micro-epel-8.repo
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
     INSTALL_PKGS="$MICRO_PKGS @nginx:1.22/common findutils hostname nss_wrapper-libs gettext " && \
     dnf --installroot /mnt/rootfs --releasever 8 --setopt install_weak_deps=false --nodocs module enable nginx:1.22 -y && \

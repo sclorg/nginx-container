@@ -1,1 +1,0 @@
-../../test/test_ocp_shared_helm_imagestreams.py

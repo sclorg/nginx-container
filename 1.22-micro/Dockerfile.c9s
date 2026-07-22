@@ -1,9 +1,6 @@
 FROM quay.io/centos/centos:stream9 AS build
 
 RUN mkdir -p /mnt/rootfs
-# this is an alternative build of some packages with even smaller footprint on RPM level
-# ADD https://copr.fedorainfracloud.org/coprs/hhorak/nginx-micro/repo/centos-stream-9/hhorak-nginx-micro-centos-stream-9.repo /etc/yum.repos.d/hhorak-nginx-micro-centos-stream-9.repo
-#    INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs envsubst " && \
 RUN MICRO_PKGS="coreutils-single glibc-minimal-langpack" && \
     INSTALL_PKGS="$MICRO_PKGS nginx-core findutils hostname nss_wrapper-libs gettext " && \
     dnf --installroot /mnt/rootfs --releasever 9 --setopt install_weak_deps=false --nodocs module enable nginx:1.22 -y && \
@@ -43,12 +40,12 @@ LABEL summary="${SUMMARY}" \
       io.openshift.expose-services="8443:https" \
       io.openshift.tags="builder,${NAME},${NAME}-${NGINX_SHORT_VER}" \
       com.redhat.component="${NAME}-${NGINX_SHORT_VER}-container" \
-      name="sclorg/${NAME}-${NGINX_SHORT_VER}-micro-c9s" \
+      name="sclorg/${NAME}-${NGINX_SHORT_VER}-micro" \
       version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${NGINX_SHORT_VER}-c9s:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> sclorg/${NAME}-${NGINX_SHORT_VER}-micro:latest <APP-NAME>"
 
 COPY --from=build /mnt/rootfs/ /
 
