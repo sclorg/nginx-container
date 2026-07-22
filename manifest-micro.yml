@@ -17,8 +17,6 @@ DISTGEN_MULTI_RULES:
 
 
 # Symbolic links
-# This section is the last one on purpose because the generator.py
-# does not allow dead symlinks.
 SYMLINK_RULES:
   - src: ../1.22/root
     dest: root
